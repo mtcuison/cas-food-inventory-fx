@@ -1,3 +1,5 @@
 dist/
-*.txt
+build/
+nbproject/private/
+*.log
 GhostRiderXP.properties

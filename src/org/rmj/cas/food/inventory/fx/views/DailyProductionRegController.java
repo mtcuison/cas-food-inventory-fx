@@ -37,45 +37,25 @@ import org.rmj.cas.inventory.production.base.DailyProduction;
 
 public class DailyProductionRegController implements Initializable {
 
-    @FXML
-    private VBox VBoxForm;
-    @FXML
-    private Button btnExit;
-    @FXML
-    private FontAwesomeIconView glyphExit;
-    @FXML
-    private AnchorPane anchorField;
-    @FXML
-    private TextField txtField01;
-    @FXML
-    private TextField txtField02;
-    @FXML
-    private TextArea txtField03;
-    @FXML
-    private TextField txtDetail03;
-    @FXML
-    private TextField txtDetail80;
-    @FXML
-    private TextField txtDetail05;
-    @FXML
-    private TextField txtDetail04;
-    @FXML
-    private TableView table;
-    @FXML
-    private ImageView imgTranStat;
-    @FXML
-    private Button btnVoid;
-    @FXML
-    private Button btnClose;
-    @FXML
-    private Button btnPrint;
-    @FXML
-    private Button btnBrowse;
-    @FXML
-    private TextField txtField50;
-    @FXML
-    private TextField txtField51;
-
+    @FXML private VBox VBoxForm;
+    @FXML private Button btnExit;
+    @FXML private FontAwesomeIconView glyphExit;
+    @FXML private AnchorPane anchorField;
+    @FXML private TextField txtField01;
+    @FXML private TextField txtField02;
+    @FXML private TextArea txtField03;
+    @FXML private TextField txtDetail03;
+    @FXML private TextField txtDetail80;
+    @FXML private TextField txtDetail05;
+    @FXML private TextField txtDetail04;
+    @FXML private TableView table;
+    @FXML private ImageView imgTranStat;
+    @FXML private Button btnVoid;
+    @FXML private Button btnClose;
+    @FXML private Button btnPrint;
+    @FXML private Button btnBrowse;
+    @FXML private TextField txtField50;
+    @FXML private TextField txtField51;
    
     @Override
     public void initialize(URL url, ResourceBundle rb) {

@@ -44,68 +44,36 @@ import org.rmj.appdriver.constants.UserRight;
 
 public class PurchaseOrderController implements Initializable {
 
-    @FXML
-    private VBox VBoxForm;
-    @FXML
-    private Button btnExit;
-    @FXML
-    private AnchorPane anchorField;
-    @FXML
-    private TextField txtField01;
-    @FXML
-    private TextField txtField03;
-    @FXML
-    private TextField txtField02;
-    @FXML
-    private TextField txtField05;
-    @FXML
-    private TextField txtField06;
-    @FXML
-    private TextField txtField07;
-    @FXML
-    private TextField txtField08;
-    @FXML
-    private TextField txtField16;
-    @FXML
-    private TextArea txtField10;
-    @FXML
-    private Label Label09;
-    @FXML
-    private TextField txtDetail03;
-    @FXML
-    private TextField txtDetail80;
-    @FXML
-    private TextField txtDetail04;
-    @FXML
-    private TableView table;
-    @FXML
-    private Button btnNew;
-    @FXML
-    private Button btnSave;
-    @FXML
-    private Button btnCancel;
-    @FXML
-    private Button btnClose;
-    @FXML
-    private Button btnSearch;
-    @FXML
-    private Button btnConfirm;
-    @FXML
-    private Button btnDel;
-    @FXML
-    private FontAwesomeIconView glyphExit;
-    @FXML
-    private Button btnBrowse;
-    @FXML
-    private Button btnPrint;
-    @FXML
-    private ImageView imgTranStat;
-    @FXML
-    private TextField txtField50;
-    @FXML
-    private TextField txtField51;
-    @FXML
-    private TextField txtDetail05;
+    @FXML private VBox VBoxForm;
+    @FXML private Button btnExit;
+    @FXML private AnchorPane anchorField;
+    @FXML private TextField txtField01;
+    @FXML private TextField txtField03;
+    @FXML private TextField txtField02;
+    @FXML private TextField txtField05;
+    @FXML private TextField txtField06;
+    @FXML private TextField txtField07;
+    @FXML private TextField txtField08;
+    @FXML private TextField txtField16;
+    @FXML private TextArea txtField10;
+    @FXML private Label Label09;
+    @FXML private TextField txtDetail03;
+    @FXML private TextField txtDetail80;
+    @FXML private TextField txtDetail04;
+    @FXML private TableView table;
+    @FXML private Button btnNew;
+    @FXML private Button btnSave;
+    @FXML private Button btnCancel;
+    @FXML private Button btnClose;
+    @FXML private Button btnSearch;
+    @FXML private Button btnConfirm;
+    @FXML private Button btnDel;
+    @FXML private FontAwesomeIconView glyphExit;
+    @FXML private Button btnBrowse;
+    @FXML private Button btnPrint;
+    @FXML private ImageView imgTranStat;
+    @FXML private TextField txtField50;
+    @FXML private TextField txtField51;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -138,7 +106,6 @@ public class PurchaseOrderController implements Initializable {
         
         txtDetail03.focusedProperty().addListener(txtDetail_Focus);
         txtDetail04.focusedProperty().addListener(txtDetail_Focus);
-        txtDetail05.focusedProperty().addListener(txtDetail_Focus);
         txtDetail80.focusedProperty().addListener(txtDetail_Focus);
                 
         /*Add keypress event for field with search*/
@@ -155,7 +122,6 @@ public class PurchaseOrderController implements Initializable {
         
         txtDetail03.setOnKeyPressed(this::txtDetail_KeyPressed);
         txtDetail04.setOnKeyPressed(this::txtDetail_KeyPressed);
-        txtDetail05.setOnKeyPressed(this::txtDetail_KeyPressed);
         txtDetail80.setOnKeyPressed(this::txtDetail_KeyPressed);
         
         pnEditMode = EditMode.UNKNOWN;
@@ -193,12 +159,10 @@ public class PurchaseOrderController implements Initializable {
             txtDetail80.setText(psDescript);
             
             txtDetail04.setText(String.valueOf(poTrans.getDetail(pnRow, 4))); /*Quantity*/
-            txtDetail05.setText(CommonUtils.NumberFormat(Double.valueOf(String.valueOf(poTrans.getDetail(pnRow, 5))), "#,##0.00")); /*Quantity*/
         } else{
             txtDetail03.setText("");
             txtDetail80.setText("");
             txtDetail04.setText("0");
-            txtDetail05.setText("0.00");
         }
     }
     
@@ -476,7 +440,6 @@ public class PurchaseOrderController implements Initializable {
         
         txtDetail03.setText("");
         txtDetail04.setText("0");
-        txtDetail04.setText("0.00");
         txtDetail80.setText("");
         
         Label09.setText("0.00");
@@ -573,7 +536,6 @@ public class PurchaseOrderController implements Initializable {
                         psDescript = (String) loJSON.get("sDescript");
                         txtDetail03.setText(psBarCodex);
                         txtDetail80.setText(psDescript);
-                        txtDetail05.setText(CommonUtils.NumberFormat(Double.valueOf(loJSON.get("nUnitPrce").toString()), "#,##0.00"));
                     }
                 } else if (lnIndex == 80){
                     lsValue = txtDetail.getText();
@@ -586,7 +548,6 @@ public class PurchaseOrderController implements Initializable {
                         psDescript = (String) loJSON.get("sDescript");
                         txtDetail03.setText(psBarCodex);
                         txtDetail80.setText(psDescript);
-                        txtDetail05.setText(CommonUtils.NumberFormat(Double.valueOf(loJSON.get("nUnitPrce").toString()), "#,##0.00"));
                     }
                 }
                 loadDetail();
@@ -768,18 +729,6 @@ public class PurchaseOrderController implements Initializable {
                         
                     }
                     poTrans.setDetail(pnRow, lnIndex, lnValue);
-                    break;
-                case 5: /*Unit Price*/
-                    double loValue = 0;
-                    try {
-                        /*this must be numeric*/
-                        loValue = Double.valueOf(lsValue);
-                    } catch (Exception e) {
-                        ShowMessageFX.Warning("Please input numbers only.", pxeModuleName, e.getMessage());
-                        txtField.requestFocus();
-                        
-                    }
-                    poTrans.setDetail(pnRow, lnIndex, loValue);
             }
             
             pnOldRow = table.getSelectionModel().getSelectedIndex();
@@ -853,10 +802,6 @@ public class PurchaseOrderController implements Initializable {
         @Override
         public void DetailRetreive(int fnIndex) {
             switch(fnIndex){
-                case 5:
-                    txtDetail05.setText(CommonUtils.NumberFormat(Double.valueOf(String.valueOf(poTrans.getDetail(pnRow, fnIndex))), "#,##0.00"));
-                    loadDetail();
-                    break;
                 case 4:
                     txtDetail04.setText(String.valueOf(poTrans.getDetail(pnRow, fnIndex)));
                     loadDetail();

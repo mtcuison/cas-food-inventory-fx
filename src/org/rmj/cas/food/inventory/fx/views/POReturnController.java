@@ -43,84 +43,45 @@ import org.rmj.purchasing.agent.XMPOReturn;
 import org.rmj.appdriver.agentfx.callback.IMasterDetail;
 
 public class POReturnController implements Initializable {
-    @FXML
-    private VBox VBoxForm;
-    @FXML
-    private Button btnExit;
-    @FXML
-    private AnchorPane anchorField;
-    @FXML
-    private TextField txtField01;
-    @FXML
-    private TextField txtField03;
-    @FXML
-    private TextField txtField02;
-    @FXML
-    private TextField txtField18;
-    @FXML
-    private TextField txtField05;
-    @FXML
-    private TextField txtField16;
-    @FXML
-    private TextArea txtField12;
-    @FXML
-    private TextField txtDetail80;
-    @FXML
-    private TextField txtDetail07;
-    @FXML
-    private TableView table;
-    @FXML
-    private TextField txtField07;
-    @FXML
-    private TextField txtField08;
-    @FXML
-    private TextField txtField11;
-    @FXML
-    private TextField txtField09;
-    @FXML
-    private TextField txtField10;
-    @FXML
-    private TextField txtField13;
-    @FXML
-    private Button btnNew;
-    @FXML
-    private Button btnSave;
-    @FXML
-    private Button btnCancel;
-    @FXML
-    private Button btnClose;
-    @FXML
-    private Button btnSearch;
-    @FXML
-    private Button btnConfirm;
-    @FXML
-    private Button btnDel;
-    @FXML
-    private TextField txtDetail03;
-    @FXML
-    private ComboBox Combo04;
-    @FXML
-    private TextField txtDetail06;
-    @FXML
-    private TextField txtDetail05;
-    @FXML
-    private Label Label06;
-    @FXML
-    private FontAwesomeIconView glyphExit;
-    @FXML
-    private Button btnBrowse;
-    @FXML
-    private TextField txtField27;
-    @FXML
-    private ComboBox Combo28;
-    @FXML
-    private ImageView imgTranStat;
-    @FXML
-    private ImageView imgTranStat1;
-    @FXML
-    private TextField txtField50;
-    @FXML
-    private TextField txtField51;
+    @FXML private VBox VBoxForm;
+    @FXML private Button btnExit;
+    @FXML private AnchorPane anchorField;
+    @FXML private TextField txtField01;
+    @FXML private TextField txtField03;
+    @FXML private TextField txtField02;
+    @FXML private TextField txtField18;
+    @FXML private TextField txtField05;
+    @FXML private TextField txtField16;
+    @FXML private TextArea txtField12;
+    @FXML private TextField txtDetail80;
+    @FXML private TextField txtDetail07;
+    @FXML private TableView table;
+    @FXML private TextField txtField07;
+    @FXML private TextField txtField08;
+    @FXML private TextField txtField11;
+    @FXML private TextField txtField09;
+    @FXML private TextField txtField10;
+    @FXML private TextField txtField13;
+    @FXML private Button btnNew;
+    @FXML private Button btnSave;
+    @FXML private Button btnCancel;
+    @FXML private Button btnClose;
+    @FXML private Button btnSearch;
+    @FXML private Button btnConfirm;
+    @FXML private Button btnDel;
+    @FXML private TextField txtDetail03;
+    @FXML private ComboBox Combo04;
+    @FXML private TextField txtDetail06;
+    @FXML private TextField txtDetail05;
+    @FXML private Label Label06;
+    @FXML private FontAwesomeIconView glyphExit;
+    @FXML private Button btnBrowse;
+    @FXML private TextField txtField27;
+    @FXML private ComboBox Combo28;
+    @FXML private ImageView imgTranStat;
+    @FXML private ImageView imgTranStat1;
+    @FXML private TextField txtField50;
+    @FXML private TextField txtField51;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {

@@ -34,7 +34,6 @@ import org.rmj.appdriver.agentfx.ShowMessageFX;
 import org.rmj.appdriver.agentfx.CommonUtils;
 import org.rmj.cas.inventory.base.Inventory;
 import org.rmj.cas.parameter.agent.XMBranch;
-import org.rmj.cas.parameter.agent.XMDepartment;
 import org.rmj.cas.parameter.agent.XMInventoryType;
 import org.rmj.cas.parameter.agent.XMTerm;
 import org.rmj.purchasing.agent.XMPurchaseOrder;
@@ -42,56 +41,31 @@ import org.rmj.purchasing.agent.XMPurchaseOrder;
 
 public class PurchaseOrderRegController implements Initializable {
 
-    @FXML
-    private VBox VBoxForm;
-    @FXML
-    private Button btnExit;
-    @FXML
-    private FontAwesomeIconView glyphExit;
-    @FXML
-    private AnchorPane anchorField;
-    @FXML
-    private TextField txtField03;
-    @FXML
-    private TextField txtField02;
-    @FXML
-    private TextField txtField05;
-    @FXML
-    private TextField txtField06;
-    @FXML
-    private TextField txtField07;
-    @FXML
-    private TextField txtField08;
-    @FXML
-    private TextField txtField16;
-    @FXML
-    private Label Label09;
-    @FXML
-    private TextField txtDetail03;
-    @FXML
-    private TextField txtDetail04;
-    @FXML
-    private TextField txtDetail80;
-    @FXML
-    private TableView table;
-    @FXML
-    private TextArea txtField10;
-    @FXML
-    private ImageView imgTranStat;
-    @FXML
-    private TextField txtField01;
-    @FXML
-    private Button btnClose;
-    @FXML
-    private Button btnBrowse;
-    @FXML
-    private Button btnVoid;
-    @FXML
-    private Button btnPrint;
-    @FXML
-    private TextField txtField50;
-    @FXML
-    private TextField txtField51;
+    @FXML private VBox VBoxForm;
+    @FXML private Button btnExit;
+    @FXML private FontAwesomeIconView glyphExit;
+    @FXML private AnchorPane anchorField;
+    @FXML private TextField txtField03;
+    @FXML private TextField txtField02;
+    @FXML private TextField txtField05;
+    @FXML private TextField txtField06;
+    @FXML private TextField txtField07;
+    @FXML private TextField txtField08;
+    @FXML private TextField txtField16;
+    @FXML private Label Label09;
+    @FXML private TextField txtDetail03;
+    @FXML private TextField txtDetail04;
+    @FXML private TextField txtDetail80;
+    @FXML private TableView table;
+    @FXML private TextArea txtField10;
+    @FXML private ImageView imgTranStat;
+    @FXML private TextField txtField01;
+    @FXML private Button btnClose;
+    @FXML private Button btnBrowse;
+    @FXML private Button btnVoid;
+    @FXML private Button btnPrint;
+    @FXML private TextField txtField50;
+    @FXML private TextField txtField51;
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {

@@ -77,12 +77,10 @@
                   <TextField fx:id="txtDetail03" layoutX="529.0" layoutY="10.0" prefHeight="25.0" prefWidth="149.0" promptText="Press F3 to search" />
                   <Label alignment="CENTER_RIGHT" layoutX="453.0" layoutY="41.0" prefHeight="17.0" prefWidth="69.0" text="Description" />
                   <TextField fx:id="txtDetail80" layoutX="529.0" layoutY="37.0" prefHeight="25.0" prefWidth="315.0" promptText="Press F3 to search" />
-                  <Label alignment="CENTER_RIGHT" layoutX="451.0" layoutY="69.0" prefHeight="17.0" prefWidth="69.0" text="Unit Price" />
-                  <TextField fx:id="txtDetail05" alignment="CENTER_RIGHT" layoutX="529.0" layoutY="64.0" prefHeight="25.0" prefWidth="69.0" />
-                  <Label alignment="CENTER_RIGHT" layoutX="453.0" layoutY="95.0" prefHeight="17.0" prefWidth="69.0" text="Quantity" />
-                  <TextField fx:id="txtDetail04" alignment="CENTER_RIGHT" layoutX="529.0" layoutY="91.0" prefHeight="25.0" prefWidth="69.0" />
+                  <Label alignment="CENTER_RIGHT" layoutX="453.0" layoutY="68.0" prefHeight="17.0" prefWidth="69.0" text="Quantity" />
+                  <TextField fx:id="txtDetail04" alignment="CENTER_RIGHT" layoutX="529.0" layoutY="64.0" prefHeight="25.0" prefWidth="69.0" />
                   <Separator layoutX="436.0" orientation="VERTICAL" prefHeight="377.0" prefWidth="0.0" style="-fx-background-color: black;" />
-                  <TableView fx:id="table" focusTraversable="false" layoutX="451.0" layoutY="135.0" onMouseClicked="#table_Clicked" prefHeight="230.0" prefWidth="472.0" stylesheets="@../styles/Tables.css">
+                  <TableView fx:id="table" focusTraversable="false" layoutX="451.0" layoutY="94.0" onMouseClicked="#table_Clicked" prefHeight="271.0" prefWidth="472.0" stylesheets="@../styles/Tables.css">
                     <columns>
                       <TableColumn prefWidth="75.0" text="C1" />
                       <TableColumn prefWidth="75.0" text="C2" />

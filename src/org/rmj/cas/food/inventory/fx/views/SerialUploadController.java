@@ -5,7 +5,6 @@ import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import static javafx.scene.input.KeyCode.ENTER;
@@ -23,14 +22,10 @@ import javafx.scene.layout.VBox;
 
 public class SerialUploadController implements Initializable {
 
-    @FXML
-    private Button btnOkay;
-    @FXML
-    private Button btnCancel;
-    @FXML
-    private TextField txtField01;
-    @FXML
-    private VBox VBoxForm;
+    @FXML private Button btnOkay;
+    @FXML private Button btnCancel;
+    @FXML private TextField txtField01;
+    @FXML private VBox VBoxForm;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {

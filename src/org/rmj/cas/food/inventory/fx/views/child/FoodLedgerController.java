@@ -25,36 +25,21 @@ import org.rmj.appdriver.agentfx.ShowMessageFX;
 
 public class FoodLedgerController implements Initializable {
 
-    @FXML
-    private Button btnExit;
-    @FXML
-    private TextField txtField03;
-    @FXML
-    private TextField txtField80;
-    @FXML
-    private TextField txtField82;
-    @FXML
-    private TextField txtField81;
-    @FXML
-    private Button btnOk;
-    @FXML
-    private TableView table;
-    @FXML
-    private VBox VBox;
-    @FXML
-    private TableColumn index01;
-    @FXML
-    private TableColumn index02;
-    @FXML
-    private TableColumn index03;
-    @FXML
-    private TableColumn index04;
-    @FXML
-    private TableColumn index05;
-    @FXML
-    private TableColumn index06;
+    @FXML private Button btnExit;
+    @FXML private TextField txtField03;
+    @FXML private TextField txtField80;
+    @FXML private TextField txtField82;
+    @FXML private TextField txtField81;
+    @FXML private Button btnOk;
+    @FXML private TableView table;
+    @FXML private VBox VBox;
+    @FXML private TableColumn index01;
+    @FXML private TableColumn index02;
+    @FXML private TableColumn index03;
+    @FXML private TableColumn index04;
+    @FXML private TableColumn index05;
+    @FXML private TableColumn index06;
 
-   
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         btnExit.setOnAction(this::cmdButton_Click);

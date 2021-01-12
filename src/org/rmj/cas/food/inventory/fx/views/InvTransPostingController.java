@@ -39,64 +39,35 @@ import org.rmj.cas.parameter.agent.XMBranch;
 
 public class InvTransPostingController implements Initializable {
 
-    @FXML
-    private VBox VBoxForm;
-    @FXML
-    private Button btnExit;
-    @FXML
-    private FontAwesomeIconView glyphExit;
-    @FXML
-    private AnchorPane anchorField;
-    @FXML
-    private Label lblHeader;
-    @FXML
-    private TextField txtField01;
-    @FXML
-    private TextField txtField03;
-    @FXML
-    private TextField txtField04;
-    @FXML
-    private TextField txtField18;
-    @FXML
-    private TextField txtField06;
-    @FXML
-    private TextField txtField07;
-    @FXML
-    private TextField txtField13;
-    @FXML
-    private TextArea txtField05;
-    @FXML
-    private Label Label12;
-    @FXML
-    private TextField txtDetail05;
-    @FXML
-    private TextField txtDetail03;
-    @FXML
-    private TextField txtDetail80;
-    @FXML
-    private TextArea txtDetail10;
-    @FXML
-    private TextField txtDetail04;
-    @FXML
-    private TextField txtDetail07;
-    @FXML
-    private TextField txtDetail06;
-    @FXML
-    private TableView table;
-    @FXML
-    private ImageView imgTranStat;
-    @FXML
-    private TextField txtField50;
-    @FXML
-    private TextField txtField51;
-    @FXML
-    private Button btnPost;
-    @FXML
-    private Button btnClose;
-    @FXML
-    private Button btnBrowse;
-    @FXML
-    private TextField txtOther02;
+    @FXML private VBox VBoxForm;
+    @FXML private Button btnExit;
+    @FXML private FontAwesomeIconView glyphExit;
+    @FXML private AnchorPane anchorField;
+    @FXML private Label lblHeader;
+    @FXML private TextField txtField01;
+    @FXML private TextField txtField03;
+    @FXML private TextField txtField04;
+    @FXML private TextField txtField18;
+    @FXML private TextField txtField06;
+    @FXML private TextField txtField07;
+    @FXML private TextField txtField13;
+    @FXML private TextArea txtField05;
+    @FXML private Label Label12;
+    @FXML private TextField txtDetail05;
+    @FXML private TextField txtDetail03;
+    @FXML private TextField txtDetail80;
+    @FXML private TextArea txtDetail10;
+    @FXML private TextField txtDetail04;
+    @FXML private TextField txtDetail07;
+    @FXML private TextField txtDetail06;
+    @FXML private TableView table;
+    @FXML private ImageView imgTranStat;
+    @FXML private TextField txtField50;
+    @FXML private TextField txtField51;
+    @FXML private Button btnPost;
+    @FXML private Button btnClose;
+    @FXML private Button btnBrowse;
+    @FXML private TextField txtOther02;
 
    
     @Override

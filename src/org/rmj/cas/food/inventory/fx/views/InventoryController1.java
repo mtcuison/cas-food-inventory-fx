@@ -28,84 +28,45 @@ import org.rmj.cas.inventory.base.Inventory;
 
 public class InventoryController1 implements Initializable {
 
-    @FXML
-    private VBox VBoxForm;
-    @FXML
-    private Button btnExit;
-    @FXML
-    private AnchorPane anchorField;
-    @FXML
-    private TextField txtField01;
-    @FXML
-    private TextField txtField02;
-    @FXML
-    private TextField txtField03;
-    @FXML
-    private TextField txtField04;
-    @FXML
-    private TextField txtField05;
-    @FXML
-    private TextField txtField06;
-    @FXML
-    private TextField txtField07;
-    @FXML
-    private TextField txtField08;
-    @FXML
-    private TextField txtField09;
-    @FXML
-    private TextField txtField10;
-    @FXML
-    private TextField txtField11;
-    @FXML
-    private TextField txtField12;
-    @FXML
-    private TextField txtField13;
-    @FXML
-    private TextField txtField14;
-    @FXML
-    private TextField txtField15;
-    @FXML
-    private TextField txtField16;
-    @FXML
-    private TextField txtField17;
-    @FXML
-    private TextField txtField18;
-    @FXML
-    private TextField txtField19;
-    @FXML
-    private ComboBox Combo23;
-    @FXML
-    private ComboBox Combo24;
-    @FXML
-    private CheckBox Check20;
-    @FXML
-    private CheckBox Check21;
-    @FXML
-    private CheckBox Check22;
-    @FXML
-    private CheckBox Check26;
-    @FXML
-    private Button btnSave;
-    @FXML
-    private Button btnUpdate;
-    @FXML
-    private Button btnCancel;
-    @FXML
-    private Button btnClose;
-    @FXML
-    private Button btnSearch;
-    @FXML
-    private Button btnBrowse;
-    @FXML
-    private Button btnNew;
-    @FXML
-    private Button btnActivate;
-    @FXML
-    private TextField txtField25;
-    @FXML
-    private FontAwesomeIconView glyphExit;
-    @FXML
-    private Label lblHeader;
+    @FXML private VBox VBoxForm;
+    @FXML private Button btnExit;
+    @FXML private AnchorPane anchorField;
+    @FXML private TextField txtField01;
+    @FXML private TextField txtField02;
+    @FXML private TextField txtField03;
+    @FXML private TextField txtField04;
+    @FXML private TextField txtField05;
+    @FXML private TextField txtField06;
+    @FXML private TextField txtField07;
+    @FXML private TextField txtField08;
+    @FXML private TextField txtField09;
+    @FXML private TextField txtField10;
+    @FXML private TextField txtField11;
+    @FXML private TextField txtField12;
+    @FXML private TextField txtField13;
+    @FXML private TextField txtField14;
+    @FXML private TextField txtField15;
+    @FXML private TextField txtField16;
+    @FXML private TextField txtField17;
+    @FXML private TextField txtField18;
+    @FXML private TextField txtField19;
+    @FXML private ComboBox Combo23;
+    @FXML private ComboBox Combo24;
+    @FXML private CheckBox Check20;
+    @FXML private CheckBox Check21;
+    @FXML private CheckBox Check22;
+    @FXML private CheckBox Check26;
+    @FXML private Button btnSave;
+    @FXML private Button btnUpdate;
+    @FXML private Button btnCancel;
+    @FXML private Button btnClose;
+    @FXML private Button btnSearch;
+    @FXML private Button btnBrowse;
+    @FXML private Button btnNew;
+    @FXML private Button btnActivate;
+    @FXML private TextField txtField25;
+    @FXML private FontAwesomeIconView glyphExit;
+    @FXML private Label lblHeader;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {

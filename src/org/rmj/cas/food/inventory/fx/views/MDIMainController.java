@@ -54,128 +54,67 @@ import org.rmj.cas.parameter.fx.ParameterFX;
 import org.rmj.cas.pos.reports.BIRReports;
 
 public class MDIMainController implements Initializable {
-    @FXML
-    private VBox dataPane;
-    @FXML
-    private MenuItem mnuClose;
-    @FXML
-    private MenuItem mnuTerm;
-    @FXML
-    private MenuItem mnuInvType;
-    @FXML
-    private MenuItem mnuCompany;
-    @FXML
-    private MenuItem mnuInventory;
-    @FXML
-    private MenuItem mnuBrand;
-    @FXML
-    private MenuItem mnuModel;
-    @FXML
-    private MenuItem mnuColor;
-    @FXML
-    private MenuItem mnuCategory;
-    @FXML
-    private MenuItem mnuCategory2;
-    @FXML
-    private MenuItem mnuCategory3;
-    @FXML
-    private MenuItem mnuCategory4;
-    @FXML
-    private MenuItem mnuSupplier;
-    @FXML
-    private MenuItem mnuInvLocation;
-    @FXML
-    private Label lblUser;
-    @FXML
-    private Button btnExit;
-    @FXML
-    private Button btnMinimize;
-    @FXML
-    private MenuBar mnuBar;
-    @FXML
-    private Label lblDate;
-    @FXML
-    private Label lblCompany;
-    @FXML
-    private MenuItem mnuPOReceiving;
-    @FXML
-    private MenuItem mnuStocks;
-    @FXML
-    private CheckMenuItem chkLight;
-    @FXML
-    private MenuItem mnu_InventoryTransfer;
-    @FXML
-    private MenuItem mnu_inventoryCount;
-    @FXML
-    private MenuItem mnu_DailyProduction;
-    @FXML
-    private MenuItem mnu_POReceivingReg;
-    @FXML
-    private MenuItem mnu_InvTransReg;
-    @FXML
-    private MenuItem mnu_InvCountReg;
-    @FXML
-    private MenuItem mnu_InvDailyProdReg;
-    @FXML
-    private MenuItem menu_TransferPosting;
-    @FXML
-    private ToggleButton btnRestoreDown;
-    @FXML
-    private FontAwesomeIconView cmdRestore;
-    @FXML
-    private AnchorPane rootPane;
-    @FXML
-    private FontAwesomeIconView file;
-    @FXML
-    private FontAwesomeIconView transaction;
-    @FXML
-    private FontAwesomeIconView utilities;
-    @FXML
-    private FontAwesomeIconView reports;
-    @FXML
-    private FontAwesomeIconView history;
-    @FXML
-    private FontAwesomeIconView settings;
-    @FXML
-    private MenuItem mnuStandard;
-    @FXML
-    private MenuItem mnuMeasure;
-    @FXML
-    private MenuItem mnuWasteInventory;
-    @FXML
-    private MenuItem mnuPurchaseOrder;
-    @FXML
-    private MenuItem mnu_InvWasteReg;
-    @FXML
-    private MenuItem mnuPOReturn;
-    @FXML
-    private MenuItem mnu_PurchaseOrderReg;
-    @FXML
-    private MenuItem mnu_POReturnReg;
-    @FXML
-    private MenuItem mnuBIRrep;
-    @FXML
-    private Label lblFormTitle;
-    @FXML
-    private MenuItem mnuResetPOS;
-    @FXML
-    private MenuItem mnuDiscounts;
-    @FXML
-    private MenuItem mnuSerialUpload;
-    @FXML
-    private Menu mnuFiles;
-    @FXML
-    private Menu mnuTransactions;
-    @FXML
-    private Menu mnuUtilities;
-    @FXML
-    private Menu mnuReports;
-    @FXML
-    private Menu mnuHistory;
-    @FXML
-    private Menu mnuSettings;
-    @FXML
-    private AnchorPane mnuMain;
+    @FXML private VBox dataPane;
+    @FXML private MenuItem mnuClose;
+    @FXML private MenuItem mnuTerm;
+    @FXML private MenuItem mnuInvType;
+    @FXML private MenuItem mnuCompany;
+    @FXML private MenuItem mnuInventory;
+    @FXML private MenuItem mnuBrand;
+    @FXML private MenuItem mnuModel;
+    @FXML private MenuItem mnuColor;
+    @FXML private MenuItem mnuCategory;
+    @FXML private MenuItem mnuCategory2;
+    @FXML private MenuItem mnuCategory3;
+    @FXML private MenuItem mnuCategory4;
+    @FXML private MenuItem mnuSupplier;
+    @FXML private MenuItem mnuInvLocation;
+    @FXML private Label lblUser;
+    @FXML private Button btnExit;
+    @FXML private Button btnMinimize;
+    @FXML private MenuBar mnuBar;
+    @FXML private Label lblDate;
+    @FXML private Label lblCompany;
+    @FXML private MenuItem mnuPOReceiving;
+    @FXML private MenuItem mnuStocks;
+    @FXML private CheckMenuItem chkLight;
+    @FXML private MenuItem mnu_InventoryTransfer;
+    @FXML private MenuItem mnu_inventoryCount;
+    @FXML private MenuItem mnu_DailyProduction;
+    @FXML private MenuItem mnu_POReceivingReg;
+    @FXML private MenuItem mnu_InvTransReg;
+    @FXML private MenuItem mnu_InvCountReg;
+    @FXML private MenuItem mnu_InvDailyProdReg;
+    @FXML private MenuItem menu_TransferPosting;
+    @FXML private ToggleButton btnRestoreDown;
+    @FXML private FontAwesomeIconView cmdRestore;
+    @FXML private AnchorPane rootPane;
+    @FXML private FontAwesomeIconView file;
+    @FXML private FontAwesomeIconView transaction;
+    @FXML private FontAwesomeIconView utilities;
+    @FXML private FontAwesomeIconView reports;
+    @FXML private FontAwesomeIconView history;
+    @FXML private FontAwesomeIconView settings;
+    @FXML private MenuItem mnuStandard;
+    @FXML private MenuItem mnuMeasure;
+    @FXML private MenuItem mnuWasteInventory;
+    @FXML private MenuItem mnuPurchaseOrder;
+    @FXML private MenuItem mnu_InvWasteReg;
+    @FXML private MenuItem mnuPOReturn;
+    @FXML private MenuItem mnu_PurchaseOrderReg;
+    @FXML private MenuItem mnu_POReturnReg;
+    @FXML private MenuItem mnuBIRrep;
+    @FXML private Label lblFormTitle;
+    @FXML private MenuItem mnuResetPOS;
+    @FXML private MenuItem mnuDiscounts;
+    @FXML private MenuItem mnuSerialUpload;
+    @FXML private Menu mnuFiles;
+    @FXML private Menu mnuTransactions;
+    @FXML private Menu mnuUtilities;
+    @FXML private Menu mnuReports;
+    @FXML private Menu mnuHistory;
+    @FXML private Menu mnuSettings;
+    @FXML private AnchorPane mnuMain;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {

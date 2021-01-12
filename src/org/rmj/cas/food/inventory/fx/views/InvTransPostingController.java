@@ -68,6 +68,7 @@ public class InvTransPostingController implements Initializable {
     @FXML private Button btnClose;
     @FXML private Button btnBrowse;
     @FXML private TextField txtOther02;
+    @FXML private TextField txtDetail08;
 
    
     @Override
@@ -366,6 +367,7 @@ public class InvTransPostingController implements Initializable {
             txtDetail07.setText(CommonUtils.NumberFormat(Double.valueOf(poTrans.getDetail(pnRow, "nInvCostx").toString()), "0.00"));
             txtDetail06.setText(String.valueOf(poTrans.getDetail(pnRow, "nQuantity")));
             txtDetail10.setText(String.valueOf(poTrans.getDetail(pnRow, "sNotesxxx")));
+            txtDetail08.setText(CommonUtils.xsDateLong((Date)poTrans.getDetail(pnRow, "dExpiryDt")));
             txtOther02.setText(String.valueOf(poTrans.getDetailOthers(pnRow, "nQtyOnHnd")));
         } else{
             txtDetail03.setText("");
@@ -376,6 +378,7 @@ public class InvTransPostingController implements Initializable {
             txtDetail10.setText("");
             txtDetail80.setText("");
             txtOther02.setText("0");
+            txtDetail08.setText("");
         }
     }
     

@@ -67,6 +67,7 @@ public class InvCountController implements Initializable {
     @FXML private TextField txtDetail09;
     @FXML private TextField txtField51;
     @FXML private TextField txtField50;
+    @FXML private TextField txtDetail11;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -207,10 +208,12 @@ public class InvCountController implements Initializable {
                         txtDetail03.setText(poTrans.getDetailOthers(pnRow, "sBarCodex").toString());
                         txtDetail80.setText(poTrans.getDetailOthers(pnRow, "sDescript").toString());
                         txtDetail05.setText(poTrans.getDetail(pnRow, "nQtyOnHnd").toString());
+                        txtDetail11.setText(CommonUtils.xsDateMedium((Date) poTrans.getDetail(pnRow, "dExpiryDt")));
                     } else {
                         txtDetail03.setText("");
                         txtDetail80.setText("");
                         txtDetail05.setText("0");
+                        txtDetail11.setText("0");
                     }
                     break;
                     
@@ -220,10 +223,12 @@ public class InvCountController implements Initializable {
                         txtDetail03.setText(poTrans.getDetailOthers(pnRow, "sBarCodex").toString());
                         txtDetail80.setText(poTrans.getDetailOthers(pnRow, "sDescript").toString());
                         txtDetail05.setText(poTrans.getDetail(pnRow, "nQtyOnHnd").toString());
+                        txtDetail11.setText(CommonUtils.xsDateMedium((Date) poTrans.getDetail(pnRow, "dExpiryDt")));
                     } else {
                         txtDetail03.setText("");
                         txtDetail80.setText("");
                         txtDetail05.setText("0");
+                        txtDetail11.setText("");
                     }
                     
                     break;
@@ -314,6 +319,7 @@ public class InvCountController implements Initializable {
             txtDetail05.setText(String.valueOf(poTrans.getDetail(pnRow, "nQtyOnHnd")));
             txtDetail09.setText(String.valueOf(poTrans.getDetail(pnRow, "nFinalCtr")));
             txtDetail10.setText(String.valueOf(poTrans.getDetail(pnRow, "sRemarksx")));
+            txtDetail11.setText(CommonUtils.xsDateMedium((Date) poTrans.getDetail(pnRow, "dExpiryDt")));
         } else{
             txtDetail03.setText("");
             txtDetail04.setText("");
@@ -321,6 +327,7 @@ public class InvCountController implements Initializable {
             txtDetail09.setText("0");
             txtDetail10.setText("");
             txtDetail80.setText("");
+            txtDetail11.setText("");
         }
     }
     

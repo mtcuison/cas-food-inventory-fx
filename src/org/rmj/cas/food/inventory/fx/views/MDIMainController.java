@@ -646,7 +646,7 @@ public class MDIMainController implements Initializable {
     
     public void setGRider(GRider foGRider){this.poGRider = foGRider;}
     
-    private final String pxeModuleName = "MDIMainController";
+    private final String pxeModuleName = "Pedritos Integrated System";
     private static GRider poGRider;
     
     public boolean changeTheme(){

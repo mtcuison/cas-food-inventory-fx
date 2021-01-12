@@ -57,17 +57,17 @@
                   <TextField fx:id="txtField02" layoutX="111.0" layoutY="101.0" prefHeight="25.0" prefWidth="149.0" />
                   <TextArea fx:id="txtField03" layoutX="111.0" layoutY="130.0" prefHeight="80.0" prefWidth="305.0" />
                   <Label alignment="CENTER_RIGHT" layoutX="14.0" layoutY="129.0" prefHeight="17.0" prefWidth="90.0" text="Remarks" textAlignment="RIGHT" />
-                  <Label alignment="CENTER_RIGHT" layoutX="456.0" layoutY="131.0" prefHeight="17.0" prefWidth="69.0" text="Barcode" />
-                  <TextField fx:id="txtDetail03" layoutX="532.0" layoutY="127.0" prefHeight="25.0" prefWidth="149.0" promptText="Press F3 to search" />
-                  <Label alignment="CENTER_RIGHT" layoutX="456.0" layoutY="160.0" prefHeight="17.0" prefWidth="69.0" text="Description" />
-                  <TextField fx:id="txtDetail80" layoutX="532.0" layoutY="155.0" prefHeight="27.0" prefWidth="323.0" promptText="Press F3 to search" />
-                  <Label alignment="CENTER_RIGHT" layoutX="456.0" layoutY="187.0" prefHeight="17.0" prefWidth="69.0" text="Unit Cost" />
-                  <TextField fx:id="txtDetail05" editable="false" focusTraversable="false" layoutX="532.0" layoutY="183.0" prefHeight="27.0" prefWidth="69.0" />
-                  <Label alignment="CENTER_RIGHT" layoutX="751.0" layoutY="189.0" prefHeight="17.0" prefWidth="25.0" text="Qty">
+                  <Label alignment="CENTER_RIGHT" layoutX="446.0" layoutY="131.0" prefHeight="17.0" prefWidth="69.0" text="Barcode" />
+                  <TextField fx:id="txtDetail03" layoutX="522.0" layoutY="127.0" prefHeight="25.0" prefWidth="149.0" promptText="Press F3 to search" />
+                  <Label alignment="CENTER_RIGHT" layoutX="446.0" layoutY="160.0" prefHeight="17.0" prefWidth="69.0" text="Description" />
+                  <TextField fx:id="txtDetail80" layoutX="522.0" layoutY="155.0" prefHeight="27.0" prefWidth="337.0" promptText="Press F3 to search" />
+                  <Label alignment="CENTER_RIGHT" layoutX="446.0" layoutY="187.0" prefHeight="17.0" prefWidth="69.0" text="Unit Cost" />
+                  <TextField fx:id="txtDetail05" editable="false" focusTraversable="false" layoutX="522.0" layoutY="183.0" prefHeight="27.0" prefWidth="69.0" />
+                  <Label alignment="CENTER_RIGHT" layoutX="741.0" layoutY="189.0" prefHeight="17.0" prefWidth="25.0" text="Qty">
                      <font>
                         <Font name="System Bold" size="12.0" />
                      </font></Label>
-                  <TextField fx:id="txtDetail04" alignment="CENTER_RIGHT" layoutX="786.0" layoutY="183.0" prefHeight="27.0" prefWidth="69.0" />
+                  <TextField fx:id="txtDetail04" alignment="CENTER_RIGHT" layoutX="776.0" layoutY="183.0" prefHeight="27.0" prefWidth="82.0" />
                   <TableView fx:id="table" focusTraversable="false" layoutX="18.0" layoutY="217.0" onMouseClicked="#table_Clicked" prefHeight="267.0" prefWidth="839.0" stylesheets="@../styles/Tables.css">
                     <columns>
                       <TableColumn prefWidth="75.0" text="C2" />
@@ -93,8 +93,10 @@
                         <Font name="System Bold" size="12.0" />
                      </font>
                   </Label>
-                  <Label alignment="CENTER_RIGHT" layoutX="613.0" layoutY="188.0" prefHeight="17.0" prefWidth="52.0" text="On Hand" />
-                  <TextField fx:id="txtDetail82" editable="false" focusTraversable="false" layoutX="672.0" layoutY="184.0" prefHeight="27.0" prefWidth="69.0" />
+                  <Label alignment="CENTER_RIGHT" layoutX="603.0" layoutY="188.0" prefHeight="17.0" prefWidth="52.0" text="On Hand" />
+                  <TextField fx:id="txtDetail82" editable="false" focusTraversable="false" layoutX="662.0" layoutY="184.0" prefHeight="27.0" prefWidth="69.0" />
+                  <Label alignment="CENTER_RIGHT" layoutX="668.0" layoutY="93.0" prefHeight="17.0" prefWidth="90.0" text="Expiration Date:" />
+                  <TextField fx:id="txtDetail06" disable="true" layoutX="760.0" layoutY="89.0" prefHeight="27.0" prefWidth="101.0" />
                </children>
             </AnchorPane>
             <AnchorPane prefHeight="498.0" prefWidth="90.0" style="-fx-background-color: #686868;" AnchorPane.topAnchor="30.0">

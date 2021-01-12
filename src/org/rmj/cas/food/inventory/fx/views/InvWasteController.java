@@ -66,6 +66,7 @@ public class InvWasteController implements Initializable {
     @FXML private TextField txtField50;
     @FXML private TextField txtField51;
     @FXML private TextField txtDetail82;
+    @FXML private TextField txtDetail06;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -584,11 +585,13 @@ public class InvWasteController implements Initializable {
                         txtDetail80.setText(poTrans.getDetailOthers(pnRow, "sDescript").toString());
                         txtDetail82.setText(poTrans.getDetailOthers(pnRow, "xQtyOnHnd").toString());
                         txtDetail05.setText(CommonUtils.NumberFormat(Double.valueOf(poTrans.getDetail(pnRow, "nInvCostx").toString()), "0.00"));
+                         txtDetail06.setText(CommonUtils.xsDateMedium((Date) poTrans.getDetail(pnRow, "dExpiryDt")));
                     } else {
                         txtDetail03.setText("");
                         txtDetail80.setText("");
                         txtDetail82.setText("0");
                         txtDetail05.setText("0.00");
+                        txtDetail06.setText("");
                     }
                     break;
 
@@ -691,12 +694,14 @@ public class InvWasteController implements Initializable {
             txtDetail05.setText(String.valueOf(poTrans.getDetailOthers(pnRow, "xQtyOnHnd")));
             txtDetail05.setText(CommonUtils.NumberFormat(Double.valueOf(poTrans.getDetail(pnRow, "nInvCostx").toString()), "0.00"));
             txtDetail04.setText(String.valueOf(poTrans.getDetail(pnRow, "nQuantity")));
+            txtDetail06.setText(CommonUtils.xsDateMedium((Date) poTrans.getDetail(pnRow, "dExpiryDt")));
         } else{
             txtDetail03.setText("");
             txtDetail04.setText("0");
             txtDetail05.setText("0.00");
             txtDetail80.setText("");
             txtDetail82.setText("0");
+            txtDetail06.setText("");
         }
     }
     
@@ -715,7 +720,9 @@ public class InvWasteController implements Initializable {
             default:
                 imgTranStat.setImage(new Image("org/rmj/cas/food/inventory/fx/images/unknown.png"));
         }    
-    }IMasterDetail poCallBack = new IMasterDetail() {
+    }
+    
+    IMasterDetail poCallBack = new IMasterDetail() {
         @Override
         public void MasterRetreive(int fnIndex) {
             getMaster(fnIndex);

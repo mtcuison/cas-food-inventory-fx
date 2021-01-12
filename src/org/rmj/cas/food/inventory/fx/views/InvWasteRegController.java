@@ -56,6 +56,7 @@ public class InvWasteRegController implements Initializable {
     @FXML private Button btnBrowse;
     @FXML private TextField txtField50;
     @FXML private TextField txtField51;
+    @FXML private TextField txtDetail06;
 
    
     @Override
@@ -331,11 +332,13 @@ public class InvWasteRegController implements Initializable {
             txtDetail80.setText((String) poTrans.getDetailOthers(pnRow, "sDescript"));
             txtDetail05.setText(String.valueOf(poTrans.getDetail(pnRow, "nInvCostx")));
             txtDetail04.setText(String.valueOf(poTrans.getDetail(pnRow, "nQuantity")));
+            txtDetail06.setText(CommonUtils.xsDateMedium((Date) poTrans.getDetail(pnRow, "dExpiryDt")));
         } else{
             txtDetail03.setText("");
             txtDetail04.setText("0");
             txtDetail05.setText("0.00");
             txtDetail80.setText("");
+            txtDetail06.setText("");
         }
     }
     

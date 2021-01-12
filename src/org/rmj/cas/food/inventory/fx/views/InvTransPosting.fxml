@@ -77,7 +77,7 @@
                      </padding>
                   </Label>
                   <Label alignment="CENTER_RIGHT" layoutX="442.0" layoutY="127.0" prefHeight="17.0" prefWidth="69.0" text="Order No." />
-                  <TextField fx:id="txtDetail05" disable="true" editable="false" layoutX="518.0" layoutY="123.0" prefHeight="27.0" prefWidth="183.0" />
+                  <TextField fx:id="txtDetail05" disable="true" editable="false" layoutX="518.0" layoutY="123.0" prefHeight="27.0" prefWidth="125.0" />
                   <Label alignment="CENTER_RIGHT" layoutX="439.0" layoutY="154.0" prefHeight="17.0" prefWidth="69.0" text="Barcode" />
                   <TextField fx:id="txtDetail03" disable="true" editable="false" layoutX="518.0" layoutY="151.0" prefHeight="27.0" prefWidth="183.0" />
                   <Label alignment="CENTER_RIGHT" layoutX="436.0" layoutY="178.0" prefHeight="17.0" prefWidth="69.0" text="Description" />
@@ -104,7 +104,7 @@
                     </columns>
                   </TableView>
                   <Separator layoutX="433.0" layoutY="43.0" orientation="VERTICAL" prefHeight="325.0" prefWidth="4.0" style="-fx-background-color: black;" />
-                  <ImageView fx:id="imgTranStat" fitHeight="35.0" fitWidth="158.0" layoutX="728.0" layoutY="47.0" pickOnBounds="true" preserveRatio="true" />
+                  <ImageView fx:id="imgTranStat" fitHeight="35.0" fitWidth="158.0" layoutX="728.0" layoutY="46.0" pickOnBounds="true" preserveRatio="true" />
                   <AnchorPane layoutX="2.0" layoutY="4.0" minHeight="43.0" prefHeight="43.0" prefWidth="200.0" style="-fx-background-color: #686868;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <children>
                         <Separator layoutY="41.0" prefWidth="200.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="40.0" />
@@ -127,6 +127,8 @@
                      </font>
                   </Label>
                   <TextField fx:id="txtOther02" disable="true" editable="false" layoutX="518.0" layoutY="285.0" prefHeight="25.0" prefWidth="149.0" />
+                  <Label alignment="CENTER_RIGHT" layoutX="643.0" layoutY="97.0" prefHeight="17.0" prefWidth="98.0" text="Expiration Date:" />
+                  <TextField fx:id="txtDetail08" disable="true" editable="false" layoutX="744.0" layoutY="93.0" prefHeight="27.0" prefWidth="139.0" />
                </children>
             </AnchorPane>
             <AnchorPane prefHeight="596.0" prefWidth="90.0" style="-fx-background-color: #686868;" AnchorPane.topAnchor="30.0">

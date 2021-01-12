@@ -14,7 +14,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox fx:id="VBoxForm" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="529.0" prefWidth="962.0" stylesheets="@../styles/Register.css" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1">
+<VBox fx:id="VBoxForm" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="529.0" prefWidth="962.0" stylesheets="@../styles/Register.css" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.rmj.cas.food.inventory.fx.views.InvWasteRegController">
    <children>
       <AnchorPane prefHeight="490.0" prefWidth="962.0">
          <children>
@@ -55,9 +55,9 @@
                   <TextArea fx:id="txtField03" disable="true" editable="false" layoutX="111.0" layoutY="125.0" prefHeight="80.0" prefWidth="305.0" />
                   <Label alignment="CENTER_RIGHT" layoutX="14.0" layoutY="123.0" prefHeight="17.0" prefWidth="90.0" text="Remarks" textAlignment="RIGHT" />
                   <Label alignment="CENTER_RIGHT" layoutX="456.0" layoutY="121.0" prefHeight="17.0" prefWidth="69.0" text="Barcode" />
-                  <TextField fx:id="txtDetail03" disable="true" editable="false" layoutX="532.0" layoutY="117.0" prefHeight="25.0" prefWidth="149.0" promptText="Press F3 to search" />
+                  <TextField fx:id="txtDetail03" disable="true" editable="false" layoutX="532.0" layoutY="117.0" prefHeight="25.0" prefWidth="149.0" />
                   <Label alignment="CENTER_RIGHT" layoutX="448.0" layoutY="149.0" prefHeight="17.0" prefWidth="69.0" text="Description" />
-                  <TextField fx:id="txtDetail80" disable="true" editable="false" layoutX="532.0" layoutY="145.0" prefHeight="27.0" prefWidth="323.0" promptText="Press F3 to search" />
+                  <TextField fx:id="txtDetail80" disable="true" editable="false" layoutX="532.0" layoutY="145.0" prefHeight="27.0" prefWidth="323.0" />
                   <Label alignment="CENTER_RIGHT" layoutX="456.0" layoutY="177.0" prefHeight="17.0" prefWidth="69.0" text="Unit Cost" />
                   <TextField fx:id="txtDetail05" disable="true" editable="false" layoutX="532.0" layoutY="173.0" prefHeight="25.0" prefWidth="149.0" />
                   <Label alignment="CENTER_RIGHT" layoutX="681.0" layoutY="179.0" prefHeight="17.0" prefWidth="69.0" text="Quantity">
@@ -72,7 +72,7 @@
                     </columns>
                   </TableView>
                   <Separator layoutX="439.0" layoutY="45.0" orientation="VERTICAL" prefHeight="166.0" prefWidth="0.0" style="-fx-background-color: black;" />
-                  <ImageView fx:id="imgTranStat" fitHeight="35.0" fitWidth="170.0" layoutX="691.0" layoutY="48.0" pickOnBounds="true" preserveRatio="true" />
+                  <ImageView fx:id="imgTranStat" fitHeight="35.0" fitWidth="170.0" layoutX="691.0" layoutY="44.0" pickOnBounds="true" preserveRatio="true" />
                   <AnchorPane layoutX="4.0" layoutY="-1.0" prefHeight="43.0" prefWidth="780.0" style="-fx-background-color: #686868;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <children>
                         <Separator layoutY="42.0" prefWidth="200.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="40.0" />
@@ -89,6 +89,8 @@
                         <Font name="System Bold" size="12.0" />
                      </font>
                   </Label>
+                  <Label alignment="CENTER_RIGHT" layoutX="609.0" layoutY="86.0" prefHeight="17.0" prefWidth="90.0" text="Expiration Date:" />
+                  <TextField fx:id="txtDetail06" disable="true" editable="false" layoutX="706.0" layoutY="82.0" prefHeight="25.0" prefWidth="149.0" />
                </children>
             </AnchorPane>
             <AnchorPane prefHeight="498.0" prefWidth="90.0" style="-fx-background-color: #686868;" AnchorPane.topAnchor="30.0">

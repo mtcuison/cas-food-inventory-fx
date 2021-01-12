@@ -94,6 +94,7 @@ public class InvTransferController implements Initializable {
     @FXML private TextField txtField51;
     @FXML private Button btnPrint;
     @FXML private TextField txtOther02;
+    @FXML private TextField txtDetail08;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -154,7 +155,6 @@ public class InvTransferController implements Initializable {
         initButton(pnEditMode);
         
         pbLoaded = true;
-  
     }
     
     private void initButton(int fnValue){
@@ -335,12 +335,14 @@ public class InvTransferController implements Initializable {
                         txtDetail80.setText(poTrans.getDetailOthers(pnRow, "sDescript").toString());
                         txtDetail06.setText(poTrans.getDetail(pnRow, "nQuantity").toString());
                         txtDetail07.setText(poTrans.getDetail(pnRow, "nInvCostx").toString());
+                        txtDetail08.setText(CommonUtils.xsDateMedium((Date) poTrans.getDetail(pnRow, "dExpiryDt")));
                         txtOther02.setText(poTrans.getDetailOthers(pnRow, "nQtyOnHnd").toString());
                     } else {
                         txtDetail03.setText("");
                         txtDetail80.setText("");
                         txtDetail06.setText("");
                         txtDetail07.setText("");
+                        txtDetail08.setText("");
                         txtOther02.setText("0");
                     }
                     break;
@@ -353,12 +355,14 @@ public class InvTransferController implements Initializable {
                         txtDetail06.setText(poTrans.getDetail(pnRow, "nQuantity").toString());
                         txtDetail07.setText(poTrans.getDetail(pnRow, "nInvCostx").toString());
                         txtOther02.setText(poTrans.getDetailOthers(pnRow, "nQtyOnHnd").toString());
+                        txtDetail08.setText(CommonUtils.xsDateMedium((Date) poTrans.getDetail(pnRow, "dExpiryDt")));
                     } else {
                         txtDetail03.setText("");
                         txtDetail80.setText("");
                         txtDetail06.setText("");
                         txtDetail07.setText("");
                         txtOther02.setText("0");
+                        txtDetail08.setText("");
                     }
                     
                     break;
@@ -622,6 +626,7 @@ public class InvTransferController implements Initializable {
             txtDetail80.setText((String) poTrans.getDetailOthers(pnRow, "sDescript"));
             txtDetail04.setText((String) poTrans.getDetailOthers(pnRow, "sOrigCode"));
             txtDetail07.setText(CommonUtils.NumberFormat(Double.valueOf(poTrans.getDetail(pnRow, "nInvCostx").toString()), "0.00"));
+            txtDetail08.setText(CommonUtils.xsDateMedium((Date) poTrans.getDetail(pnRow, "dExpiryDt")));
             txtDetail06.setText(String.valueOf(poTrans.getDetail(pnRow, "nQuantity")));
             txtDetail10.setText(String.valueOf(poTrans.getDetail(pnRow, "sNotesxxx")));
             txtOther02.setText(String.valueOf(poTrans.getDetailOthers(pnRow, "nQtyOnHnd")));

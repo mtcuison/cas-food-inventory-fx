@@ -91,6 +91,7 @@ public class POReceivingController implements Initializable {
     @FXML private TextField txtField50;
     @FXML private TextField txtField51;
     @FXML private TextField txtField29;
+    @FXML private TextField txtDetail10;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -224,6 +225,7 @@ public class POReceivingController implements Initializable {
             txtDetail07.setText(String.valueOf(poTrans.getDetail(pnRow, "nQuantity")));
             txtDetail08.setText(CommonUtils.NumberFormat(Double.valueOf(poTrans.getDetail(pnRow, 8).toString()), "0.00"));
             txtDetail09.setText(CommonUtils.NumberFormat(Double.valueOf(poTrans.getDetail(pnRow, 9).toString()), "0.00"));
+            txtDetail10.setText(CommonUtils.xsDateMedium((Date) poTrans.getDetail(pnRow, "dExpiryDt")));
             
             Combo06.getSelectionModel().select(Integer.parseInt((String) poTrans.getDetail(pnRow, 6)));
         } else{
@@ -234,6 +236,7 @@ public class POReceivingController implements Initializable {
             txtDetail08.setText("0.00");
             txtDetail09.setText("0.00");
             txtDetail80.setText("");   
+            txtDetail10.setText("");
         }
     }
     
@@ -650,6 +653,7 @@ public class POReceivingController implements Initializable {
                         psBarCodex = (String) loJSON.get("sBarCodex");
                         psDescript = (String) loJSON.get("sDescript");
                         txtDetail04.setText(psBarCodex);
+                        ShowMessageFX.Warning(lsValue, lsValue, lsValue);
                         txtDetail80.setText(psDescript);
                         loadDetail();
                     }

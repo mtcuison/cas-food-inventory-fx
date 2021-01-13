@@ -136,6 +136,7 @@ public class POReceivingController implements Initializable {
         txtDetail07.focusedProperty().addListener(txtDetail_Focus);
         txtDetail08.focusedProperty().addListener(txtDetail_Focus);
         txtDetail09.focusedProperty().addListener(txtDetail_Focus);
+        txtDetail10.focusedProperty().addListener(txtDetail_Focus);
         txtDetail80.focusedProperty().addListener(txtDetail_Focus);
                 
         /*Add keypress event for field with search*/
@@ -163,6 +164,7 @@ public class POReceivingController implements Initializable {
         txtDetail07.setOnKeyPressed(this::txtDetail_KeyPressed);
         txtDetail08.setOnKeyPressed(this::txtDetail_KeyPressed);
         txtDetail09.setOnKeyPressed(this::txtDetail_KeyPressed);
+        txtDetail10.setOnKeyPressed(this::txtDetail_KeyPressed);
         txtDetail80.setOnKeyPressed(this::txtDetail_KeyPressed);
         
         Combo06.setOnKeyPressed(this::ComboBox_KeyPressed);
@@ -641,7 +643,6 @@ public class POReceivingController implements Initializable {
         
         if (event.getCode() == F3){                    
             if (lsValue.isEmpty()) return;
-            
             switch (lnIndex){
                 case 3:                    
                     loJSON = poTrans.SearchDetail(pnRow, 3, lsValue, false, false);                  
@@ -653,7 +654,6 @@ public class POReceivingController implements Initializable {
                         psBarCodex = (String) loJSON.get("sBarCodex");
                         psDescript = (String) loJSON.get("sDescript");
                         txtDetail04.setText(psBarCodex);
-                        ShowMessageFX.Warning(lsValue, lsValue, lsValue);
                         txtDetail80.setText(psDescript);
                         loadDetail();
                     }
@@ -893,13 +893,31 @@ public class POReceivingController implements Initializable {
                     }
                     poTrans.setDetail(pnRow, lnIndex, x);
                     break;
+                 case 10: /*dRefernce*/
+                    if (CommonUtils.isDate(txtDetail.getText(), pxeDateFormat)){
+                        poTrans.setDetail(pnRow, "dExpiryDt", CommonUtils.toDate(txtDetail.getText()));
+                    } else{
+                        ShowMessageFX.Warning("Invalid date entry.", pxeModuleName, "Date format must be yyyy-MM-dd (e.g. 1991-07-07)");
+                        poTrans.setDetail(pnRow, "dExpiryDt",CommonUtils.toDate(pxeDateDefault));
+                    }
+                    return;
                 default:
                     break;
             }
             pnOldRow = table.getSelectionModel().getSelectedIndex();
             pdIndex= lnIndex;
-        } else {
-            pdIndex = -1 ;
+        } else{
+            switch (lnIndex){
+                case 10: /*dRefernce*/
+                    try{
+                        txtDetail.setText(CommonUtils.xsDateShort(lsValue));
+                    }catch(ParseException e){
+                        ShowMessageFX.Error(e.getMessage(), pxeModuleName, null);
+                    }
+                    txtDetail.selectAll();
+                    break;
+            }
+            pdIndex = lnIndex;
             txtDetail.selectAll();
         }
     };
@@ -1030,6 +1048,9 @@ public class POReceivingController implements Initializable {
                 case 9:
                     txtDetail09.setText(CommonUtils.NumberFormat(Double.valueOf(poTrans.getDetail(pnRow, fnIndex).toString()), "0.00"));
                     loadDetail();
+//                case 10:
+//                    txtDetail10.setText(poTrans.getDetail(pnRow, fnIndex).toString());
+//                    loadDetail();
                     break;
             }
         }

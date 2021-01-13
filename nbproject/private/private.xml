@@ -22,5 +22,6 @@
         </group>
         <group name="GCard"/>
         <group name="POS"/>
+        <group/>
     </open-files>
 </project-private>

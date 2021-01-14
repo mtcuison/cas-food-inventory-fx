@@ -392,7 +392,7 @@ public class InvTransferController implements Initializable {
         TextField txtField = (TextField)event.getSource();
         int lnIndex = Integer.parseInt(txtField.getId().substring(8, 10));
         String lsValue = txtField.getText() + "%";
-            if (event.getCode() == F3){
+            if (event.getCode() == ENTER || event.getCode() == F3){
                 switch (lnIndex){
                     case 4: /*sDestinat*/
                     case 6: /*sTruckIDx*/

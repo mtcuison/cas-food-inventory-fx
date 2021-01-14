@@ -551,7 +551,6 @@ public class POReceivingController implements Initializable {
         pnRow = 51;
         pnOldRow = -1;
         pnIndex = -1;
-        pdIndex = -1;
         setTranStat("-1");
         
         psOldRec = "";
@@ -577,7 +576,7 @@ public class POReceivingController implements Initializable {
                 case 5: /*sSupplier*/
                 case 8: /*sTermCode*/
                 case 20: /*sInvTypCd*/
-                case 29: /*sDeptIDxx*/    
+                case 29: /*sDeptIDxx*/
                     if (poTrans.SearchMaster(lnIndex, lsValue, false))
                         CommonUtils.SetNextFocus(txtField);
                     return;
@@ -775,7 +774,6 @@ public class POReceivingController implements Initializable {
     ObservableList<String> cDivision = FXCollections.observableArrayList("Motorcycle", "Mobile Phone", "Hotel", "General");
     
     private int pnIndex = -1;
-    private int pdIndex = -1;
     private int pnRow = -1;
     private int pnOldRow = -1;
     
@@ -896,16 +894,14 @@ public class POReceivingController implements Initializable {
                  case 10: /*dRefernce*/
                     if (CommonUtils.isDate(txtDetail.getText(), pxeDateFormat)){
                         poTrans.setDetail(pnRow, "dExpiryDt", CommonUtils.toDate(txtDetail.getText()));
-                    } else{
+                    }else{
                         ShowMessageFX.Warning("Invalid date entry.", pxeModuleName, "Date format must be yyyy-MM-dd (e.g. 1991-07-07)");
                         poTrans.setDetail(pnRow, "dExpiryDt",CommonUtils.toDate(pxeDateDefault));
                     }
                     return;
-                default:
-                    break;
             }
             pnOldRow = table.getSelectionModel().getSelectedIndex();
-            pdIndex= lnIndex;
+            pnIndex= lnIndex;
         } else{
             switch (lnIndex){
                 case 10: /*dRefernce*/
@@ -916,8 +912,9 @@ public class POReceivingController implements Initializable {
                     }
                     txtDetail.selectAll();
                     break;
+                default:
             }
-            pdIndex = lnIndex;
+            pnIndex = -1;
             txtDetail.selectAll();
         }
     };
@@ -1048,9 +1045,9 @@ public class POReceivingController implements Initializable {
                 case 9:
                     txtDetail09.setText(CommonUtils.NumberFormat(Double.valueOf(poTrans.getDetail(pnRow, fnIndex).toString()), "0.00"));
                     loadDetail();
-//                case 10:
-//                    txtDetail10.setText(poTrans.getDetail(pnRow, fnIndex).toString());
-//                    loadDetail();
+                case 10:
+                    txtDetail10.setText(CommonUtils.xsDateMedium((Date) poTrans.getDetail(pnRow, fnIndex)));
+                    loadDetail();
                     break;
             }
         }

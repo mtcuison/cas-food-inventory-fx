@@ -891,7 +891,7 @@ public class POReceivingController implements Initializable {
                     }
                     poTrans.setDetail(pnRow, lnIndex, x);
                     break;
-                 case 10: /*dRefernce*/
+                 case 10: /*dExpiryDt*/
                     if (CommonUtils.isDate(txtDetail.getText(), pxeDateFormat)){
                         poTrans.setDetail(pnRow, "dExpiryDt", CommonUtils.toDate(txtDetail.getText()));
                     }else{
@@ -904,7 +904,7 @@ public class POReceivingController implements Initializable {
             pnIndex= lnIndex;
         } else{
             switch (lnIndex){
-                case 10: /*dRefernce*/
+                case 10: /*dExpiryDt*/
                     try{
                         txtDetail.setText(CommonUtils.xsDateShort(lsValue));
                     }catch(ParseException e){

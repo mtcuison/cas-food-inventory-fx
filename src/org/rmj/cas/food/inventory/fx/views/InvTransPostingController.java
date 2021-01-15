@@ -4,6 +4,7 @@ package org.rmj.cas.food.inventory.fx.views;
 import com.sun.javafx.scene.control.skin.TableHeaderRow;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import java.net.URL;
+import java.text.ParseException;
 import java.util.Date;
 import java.util.ResourceBundle;
 import javafx.beans.property.ReadOnlyBooleanPropertyBase;
@@ -69,7 +70,7 @@ public class InvTransPostingController implements Initializable {
     @FXML private Button btnBrowse;
     @FXML private TextField txtOther02;
     @FXML private TextField txtDetail08;
-
+    @FXML private TextField txtField19;
    
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -83,9 +84,11 @@ public class InvTransPostingController implements Initializable {
         
         txtField50.focusedProperty().addListener(txtField_Focus);
         txtField51.focusedProperty().addListener(txtField_Focus);
+        txtField19.focusedProperty().addListener(txtField_Focus);
         
         txtField50.setOnKeyPressed(this::txtField_KeyPressed);
         txtField51.setOnKeyPressed(this::txtField_KeyPressed);
+        txtField19.setOnKeyPressed(this::txtField_KeyPressed);
         
         pnEditMode = EditMode.UNKNOWN;
         clearFields();
@@ -125,7 +128,7 @@ public class InvTransPostingController implements Initializable {
         psOrderNm = "";
         psOrderNox = "";
         psTransNox = "";
-        
+        txtField19.setDisable(true);
         data.clear();
     }
     
@@ -251,7 +254,7 @@ public class InvTransPostingController implements Initializable {
                             return;
                     }          
                     if(ShowMessageFX.YesNo(null, pxeModuleName, "Do you want to post this transaction?")==true){
-                        if (poTrans.postTransaction(psOldRec)){
+                        if (poTrans.postTransaction(psOldRec,(Date) poTrans.getMaster("dReceived"))){
                         ShowMessageFX.Information(null, pxeModuleName, "Transaction POSTED successfully.");
                         clearFields();
                         initGrid();
@@ -276,6 +279,7 @@ public class InvTransPostingController implements Initializable {
     private void loadRecord(){
         txtField01.setText((String) poTrans.getMaster("sTransNox"));
         txtField50.setText((String) poTrans.getMaster("sTransNox"));
+        txtField19.setText(CommonUtils.xsDateMedium((Date) poTrans.getMaster("dReceived")));
         psTransNox = txtField50.getText();
         
         XMBranch loBranch = poTrans.GetBranch((String)poTrans.getMaster(4), true);
@@ -292,7 +296,7 @@ public class InvTransPostingController implements Initializable {
         txtField03.setText(CommonUtils.xsDateMedium((Date) poTrans.getMaster("dTransact")));
         psDestina = txtField51.getText();
         txtField05.setText((String) poTrans.getMaster("sRemarksx"));
-        
+       
         txtField07.setText(CommonUtils.NumberFormat(Double.valueOf(poTrans.getMaster("nFreightx").toString()), "0.00"));
         txtField13.setText(CommonUtils.NumberFormat(Double.valueOf(poTrans.getMaster("nDiscount").toString()), "0.00"));
         
@@ -301,6 +305,11 @@ public class InvTransPostingController implements Initializable {
         pnRow = 0;
         pnOldRow = 0;
         loadDetail();
+        if (poTrans.getMaster("cTranStat").equals(0)){
+            txtField19.setDisable(false);
+            txtField19.requestFocus();
+        }
+        
         setTranStat((String) poTrans.getMaster("cTranStat"));
         psOldRec = txtField01.getText();
     }
@@ -479,10 +488,31 @@ public class InvTransPostingController implements Initializable {
                    if(lsValue.equals("") || lsValue.equals("%"))
                         txtField.setText("");
                         break;
-                default:
-                    ShowMessageFX.Warning(null, pxeModuleName, "Text field with name " + txtField.getId() + " not registered.");
+                case 19: /*dReceived*/
+                    if (CommonUtils.isDate(txtField.getText(), pxeDateFormat)){
+                        poTrans.setMaster("dExpiryDt", CommonUtils.toDate(txtField.getText()));
+                    }else{
+                        ShowMessageFX.Warning("Invalid date entry.", pxeModuleName, "Date format must be yyyy-MM-dd (e.g. 1991-07-07)");
+                        poTrans.setMaster("dExpiryDt",CommonUtils.toDate(pxeDateDefault));
+                    }
+                    return;
             }
-            pnIndex = lnIndex;
+            pnOldRow = table.getSelectionModel().getSelectedIndex();
+            pnIndex= lnIndex;
+        } else{
+            switch (lnIndex){
+                case 19: /*dReceived*/
+                    try{
+                        txtField.setText(CommonUtils.xsDateShort(lsValue));
+                    }catch(ParseException e){
+                        ShowMessageFX.Error(e.getMessage(), pxeModuleName, null);
+                    }
+                    txtField.selectAll();
+                    break;
+                default:
+            }
+            pnIndex = -1;
+            txtField.selectAll();
         }
         
     };

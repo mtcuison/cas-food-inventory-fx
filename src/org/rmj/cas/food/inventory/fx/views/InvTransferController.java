@@ -127,6 +127,8 @@ public class InvTransferController implements Initializable {
         txtDetail04.focusedProperty().addListener(txtDetail_Focus);
         txtDetail05.focusedProperty().addListener(txtDetail_Focus);
         txtDetail06.focusedProperty().addListener(txtDetail_Focus);
+        txtDetail07.focusedProperty().addListener(txtDetail_Focus);
+        txtDetail08.focusedProperty().addListener(txtDetail_Focus);
         txtDetail10.focusedProperty().addListener(txtDetailArea_Focus);
         txtDetail80.focusedProperty().addListener(txtDetail_Focus);
                 
@@ -146,6 +148,8 @@ public class InvTransferController implements Initializable {
         txtDetail04.setOnKeyPressed(this::txtDetail_KeyPressed);
         txtDetail05.setOnKeyPressed(this::txtDetail_KeyPressed);
         txtDetail06.setOnKeyPressed(this::txtDetail_KeyPressed);
+        txtDetail07.setOnKeyPressed(this::txtDetail_KeyPressed);
+        txtDetail08.setOnKeyPressed(this::txtDetail_KeyPressed);
         txtDetail10.setOnKeyPressed(this::txtDetailArea_KeyPressed);
         txtDetail80.setOnKeyPressed(this::txtDetail_KeyPressed);
         
@@ -786,10 +790,30 @@ public class InvTransferController implements Initializable {
                         y = 0.00;
                     }
                     poTrans.setDetail(pnRow,"nInvCostx", y);
-                    break; 
+                    break;
+                case 8: /*dExpiryDt*/
+                    if (CommonUtils.isDate(txtDetail.getText(), pxeDateFormat)){
+                        poTrans.setDetail(pnRow, "dExpiryDt", CommonUtils.toDate(txtDetail.getText()));
+                    }else{
+                        ShowMessageFX.Warning("Invalid date entry.", pxeModuleName, "Date format must be yyyy-MM-dd (e.g. 1991-07-07)");
+                        poTrans.setDetail(pnRow, "dExpiryDt",CommonUtils.toDate(pxeDateDefault));
+                    }
+                    return;
             }
             pnOldRow = table.getSelectionModel().getSelectedIndex();
-        } else {
+            pnIndex= lnIndex;
+        } else{
+            switch (lnIndex){
+                case 8: /*dExpiryDt*/
+                    try{
+                        txtDetail.setText(CommonUtils.xsDateShort(lsValue));
+                    }catch(ParseException e){
+                        ShowMessageFX.Error(e.getMessage(), pxeModuleName, null);
+                    }
+                    txtDetail.selectAll();
+                    break;
+                default:
+            }
             pnIndex = -1;
             txtDetail.selectAll();
         }

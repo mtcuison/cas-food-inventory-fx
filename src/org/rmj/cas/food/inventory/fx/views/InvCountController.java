@@ -95,6 +95,7 @@ public class InvCountController implements Initializable {
         txtDetail05.focusedProperty().addListener(txtDetail_Focus);
         txtDetail09.focusedProperty().addListener(txtDetail_Focus);
         txtDetail80.focusedProperty().addListener(txtDetail_Focus);
+        txtDetail11.focusedProperty().addListener(txtDetail_Focus);
         txtDetail10.focusedProperty().addListener(txtDetailArea_Focus);
         
         txtField01.setOnKeyPressed(this::txtField_KeyPressed);
@@ -105,6 +106,7 @@ public class InvCountController implements Initializable {
         txtField05.setOnKeyPressed(this::txtFieldArea_KeyPressed);
         
         txtDetail03.setOnKeyPressed(this::txtDetail_KeyPressed);
+        txtDetail11.setOnKeyPressed(this::txtDetail_KeyPressed);
         txtDetail04.setOnKeyPressed(this::txtDetail_KeyPressed);
         txtDetail05.setOnKeyPressed(this::txtDetail_KeyPressed);
         txtDetail09.setOnKeyPressed(this::txtDetail_KeyPressed);    

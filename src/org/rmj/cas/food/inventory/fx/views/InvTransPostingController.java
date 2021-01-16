@@ -256,7 +256,7 @@ public class InvTransPostingController implements Initializable {
                             return;
                     }          
                     if(ShowMessageFX.YesNo(null, pxeModuleName, "Do you want to post this transaction?")==true){
-                        if (poTrans.postTransaction(psOldRec,CommonUtils.toDate(txtField19.getText()))){
+                        if (poTrans.postTransaction(psOldRec,txtField19.getText())){
                         ShowMessageFX.Information(null, pxeModuleName, "Transaction POSTED successfully.");
                         clearFields();
                         initGrid();

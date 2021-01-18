@@ -5,8 +5,11 @@ import com.sun.javafx.scene.control.skin.TableHeaderRow;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import java.net.URL;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.beans.property.ReadOnlyBooleanPropertyBase;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -256,11 +259,15 @@ public class InvTransPostingController implements Initializable {
                             return;
                     }          
                     if(ShowMessageFX.YesNo(null, pxeModuleName, "Do you want to post this transaction?")==true){
-                        if (poTrans.postTransaction(psOldRec,txtField19.getText())){
-                        ShowMessageFX.Information(null, pxeModuleName, "Transaction POSTED successfully.");
-                        clearFields();
-                        initGrid();
-                        pnEditMode = EditMode.UNKNOWN;
+                        try {
+                            if (poTrans.postTransaction(psOldRec,toDate(CommonUtils.xsDateShort(txtField19.getText())))){
+                                ShowMessageFX.Information(null, pxeModuleName, "Transaction POSTED successfully.");
+                                clearFields();
+                                initGrid();
+                                pnEditMode = EditMode.UNKNOWN;
+                            }
+                        } catch (ParseException ex) {
+                            Logger.getLogger(InvTransPostingController.class.getName()).log(Level.SEVERE, null, ex);
                         }
                     }
                     
@@ -271,6 +278,18 @@ public class InvTransPostingController implements Initializable {
                 ShowMessageFX.Warning(null, pxeModuleName, "Button with name " + lsButton + " not registered.");
                 return;
         }
+    }
+    
+    public Date toDate(String fsDate){
+        Date ldDate = new Date();
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        try {
+         ldDate = formatter.parse(fsDate);
+         return ldDate;
+        }catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     @FXML

@@ -3,7 +3,7 @@
 }
 
 .table-view:focused{
-    -fx-background-color: transparent;
+    -fx-background-color: #4d5656;
 }
 .table-row-cell:empty {
     -fx-background-color: white;
@@ -75,6 +75,11 @@
     -fx-border-width: 1px 1px 0px 1px;
 }
 #table{
+    -fx-border-color: #000000;
+    -fx-border-width: 1px 1px 1px 1px;
+}
+
+#tableDetail{
     -fx-border-color: #000000;
     -fx-border-width: 1px 1px 1px 1px;
 }

@@ -5,7 +5,6 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Separator?>
-<?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
@@ -105,12 +104,7 @@
                         <Font name="System Bold" size="12.0" />
                      </font></Label>
                   <TextField fx:id="txtDetail06" alignment="CENTER_RIGHT" layoutX="764.0" layoutY="279.0" prefHeight="27.0" prefWidth="118.0" />
-                  <TableView fx:id="table" focusTraversable="false" layoutX="18.0" layoutY="373.0" onMouseClicked="#table_Clicked" prefHeight="217.0" prefWidth="868.0" stylesheets="@../styles/Tables.css">
-                    <columns>
-                      <TableColumn prefWidth="75.0" text="C2" />
-                      <TableColumn prefWidth="75.0" text="C1" />
-                    </columns>
-                  </TableView>
+                  <TableView fx:id="table" layoutX="18.0" layoutY="373.0" onMouseClicked="#table_Clicked" prefHeight="217.0" prefWidth="556.0" stylesheets="@../styles/Tables.css" />
                   <Separator layoutX="433.0" layoutY="42.0" orientation="VERTICAL" prefHeight="329.0" prefWidth="1.0" style="-fx-background-color: black;" />
                   <ImageView fx:id="imgTranStat" fitHeight="35.0" fitWidth="158.0" layoutX="728.0" layoutY="45.0" pickOnBounds="true" preserveRatio="true" />
                   <AnchorPane layoutX="4.0" layoutY="1.0" prefHeight="43.0" prefWidth="200.0" style="-fx-background-color: #686868;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
@@ -138,6 +132,7 @@
                   <TextField fx:id="txtOther02" alignment="TOP_RIGHT" disable="true" editable="false" layoutX="518.0" layoutY="279.0" prefHeight="27.0" prefWidth="149.0" />
                   <Label alignment="CENTER_RIGHT" layoutX="663.0" layoutY="88.0" prefHeight="17.0" prefWidth="90.0" text="Expiration Date:" />
                   <TextField fx:id="txtDetail08" disable="true" layoutX="763.0" layoutY="84.0" prefHeight="27.0" prefWidth="118.0" />
+                  <TableView fx:id="tableDetail" layoutX="581.0" layoutY="371.0" prefHeight="217.0" prefWidth="308.0" />
                </children>
             </AnchorPane>
             <AnchorPane prefHeight="596.0" prefWidth="90.0" style="-fx-background-color: #686868;" AnchorPane.topAnchor="30.0">

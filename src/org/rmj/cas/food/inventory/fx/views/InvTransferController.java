@@ -10,6 +10,7 @@ import java.net.URL;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -26,7 +27,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
@@ -98,6 +98,7 @@ public class InvTransferController implements Initializable {
     @FXML private TextField txtDetail08;
     @FXML private TableView tableDetail;
     
+    
     private final String pxeModuleName = "InvTransferController";
     private static GRider poGRider;
     private InvTransfer poTrans;
@@ -109,6 +110,8 @@ public class InvTransferController implements Initializable {
     private TableModel model;
     private ObservableList<TableModel> data = FXCollections.observableArrayList();
     private ObservableList<TableModel> dataDetail =  FXCollections.observableArrayList();
+    private UnitExpiration poDetail = new UnitExpiration();
+    private ArrayList<UnitExpiration> detail;
     
     private int pnIndex = -1;
     private int pnRow = -1;
@@ -185,7 +188,6 @@ public class InvTransferController implements Initializable {
         initGrid();
         initButton(pnEditMode);
         initLisView();
-        loadDetailData("M00120002478");
         
         pbLoaded = true;
     }
@@ -337,7 +339,7 @@ public class InvTransferController implements Initializable {
         index04.setPrefWidth(78); index04.setStyle("-fx-alignment: CENTER;");
         
         index01.setSortable(false); index01.setResizable(false);
-        index02.setSortable(false); index02.setResizable(false);
+        index02.setSortable(true); index02.setResizable(false);
         index03.setSortable(false); index03.setResizable(false);
         index04.setSortable(false); index04.setResizable(false);
 
@@ -620,7 +622,7 @@ public class InvTransferController implements Initializable {
         pnRow = 0;
         pnOldRow = 0;
         loadDetail();
-        loadDetailData("M00120002478");
+        loadDetailData();
         setTranStat((String) poTrans.getMaster("cTranStat"));
         psOldRec = txtField01.getText();
     }
@@ -642,44 +644,35 @@ public class InvTransferController implements Initializable {
         }    
     }
     
-    private void loadDetailData(String fsStockIDx){
+    private void loadDetailData(){
         ResultSet loRS = null;
-        String lsSQL = "SELECT * FROM Inv_Master_Expiration" +
-                        " WHERE sStockIDx = " + SQLUtil.toSQL(fsStockIDx) +
-                            " AND sBranchCd = " + SQLUtil.toSQL("P001") +
-                            " AND nQtyOnHnd > 0" +
-                        " ORDER BY dExpiryDt";     
+        loRS = poTrans.getExpiration((String)poTrans.getDetail(pnRow, "sStockIDx"));
         
-        loRS = poGRider.executeQuery(lsSQL);
-        
+        int rowCount = 0;
+        int lnQtyOut = (Integer) poTrans.getDetail(pnRow, "nQuantity");
+        int lnTmpQtyOut = 0;
         try {
-//            while(loRS.next()){
+            dataDetail.clear();
+            while(loRS.next()){
+                    if(lnQtyOut <= loRS.getInt("nQtyOnHnd")){
+                        lnTmpQtyOut = lnQtyOut;
+                    }
+                   dataDetail.add(new TableModel(String.valueOf(rowCount +1),
+                                String.valueOf(CommonUtils.xsDateMedium(loRS.getDate("dExpiryDt"))),
+                                String.valueOf(loRS.getInt("nQtyOnHnd")),
+                                String.valueOf(lnTmpQtyOut),
+                                "",
+                                "",
+                                "",
+                                "",
+                                "",
+                                ""     
+                            ));
+                    rowCount++;
+           }
 
-                System.err.println(loRS.getString(1));
-//            }
-            
-//        int lnRow = table.getSelectionModel().getSelectedIndex();
-//        int lnCtr;
-//        //int lnRow = poTrans.ItemCount();
-//        
-//        dataDetail.clear();
-//        
-//        for(lnCtr = 0; lnCtr <=lnRow -1; lnCtr++){
-//            dataDetail.add(new TableModel(String.valueOf(lnCtr +1),
-//                    "",
-//                    "",
-//                    "",
-//                    "",
-//                    "",
-//                    "",
-//                    "",
-//                    "",
-//                    ""     
-//            ));
-//        }
         } catch (SQLException ex) {
             ex.printStackTrace();
-            Logger.getLogger(InvTransferController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     
@@ -937,9 +930,10 @@ public class InvTransferController implements Initializable {
 
     @FXML
     private void table_Clicked(MouseEvent event) {
-        setDetailInfo(); 
+        setDetailInfo();
         txtDetail03.requestFocus();
         txtDetail03.selectAll();
+        loadDetailData();
         
     }    
     

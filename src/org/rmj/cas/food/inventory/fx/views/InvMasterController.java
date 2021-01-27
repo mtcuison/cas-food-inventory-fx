@@ -4,9 +4,13 @@ package org.rmj.cas.food.inventory.fx.views;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import java.io.IOException;
 import java.net.URL;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.text.ParseException;
 import java.util.Date;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.beans.property.ReadOnlyBooleanPropertyBase;
 import javafx.beans.value.ChangeListener;
 import javafx.collections.FXCollections;
@@ -22,7 +26,10 @@ import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.cell.PropertyValueFactory;
 import static javafx.scene.input.KeyCode.ENTER;
 import static javafx.scene.input.KeyCode.F3;
 import javafx.scene.input.KeyEvent;
@@ -34,6 +41,8 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import org.rmj.appdriver.constants.EditMode;
 import org.rmj.appdriver.GRider;
+import org.rmj.appdriver.MiscUtil;
+import org.rmj.appdriver.SQLUtil;
 import org.rmj.appdriver.agentfx.ShowMessageFX;
 import org.rmj.appdriver.agentfx.CommonUtils;
 import org.rmj.cas.food.inventory.fx.views.child.FoodLedgerController;
@@ -96,6 +105,7 @@ public class InvMasterController implements Initializable {
     @FXML private Button btnList;
     @FXML private Label lblHeader;
     @FXML private TextField txtField29;
+    @FXML private TableView table;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -149,6 +159,79 @@ public class InvMasterController implements Initializable {
         initButton(pnEditMode);
         
         pbLoaded = true;
+    }
+    
+    public void initGrid(){
+        TableColumn index01 = new TableColumn("No.");
+        TableColumn index02 = new TableColumn("Expiration");
+        TableColumn index03 = new TableColumn("QtyOnHnd");
+        
+        index01.setPrefWidth(50); index01.setStyle("-fx-alignment: CENTER;");
+        index02.setPrefWidth(200); index02.setStyle("-fx-alignment: CENTER;");
+        index03.setPrefWidth(100); index03.setStyle("-fx-alignment: CENTER;");
+        
+        index01.setSortable(false); index01.setResizable(false);
+        index02.setSortable(true); index02.setResizable(false);
+        index03.setSortable(false); index03.setResizable(false);
+
+        table.getColumns().clear();
+        table.getColumns().add(index01);
+        table.getColumns().add(index02);
+        table.getColumns().add(index03);
+        
+        index01.setCellValueFactory(new PropertyValueFactory<org.rmj.cas.food.inventory.fx.views.TableModel,String>("index01"));
+        index02.setCellValueFactory(new PropertyValueFactory<org.rmj.cas.food.inventory.fx.views.TableModel,String>("index02"));
+        index03.setCellValueFactory(new PropertyValueFactory<org.rmj.cas.food.inventory.fx.views.TableModel,String>("index03"));
+        
+        table.setItems(data);
+    }
+    
+    private void loadDetailData(String fsStockIDx){
+        ResultSet loRS = null;
+        String lsSQL = "SELECT * FROM Inv_Master_Expiration" +
+                        " WHERE sStockIDx = " + SQLUtil.toSQL(fsStockIDx) +
+                            " AND sBranchCd = " + SQLUtil.toSQL(poGRider.getBranchCode()) +
+                            " AND nQtyOnHnd > 0" +
+                        " ORDER BY dExpiryDt";     
+        
+        loRS = poGRider.executeQuery(lsSQL);
+        int rowCount = 0;
+        if (MiscUtil.RecordCount(loRS)==0){
+            data.clear();
+            initGrid();
+            data.add(new TableModel(String.valueOf(rowCount +1),
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    ""
+                ));
+            return;
+        }
+        try {
+            data.clear();
+            while(loRS.next()){
+                data.add(new TableModel(String.valueOf(rowCount +1),
+                    String.valueOf(CommonUtils.xsDateMedium(loRS.getDate("dExpiryDt"))),
+                    String.valueOf(loRS.getInt("nQtyOnHnd")),
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    ""
+                ));
+                rowCount++;
+           }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            Logger.getLogger(InvTransferController.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
     private void txtField_KeyPressed(KeyEvent event){
@@ -485,7 +568,7 @@ public class InvMasterController implements Initializable {
         psBarcode = "";
         psDescript = "";
         psLocation = "";
-        
+        loadDetailData("");
         pnIndex = 51;
     }
     
@@ -578,6 +661,7 @@ public class InvMasterController implements Initializable {
       Check26.selectedProperty().setValue(lbCheck);
         
       psOldRec = txtField01.getText();
+      loadDetailData((String) poRecord.getInventory(1));
       pnEditMode = EditMode.READY;
     } 
     
@@ -587,6 +671,7 @@ public class InvMasterController implements Initializable {
     private final String pxeDefaultDte = "1900-01-01";
     private final String pxeDateFormat = "yyyy-MM-dd";
     private final String pxeCurrentDate = java.time.LocalDate.now().toString();
+    private ObservableList<TableModel> data = FXCollections.observableArrayList();
     private static GRider poGRider;
     private InvMaster poRecord;
     private String psLocation;
@@ -727,5 +812,9 @@ public class InvMasterController implements Initializable {
         }    
  
     };
+
+    @FXML
+    private void table_Clicked(MouseEvent event) {
+    }
 
 }

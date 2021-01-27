@@ -3,7 +3,7 @@
 }
 
 .table-view:focused{
-    -fx-background-color: #4d5656;
+    -fx-background-color: transparent;
 }
 .table-row-cell:empty {
     -fx-background-color: white;

@@ -4,7 +4,6 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Separator?>
-<?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
@@ -68,12 +67,7 @@
                         <Font name="System Bold" size="12.0" />
                      </font></Label>
                   <TextField fx:id="txtDetail04" alignment="CENTER_RIGHT" layoutX="776.0" layoutY="183.0" prefHeight="27.0" prefWidth="82.0" />
-                  <TableView fx:id="table" focusTraversable="false" layoutX="18.0" layoutY="217.0" onMouseClicked="#table_Clicked" prefHeight="267.0" prefWidth="839.0" stylesheets="@../styles/Tables.css">
-                    <columns>
-                      <TableColumn prefWidth="75.0" text="C2" />
-                      <TableColumn prefWidth="75.0" text="C1" />
-                    </columns>
-                  </TableView>
+                  <TableView fx:id="table" focusTraversable="false" layoutX="11.0" layoutY="224.0" onMouseClicked="#table_Clicked" prefHeight="267.0" prefWidth="534.0" stylesheets="@../styles/Tables.css" />
                   <Separator layoutX="436.0" layoutY="45.0" orientation="VERTICAL" prefHeight="169.0" prefWidth="4.0" style="-fx-background-color: black;" />
                   <ImageView fx:id="imgTranStat" fitHeight="35.0" fitWidth="170.0" layoutX="691.0" layoutY="47.0" pickOnBounds="true" preserveRatio="true" />
                   <AnchorPane layoutX="2.0" layoutY="1.0" prefHeight="43.0" prefWidth="200.0" style="-fx-background-color: #686868;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
@@ -144,6 +138,7 @@
                   <Separator layoutX="73.0" layoutY="120.0" minWidth="1.0" orientation="VERTICAL" prefHeight="200.0" prefWidth="1.0" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="1.0" AnchorPane.topAnchor="0.0" />
                </children>
             </AnchorPane>
+            <TableView fx:id="tableData" focusTraversable="false" layoutX="642.0" layoutY="253.0" onMouseClicked="#table_Clicked" prefHeight="267.0" prefWidth="308.0" />
          </children>
       </AnchorPane>
    </children>

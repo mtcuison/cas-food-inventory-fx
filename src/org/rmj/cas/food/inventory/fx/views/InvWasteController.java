@@ -3,6 +3,8 @@ package org.rmj.cas.food.inventory.fx.views;
 import com.sun.javafx.scene.control.skin.TableHeaderRow;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import java.net.URL;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.text.ParseException;
 import java.util.Date;
 import java.util.ResourceBundle;
@@ -34,6 +36,7 @@ import javafx.scene.layout.VBox;
 import org.rmj.appdriver.constants.EditMode;
 import org.rmj.appdriver.constants.TransactionStatus;
 import org.rmj.appdriver.GRider;
+import org.rmj.appdriver.MiscUtil;
 import org.rmj.appdriver.agentfx.ShowMessageFX;
 import org.rmj.appdriver.agentfx.CommonUtils;
 import org.rmj.cas.inventory.base.InvWaste;
@@ -67,6 +70,7 @@ public class InvWasteController implements Initializable {
     @FXML private TextField txtField51;
     @FXML private TextField txtDetail82;
     @FXML private TextField txtDetail06;
+    @FXML private TableView tableData;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -110,8 +114,44 @@ public class InvWasteController implements Initializable {
         
         initGrid();
         initButton(pnEditMode);
+        initLisView();
         
         pbLoaded = true;
+    }
+    
+    private void initLisView(){
+        TableColumn index01 = new TableColumn("No.");
+        TableColumn index02 = new TableColumn("Expiration");
+        TableColumn index03 = new TableColumn("OnHnd");
+        TableColumn index04 = new TableColumn("Out");
+        TableColumn index05 = new TableColumn("Rem");
+        
+        index01.setPrefWidth(30); index01.setStyle("-fx-alignment: CENTER;");
+        index02.setPrefWidth(90); index02.setStyle("-fx-alignment: CENTER;");
+        index03.setPrefWidth(65); index03.setStyle("-fx-alignment: CENTER;");
+        index04.setPrefWidth(65); index04.setStyle("-fx-alignment: CENTER;");
+        index05.setPrefWidth(65); index05.setStyle("-fx-alignment: CENTER;");
+        
+        index01.setSortable(false); index01.setResizable(false);
+        index02.setSortable(true); index02.setResizable(false);
+        index03.setSortable(false); index03.setResizable(false);
+        index04.setSortable(false); index04.setResizable(false);
+        index05.setSortable(false); index05.setResizable(false);
+
+        tableData.getColumns().clear();
+        tableData.getColumns().add(index01);
+        tableData.getColumns().add(index02);
+        tableData.getColumns().add(index03);
+        tableData.getColumns().add(index04);
+        tableData.getColumns().add(index05);
+        
+        index01.setCellValueFactory(new PropertyValueFactory<org.rmj.cas.food.inventory.fx.views.TableModel,String>("index01"));
+        index02.setCellValueFactory(new PropertyValueFactory<org.rmj.cas.food.inventory.fx.views.TableModel,String>("index02"));
+        index03.setCellValueFactory(new PropertyValueFactory<org.rmj.cas.food.inventory.fx.views.TableModel,String>("index03"));
+        index04.setCellValueFactory(new PropertyValueFactory<org.rmj.cas.food.inventory.fx.views.TableModel,String>("index04"));
+        index05.setCellValueFactory(new PropertyValueFactory<org.rmj.cas.food.inventory.fx.views.TableModel,String>("index05"));
+        
+        tableData.setItems(dataDetail);
     }
     
     private void initGrid(){
@@ -119,14 +159,14 @@ public class InvWasteController implements Initializable {
         TableColumn index01 = new TableColumn("No.");
         TableColumn index02 = new TableColumn("Barcode.");
         TableColumn index03 = new TableColumn("Description");
-        TableColumn index04 = new TableColumn("Expiration Date");
+        TableColumn index04 = new TableColumn("Cost");
         TableColumn index05 = new TableColumn("Quantity");
         
-        index01.setPrefWidth(70); index01.setStyle("-fx-alignment: CENTER;");
-        index02.setPrefWidth(280);
-        index03.setPrefWidth(289); 
-        index04.setPrefWidth(100); index04.setStyle("-fx-alignment: CENTER;");
-        index05.setPrefWidth(95); index04.setStyle("-fx-alignment: CENTER;");
+        index01.setPrefWidth(30); index01.setStyle("-fx-alignment: CENTER;");
+        index02.setPrefWidth(150);
+        index03.setPrefWidth(200); 
+        index04.setPrefWidth(80); index04.setStyle("-fx-alignment: CENTER;");
+        index05.setPrefWidth(70); index05.setStyle("-fx-alignment: CENTER;");
         
         index01.setSortable(false); index01.setResizable(false);
         index02.setSortable(false); index02.setResizable(false);
@@ -166,7 +206,9 @@ public class InvWasteController implements Initializable {
 
     @FXML
     private void table_Clicked(MouseEvent event) {
-        setDetailInfo(); 
+        pnRow = table.getSelectionModel().getSelectedIndex();
+        loadDetailData(pnRow);
+        setDetailInfo(pnRow); 
         txtDetail03.requestFocus();
         txtDetail03.selectAll();
     }
@@ -184,6 +226,7 @@ public class InvWasteController implements Initializable {
     
     private TableModel model;
     private ObservableList<TableModel> data = FXCollections.observableArrayList();
+    private ObservableList<TableModel> dataDetail =  FXCollections.observableArrayList();
     
     private int pnIndex = -1;
     private int pnRow = -1;
@@ -579,13 +622,12 @@ public class InvWasteController implements Initializable {
             switch (lnIndex){
                 case 3:
                     if (event.getCode() == F3) lsValue = lsValue + "%";
-                      
-                    if (poTrans.SearchDetail(pnRow, 3, lsValue, false, false)){
+                    if (poTrans.SearchDetail(pnRow, 3, lsValue, true, true)){
                         txtDetail03.setText(poTrans.getDetailOthers(pnRow, "sBarCodex").toString());
                         txtDetail80.setText(poTrans.getDetailOthers(pnRow, "sDescript").toString());
                         txtDetail82.setText(poTrans.getDetailOthers(pnRow, "xQtyOnHnd").toString());
                         txtDetail05.setText(CommonUtils.NumberFormat(Double.valueOf(poTrans.getDetail(pnRow, "nInvCostx").toString()), "0.00"));
-                         txtDetail06.setText(CommonUtils.xsDateMedium((Date) poTrans.getDetail(pnRow, "dExpiryDt")));
+                        txtDetail06.setText(CommonUtils.xsDateMedium((Date) poTrans.getDetail(pnRow, "dExpiryDt")));
                     } else {
                         txtDetail03.setText("");
                         txtDetail80.setText("");
@@ -598,7 +640,7 @@ public class InvWasteController implements Initializable {
                 case 80:
                     if (event.getCode() == F3) lsValue = lsValue + "%";
                     
-                    if (poTrans.SearchDetail(pnRow, 3, lsValue, true, false)){
+                    if (poTrans.SearchDetail(pnRow, 3, lsValue, false, false)){
                         txtDetail03.setText(poTrans.getDetailOthers(pnRow, "sBarCodex").toString());
                         txtDetail80.setText(poTrans.getDetailOthers(pnRow, "sDescript").toString());
                         txtDetail82.setText(poTrans.getDetailOthers(pnRow, "xQtyOnHnd").toString());
@@ -609,7 +651,6 @@ public class InvWasteController implements Initializable {
                         txtDetail82.setText("0");
                         txtDetail05.setText("0.00");
                     }
-                    
                     break;
                    
             }
@@ -679,15 +720,12 @@ public class InvWasteController implements Initializable {
             
             pnRow = table.getSelectionModel().getSelectedIndex();           
             
-            setDetailInfo();
+            setDetailInfo(pnRow);
         }
     }
     
-    private void setDetailInfo(){
-        int lnRow = table.getSelectionModel().getSelectedIndex();
-        
-        pnRow = lnRow;
-        
+    private void setDetailInfo(int fnRow){
+            pnRow = fnRow;
         if (pnRow >= 0){
             txtDetail03.setText((String) poTrans.getDetailOthers(pnRow, "sBarCodex"));
             txtDetail80.setText((String) poTrans.getDetailOthers(pnRow, "sDescript"));
@@ -765,6 +803,72 @@ public class InvWasteController implements Initializable {
                 break;
                 
                 
+        }
+    }
+    
+    private void loadDetailData(int fnRow){
+        ResultSet loRS = null;
+        loRS = poTrans.getExpiration((String)poTrans.getDetail(fnRow, "sStockIDx"));
+        boolean lbGetExpiry =false;
+        int rowCount = 0;
+        try {
+            dataDetail.clear();
+            if (poTrans.getDetail(fnRow, "sStockIDx").equals("")) return;
+            if(MiscUtil.RecordCount(loRS)==0){
+                dataDetail.add(new TableModel(String.valueOf(rowCount +1),
+                    String.valueOf(CommonUtils.xsDateMedium(loRS.getDate("dExpiryDt"))),
+                    String.valueOf(loRS.getInt("nQtyOnHnd")),
+                    String.valueOf((Integer) poTrans.getDetail(fnRow, "nQuantity")),
+                    String.valueOf(loRS.getInt("nQtyOnHnd") -(Integer) poTrans.getDetail(pnRow, "nQuantity")),
+                    "",
+                    "",
+                    "",
+                    "",
+                    ""     
+                ));
+                poTrans.setDetail(fnRow, "dExpiryDt", loRS.getDate("dExpiryDt"));
+            }else{
+                int lnQtyOut = (Integer) poTrans.getDetail(fnRow, "nQuantity");
+                loRS.first();
+                for (int lnRow = 0; lnRow <= MiscUtil.RecordCount(loRS) - 1; lnRow ++){
+                    if(!lbGetExpiry){
+                        poTrans.setDetail(fnRow, "dExpiryDt", loRS.getDate("dExpiryDt"));
+                        lbGetExpiry = true;
+                    }
+                    if(lnQtyOut<=loRS.getInt("nQtyOnHnd")){
+                       dataDetail.add(new TableModel(String.valueOf(rowCount +1),
+                                    String.valueOf(CommonUtils.xsDateMedium(loRS.getDate("dExpiryDt"))),
+                                    String.valueOf(loRS.getInt("nQtyOnHnd")),
+                                    String.valueOf(lnQtyOut),
+                                    String.valueOf(loRS.getInt("nQtyOnHnd") -lnQtyOut),
+                                    "",
+                                    "",
+                                    "",
+                                    "",
+                                    ""     
+                                ));
+                        lnQtyOut =  0;
+                    }else{
+                        dataDetail.add(new TableModel(String.valueOf(rowCount +1),
+                                    String.valueOf(CommonUtils.xsDateMedium(loRS.getDate("dExpiryDt"))),
+                                    String.valueOf(loRS.getInt("nQtyOnHnd")),
+                                    String.valueOf(loRS.getInt("nQtyOnHnd")),
+                                    String.valueOf(loRS.getInt("nQtyOnHnd")-loRS.getInt("nQtyOnHnd")),
+                                    "",
+                                    "",
+                                    "",
+                                    "",
+                                    ""     
+                                ));
+
+                        lnQtyOut =  lnQtyOut - loRS.getInt("nQtyOnHnd");
+                    }
+                    rowCount++;
+                    loRS.next();
+                }
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
         }
     }
 }

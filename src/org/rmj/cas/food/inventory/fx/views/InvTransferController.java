@@ -52,6 +52,7 @@ import org.json.simple.JSONObject;
 import org.rmj.appdriver.constants.EditMode;
 import org.rmj.appdriver.constants.TransactionStatus;
 import org.rmj.appdriver.GRider;
+import org.rmj.appdriver.MiscUtil;
 import org.rmj.appdriver.SQLUtil;
 import org.rmj.appdriver.agentfx.ShowMessageFX;
 import org.rmj.appdriver.agentfx.CommonUtils;
@@ -110,8 +111,6 @@ public class InvTransferController implements Initializable {
     private TableModel model;
     private ObservableList<TableModel> data = FXCollections.observableArrayList();
     private ObservableList<TableModel> dataDetail =  FXCollections.observableArrayList();
-    private UnitExpiration poDetail = new UnitExpiration();
-    private ArrayList<UnitExpiration> detail;
     
     private int pnIndex = -1;
     private int pnRow = -1;
@@ -128,7 +127,6 @@ public class InvTransferController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        
         poTrans = new InvTransfer(poGRider, poGRider.getBranchCode(), false);
         poTrans.setCallBack(poCallBack);
         
@@ -330,29 +328,34 @@ public class InvTransferController implements Initializable {
     private void initLisView(){
         TableColumn index01 = new TableColumn("No.");
         TableColumn index02 = new TableColumn("Expiration");
-        TableColumn index03 = new TableColumn("QtyOnHnd");
-        TableColumn index04 = new TableColumn("QtyOut");
+        TableColumn index03 = new TableColumn("OnHnd");
+        TableColumn index04 = new TableColumn("Out");
+        TableColumn index05 = new TableColumn("Rem");
         
         index01.setPrefWidth(30); index01.setStyle("-fx-alignment: CENTER;");
-        index02.setPrefWidth(100); index02.setStyle("-fx-alignment: CENTER;");
-        index03.setPrefWidth(78); index03.setStyle("-fx-alignment: CENTER;");
-        index04.setPrefWidth(78); index04.setStyle("-fx-alignment: CENTER;");
+        index02.setPrefWidth(90); index02.setStyle("-fx-alignment: CENTER;");
+        index03.setPrefWidth(65); index03.setStyle("-fx-alignment: CENTER;");
+        index04.setPrefWidth(65); index04.setStyle("-fx-alignment: CENTER;");
+        index05.setPrefWidth(65); index05.setStyle("-fx-alignment: CENTER;");
         
         index01.setSortable(false); index01.setResizable(false);
         index02.setSortable(true); index02.setResizable(false);
         index03.setSortable(false); index03.setResizable(false);
         index04.setSortable(false); index04.setResizable(false);
+        index05.setSortable(false); index05.setResizable(false);
 
         tableDetail.getColumns().clear();
         tableDetail.getColumns().add(index01);
         tableDetail.getColumns().add(index02);
         tableDetail.getColumns().add(index03);
         tableDetail.getColumns().add(index04);
+        tableDetail.getColumns().add(index05);
         
         index01.setCellValueFactory(new PropertyValueFactory<org.rmj.cas.food.inventory.fx.views.TableModel,String>("index01"));
         index02.setCellValueFactory(new PropertyValueFactory<org.rmj.cas.food.inventory.fx.views.TableModel,String>("index02"));
         index03.setCellValueFactory(new PropertyValueFactory<org.rmj.cas.food.inventory.fx.views.TableModel,String>("index03"));
         index04.setCellValueFactory(new PropertyValueFactory<org.rmj.cas.food.inventory.fx.views.TableModel,String>("index04"));
+        index05.setCellValueFactory(new PropertyValueFactory<org.rmj.cas.food.inventory.fx.views.TableModel,String>("index05"));
         
         tableDetail.setItems(dataDetail);
     }
@@ -622,7 +625,6 @@ public class InvTransferController implements Initializable {
         pnRow = 0;
         pnOldRow = 0;
         loadDetail();
-        loadDetailData();
         setTranStat((String) poTrans.getMaster("cTranStat"));
         psOldRec = txtField01.getText();
     }
@@ -644,33 +646,67 @@ public class InvTransferController implements Initializable {
         }    
     }
     
-    private void loadDetailData(){
+    private void loadDetailData(int fnRow){
         ResultSet loRS = null;
-        loRS = poTrans.getExpiration((String)poTrans.getDetail(pnRow, "sStockIDx"));
-        
+        loRS = poTrans.getExpiration((String)poTrans.getDetail(fnRow, "sStockIDx"));
+        boolean lbGetExpiry =false;
         int rowCount = 0;
-        int lnQtyOut = (Integer) poTrans.getDetail(pnRow, "nQuantity");
-        int lnTmpQtyOut = 0;
         try {
-            dataDetail.clear();
-            while(loRS.next()){
-                    if(lnQtyOut <= loRS.getInt("nQtyOnHnd")){
-                        lnTmpQtyOut = lnQtyOut;
-                    }
-                   dataDetail.add(new TableModel(String.valueOf(rowCount +1),
-                                String.valueOf(CommonUtils.xsDateMedium(loRS.getDate("dExpiryDt"))),
-                                String.valueOf(loRS.getInt("nQtyOnHnd")),
-                                String.valueOf(lnTmpQtyOut),
-                                "",
-                                "",
-                                "",
-                                "",
-                                "",
-                                ""     
-                            ));
-                    rowCount++;
-           }
+                dataDetail.clear();
+                if (poTrans.getDetail(fnRow, "sStockIDx").equals("")) return;
+                if(MiscUtil.RecordCount(loRS)==0){
+                    dataDetail.add(new TableModel(String.valueOf(rowCount +1),
+                        String.valueOf(CommonUtils.xsDateMedium(loRS.getDate("dExpiryDt"))),
+                        String.valueOf(loRS.getInt("nQtyOnHnd")),
+                        String.valueOf((Integer) poTrans.getDetail(fnRow, "nQuantity")),
+                        String.valueOf(loRS.getInt("nQtyOnHnd") -(Integer) poTrans.getDetail(pnRow, "nQuantity")),
+                        "",
+                        "",
+                        "",
+                        "",
+                        ""     
+                    ));
+                    poTrans.setDetail(fnRow, "dExpiryDt", loRS.getDate("dExpiryDt"));
+                }else{
+                    int lnQtyOut = (Integer) poTrans.getDetail(fnRow, "nQuantity");
+                    loRS.first();
+                    for (int lnRow = 0; lnRow <= MiscUtil.RecordCount(loRS) - 1; lnRow ++){
+                        if(!lbGetExpiry){
+                            poTrans.setDetail(fnRow, "dExpiryDt", loRS.getDate("dExpiryDt"));
+                            lbGetExpiry = true;
+                        }
+                        if(lnQtyOut<=loRS.getInt("nQtyOnHnd")){
+                           dataDetail.add(new TableModel(String.valueOf(rowCount +1),
+                                        String.valueOf(CommonUtils.xsDateMedium(loRS.getDate("dExpiryDt"))),
+                                        String.valueOf(loRS.getInt("nQtyOnHnd")),
+                                        String.valueOf(lnQtyOut),
+                                        String.valueOf(loRS.getInt("nQtyOnHnd") -lnQtyOut),
+                                        "",
+                                        "",
+                                        "",
+                                        "",
+                                        ""     
+                                    ));
+                            lnQtyOut =  0;
+                        }else{
+                            dataDetail.add(new TableModel(String.valueOf(rowCount +1),
+                                        String.valueOf(CommonUtils.xsDateMedium(loRS.getDate("dExpiryDt"))),
+                                        String.valueOf(loRS.getInt("nQtyOnHnd")),
+                                        String.valueOf(loRS.getInt("nQtyOnHnd")),
+                                        String.valueOf(loRS.getInt("nQtyOnHnd")-loRS.getInt("nQtyOnHnd")),
+                                        "",
+                                        "",
+                                        "",
+                                        "",
+                                        ""     
+                                    ));
 
+                            lnQtyOut =  lnQtyOut - loRS.getInt("nQtyOnHnd");
+                        }
+                        rowCount++;
+                        loRS.next();
+                    }
+            }
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
@@ -702,33 +738,30 @@ public class InvTransferController implements Initializable {
             
             pnRow = table.getSelectionModel().getSelectedIndex();           
             
-            setDetailInfo();
+            setDetailInfo(pnRow);
         }
         
         Label12.setText(CommonUtils.NumberFormat(Double.valueOf(poTrans.getMaster("nTranTotl").toString()), "#,##0.00"));
     }
     
-    private void setDetailInfo(){
-        int lnRow = table.getSelectionModel().getSelectedIndex();
-        
-        pnRow = lnRow;
-        
-        if (pnRow >= 0){
-            txtDetail05.setText(String.valueOf(poTrans.getDetail(pnRow, "sOrderNox")));
-            txtDetail03.setText((String) poTrans.getDetailOthers(pnRow, "sBarCodex"));
-            txtDetail80.setText((String) poTrans.getDetailOthers(pnRow, "sDescript"));
-            txtDetail04.setText((String) poTrans.getDetailOthers(pnRow, "sOrigCode"));
-            txtDetail07.setText(CommonUtils.NumberFormat(Double.valueOf(poTrans.getDetail(pnRow, "nInvCostx").toString()), "0.00"));
-            txtDetail08.setText(CommonUtils.xsDateMedium((Date) poTrans.getDetail(pnRow, "dExpiryDt")));
-            txtDetail06.setText(String.valueOf(poTrans.getDetail(pnRow, "nQuantity")));
-            txtDetail10.setText(String.valueOf(poTrans.getDetail(pnRow, "sNotesxxx")));
-            txtOther02.setText(String.valueOf(poTrans.getDetailOthers(pnRow, "nQtyOnHnd")));
+    private void setDetailInfo(int fnRow){
+        if (fnRow >= 0){
+            txtDetail05.setText(String.valueOf(poTrans.getDetail(fnRow, "sOrderNox")));
+            txtDetail03.setText((String) poTrans.getDetailOthers(fnRow, "sBarCodex"));
+            txtDetail80.setText((String) poTrans.getDetailOthers(fnRow, "sDescript"));
+            txtDetail04.setText((String) poTrans.getDetailOthers(fnRow, "sOrigCode"));
+            txtDetail07.setText(CommonUtils.NumberFormat(Double.valueOf(poTrans.getDetail(fnRow, "nInvCostx").toString()), "0.00"));
+            txtDetail08.setText(CommonUtils.xsDateMedium((Date) poTrans.getDetail(fnRow, "dExpiryDt")));
+            txtDetail06.setText(String.valueOf(poTrans.getDetail(fnRow, "nQuantity")));
+            txtDetail10.setText(String.valueOf(poTrans.getDetail(fnRow, "sNotesxxx")));
+            txtOther02.setText(String.valueOf(poTrans.getDetailOthers(fnRow, "nQtyOnHnd")));
         } else{
             txtDetail03.setText("");
             txtDetail04.setText("");
             txtDetail05.setText("");
             txtDetail06.setText("0");
             txtDetail07.setText("0.00");
+            txtDetail08.setText("");
             txtDetail10.setText("");
             txtDetail80.setText("");
             txtOther02.setText("0");
@@ -930,10 +963,12 @@ public class InvTransferController implements Initializable {
 
     @FXML
     private void table_Clicked(MouseEvent event) {
-        setDetailInfo();
+        pnRow = table.getSelectionModel().getSelectedIndex();
+        loadDetailData(pnRow);
+        setDetailInfo(pnRow);
+        
         txtDetail03.requestFocus();
         txtDetail03.selectAll();
-        loadDetailData();
         
     }    
     
@@ -998,7 +1033,7 @@ public class InvTransferController implements Initializable {
             switch(fnIndex){
                 case 10:
                     txtDetail10.setText((String)poTrans.getDetail(pnRow,"sNotesxxx"));
-                    loadDetail();
+//                    loadDetail();
                     break;
                 case 6:
                     txtDetail06.setText(String.valueOf(poTrans.getDetail(pnRow,"nQuantity")));

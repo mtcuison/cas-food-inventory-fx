@@ -63,9 +63,9 @@
                   <Label alignment="CENTER_RIGHT" layoutX="10.0" layoutY="164.0" prefHeight="17.0" prefWidth="90.0" text="Inv. Type" />
                   <Label alignment="CENTER_RIGHT" layoutX="5.0" layoutY="297.0" prefHeight="17.0" prefWidth="90.0" text="Inventory" textAlignment="RIGHT" />
                   <Label alignment="CENTER_RIGHT" layoutX="26.0" layoutY="316.0" prefHeight="17.0" prefWidth="69.0" text="Detail" textAlignment="RIGHT" />
-                  <TextField fx:id="txtDetail03" layoutX="521.0" layoutY="94.0" prefHeight="27.0" prefWidth="160.0" promptText="Press F3 to search" />
+                  <TextField fx:id="txtDetail03" layoutX="521.0" layoutY="94.0" prefHeight="27.0" prefWidth="129.0" promptText="Press F3 to search" />
                   <TextField fx:id="txtDetail80" layoutX="521.0" layoutY="122.0" prefHeight="27.0" prefWidth="332.0" promptText="Press F3 to search" />
-                  <TextField fx:id="txtDetail04" layoutX="521.0" layoutY="150.0" prefHeight="27.0" prefWidth="160.0" promptText="Press F3 to search" />
+                  <TextField fx:id="txtDetail04" layoutX="521.0" layoutY="150.0" prefHeight="27.0" prefWidth="129.0" promptText="Press F3 to search" />
                   <TextArea fx:id="txtDetail10" layoutX="521.0" layoutY="178.0" prefHeight="87.0" prefWidth="332.0" />
                   <TextField fx:id="txtDetail05" editable="false" layoutX="522.0" layoutY="266.0" prefHeight="27.0" prefWidth="98.0" />
                   <TextField fx:id="txtDetail09" alignment="CENTER_RIGHT" layoutX="747.0" layoutY="266.0" prefHeight="27.0" prefWidth="106.0" />
@@ -86,8 +86,8 @@
                         <Font name="System Bold" size="12.0" />
                      </font>
                   </Label>
-                  <TextField fx:id="txtDetail11" disable="true" layoutX="739.0" layoutY="52.0" prefHeight="27.0" prefWidth="117.0" />
-                  <Label alignment="CENTER_RIGHT" layoutX="651.0" layoutY="57.0" prefHeight="17.0" prefWidth="86.0" text="Expiration Date:" />
+                  <TextField fx:id="txtDetail11" disable="true" layoutX="739.0" layoutY="94.0" prefHeight="27.0" prefWidth="114.0" />
+                  <Label alignment="CENTER_RIGHT" layoutX="651.0" layoutY="99.0" prefHeight="17.0" prefWidth="86.0" text="Expiration Date:" />
                </children>
             </AnchorPane>
             <AnchorPane layoutY="30.0" prefHeight="499.0" prefWidth="90.0" style="-fx-background-color: #686868;">

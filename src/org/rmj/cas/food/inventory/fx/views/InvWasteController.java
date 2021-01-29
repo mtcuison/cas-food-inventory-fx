@@ -621,7 +621,6 @@ public class InvWasteController implements Initializable {
         if (event.getCode() == F3){
             switch (lnIndex){
                 case 3:
-                    if (event.getCode() == F3) lsValue = lsValue + "%";
                     if (poTrans.SearchDetail(pnRow, 3, lsValue, true, true)){
                         txtDetail03.setText(poTrans.getDetailOthers(pnRow, "sBarCodex").toString());
                         txtDetail80.setText(poTrans.getDetailOthers(pnRow, "sDescript").toString());
@@ -725,11 +724,11 @@ public class InvWasteController implements Initializable {
     }
     
     private void setDetailInfo(int fnRow){
-            pnRow = fnRow;
+        pnRow = fnRow;
         if (pnRow >= 0){
             txtDetail03.setText((String) poTrans.getDetailOthers(pnRow, "sBarCodex"));
             txtDetail80.setText((String) poTrans.getDetailOthers(pnRow, "sDescript"));
-            txtDetail05.setText(String.valueOf(poTrans.getDetailOthers(pnRow, "xQtyOnHnd")));
+            txtDetail82.setText(String.valueOf(poTrans.getDetailOthers(pnRow, "xQtyOnHnd")));
             txtDetail05.setText(CommonUtils.NumberFormat(Double.valueOf(poTrans.getDetail(pnRow, "nInvCostx").toString()), "0.00"));
             txtDetail04.setText(String.valueOf(poTrans.getDetail(pnRow, "nQuantity")));
             txtDetail06.setText(CommonUtils.xsDateMedium((Date) poTrans.getDetail(pnRow, "dExpiryDt")));

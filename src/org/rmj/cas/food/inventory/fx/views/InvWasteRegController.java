@@ -173,15 +173,16 @@ public class InvWasteRegController implements Initializable {
                
             case "btnPrint": 
                 if(!psOldRec.equals("")){
-                    if(ShowMessageFX.YesNo(null, pxeModuleName, "Do you want to print this transaction?")==true){
-                        //if (poTrans.printTransaction(psOldRec))
-                        ShowMessageFX.Information(null, pxeModuleName, "Transaction printed successfully.");
-                        clearFields();
-                        initGrid();
-                        pnEditMode = EditMode.UNKNOWN;
-                        break;
-                    }else
-                        return;
+                    ShowMessageFX.Information(null, pxeModuleName, "This feature is coming soon!.");
+//                    if(ShowMessageFX.YesNo(null, pxeModuleName, "Do you want to print this transaction?")==true){
+////                        if (poTrans.printTransaction(psOldRec))
+//                        ShowMessageFX.Information(null, pxeModuleName, "Transaction printed successfully.");
+//                        clearFields();
+//                        initGrid();
+//                        pnEditMode = EditMode.UNKNOWN;
+//                        break;
+//                    }else
+//                        return;
                 }else 
                     ShowMessageFX.Warning(null, pxeModuleName, "Please select a record to print!");
                 break;

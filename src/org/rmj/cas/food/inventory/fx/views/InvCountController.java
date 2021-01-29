@@ -204,9 +204,7 @@ public class InvCountController implements Initializable {
         if (event.getCode() == ENTER || event.getCode() == F3){
             switch (lnIndex){
                 case 3:
-                    if (event.getCode() == F3) lsValue = txtDetail.getText() + "%";
-                    
-                    if (poTrans.SearchDetail(pnRow, 3, lsValue, false, false)){
+                    if (poTrans.SearchDetail(pnRow, 3, lsValue, true, true)){
                         txtDetail03.setText(poTrans.getDetailOthers(pnRow, "sBarCodex").toString());
                         txtDetail80.setText(poTrans.getDetailOthers(pnRow, "sDescript").toString());
                         txtDetail05.setText(poTrans.getDetail(pnRow, "nQtyOnHnd").toString());
@@ -221,7 +219,7 @@ public class InvCountController implements Initializable {
                     
                 case 80:
                     if (event.getCode() == F3) lsValue = txtDetail.getText() + "%";
-                     if (poTrans.SearchDetail(pnRow, 3, lsValue, true, false)){
+                     if (poTrans.SearchDetail(pnRow, 3, lsValue, false, false)){
                         txtDetail03.setText(poTrans.getDetailOthers(pnRow, "sBarCodex").toString());
                         txtDetail80.setText(poTrans.getDetailOthers(pnRow, "sDescript").toString());
                         txtDetail05.setText(poTrans.getDetail(pnRow, "nQtyOnHnd").toString());

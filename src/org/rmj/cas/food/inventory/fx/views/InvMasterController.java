@@ -191,7 +191,6 @@ public class InvMasterController implements Initializable {
         String lsSQL = "SELECT * FROM Inv_Master_Expiration" +
                         " WHERE sStockIDx = " + SQLUtil.toSQL(fsStockIDx) +
                             " AND sBranchCd = " + SQLUtil.toSQL(poGRider.getBranchCode()) +
-                            " AND nQtyOnHnd > 0" +
                         " ORDER BY dExpiryDt";     
         
         loRS = poGRider.executeQuery(lsSQL);
@@ -329,7 +328,6 @@ public class InvMasterController implements Initializable {
         
         switch (lsButton){
             case "btnBrowse":
-                
                 switch(pnIndex){
                     case 50: /*sBarcode*/
                         lsValue = txtField50.getText() + "%";

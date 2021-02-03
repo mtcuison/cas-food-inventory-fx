@@ -114,7 +114,6 @@ public class DailyProductionController implements Initializable {
     }
     
     private void initGrid(){
-        
         TableColumn index01 = new TableColumn("No.");
         TableColumn index02 = new TableColumn("Barcode.");
         TableColumn index03 = new TableColumn("Description");

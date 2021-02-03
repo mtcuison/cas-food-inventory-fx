@@ -117,7 +117,7 @@ public class InvCountRegController implements Initializable {
                                     poTrans.getDetailOthers(lnCtr, "sLocatnNm").toString(),
                                     String.valueOf(poTrans.getDetail(lnCtr, "nQtyOnHnd")),
                                     String.valueOf(poTrans.getDetail(lnCtr, "nFinalCtr")),
-                                    "",
+                                    String.valueOf(CommonUtils.xsDateShort((Date) poTrans.getDetail(lnCtr, "dExpiryDt"))),
                                     "",
                                     "",
                                     ""));
@@ -302,13 +302,15 @@ public class InvCountRegController implements Initializable {
         TableColumn index04 = new TableColumn("Location");
         TableColumn index05 = new TableColumn("On Hand");
         TableColumn index06 = new TableColumn("Count");
+        TableColumn index07 = new TableColumn("Expiration");
         
-        index01.setPrefWidth(70); index01.setStyle("-fx-alignment: CENTER;");
-        index02.setPrefWidth(204);
-        index03.setPrefWidth(204);
+       index01.setPrefWidth(50); index01.setStyle("-fx-alignment: CENTER;");
+        index02.setPrefWidth(150);
+        index03.setPrefWidth(180);
         index04.setPrefWidth(100); index04.setStyle("-fx-alignment: CENTER;");
         index05.setPrefWidth(80); index05.setStyle("-fx-alignment: CENTER;");
         index06.setPrefWidth(80); index06.setStyle("-fx-alignment: CENTER;");
+        index07.setPrefWidth(98); index07.setStyle("-fx-alignment: CENTER;");
         
         index01.setSortable(false); index01.setResizable(false);
         index02.setSortable(false); index02.setResizable(false);
@@ -316,6 +318,7 @@ public class InvCountRegController implements Initializable {
         index04.setSortable(false); index04.setResizable(false);
         index05.setSortable(false); index05.setResizable(false);
         index06.setSortable(false); index06.setResizable(false);
+        index07.setSortable(false); index07.setResizable(false);
         
         table.getColumns().clear();        
         table.getColumns().add(index01);
@@ -324,6 +327,7 @@ public class InvCountRegController implements Initializable {
         table.getColumns().add(index04);
         table.getColumns().add(index05);
         table.getColumns().add(index06);
+        table.getColumns().add(index07);
         
         index01.setCellValueFactory(new PropertyValueFactory<org.rmj.cas.food.inventory.fx.views.TableModel,String>("index01"));
         index02.setCellValueFactory(new PropertyValueFactory<org.rmj.cas.food.inventory.fx.views.TableModel,String>("index02"));
@@ -331,6 +335,7 @@ public class InvCountRegController implements Initializable {
         index04.setCellValueFactory(new PropertyValueFactory<org.rmj.cas.food.inventory.fx.views.TableModel,String>("index04"));
         index05.setCellValueFactory(new PropertyValueFactory<org.rmj.cas.food.inventory.fx.views.TableModel,String>("index05"));
         index06.setCellValueFactory(new PropertyValueFactory<org.rmj.cas.food.inventory.fx.views.TableModel,String>("index06"));
+        index07.setCellValueFactory(new PropertyValueFactory<org.rmj.cas.food.inventory.fx.views.TableModel,String>("index07"));
          /*making column's position uninterchangebale*/
         table.widthProperty().addListener(new ChangeListener<Number>() {  
             public void changed(ObservableValue<? extends Number> source, Number oldWidth, Number newWidth)

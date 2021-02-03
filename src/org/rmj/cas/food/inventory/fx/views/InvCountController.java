@@ -95,8 +95,8 @@ public class InvCountController implements Initializable {
         txtDetail05.focusedProperty().addListener(txtDetail_Focus);
         txtDetail09.focusedProperty().addListener(txtDetail_Focus);
         txtDetail80.focusedProperty().addListener(txtDetail_Focus);
-        txtDetail11.focusedProperty().addListener(txtDetail_Focus);
         txtDetail10.focusedProperty().addListener(txtDetailArea_Focus);
+        txtDetail11.focusedProperty().addListener(txtDetail_Focus);
         
         txtField01.setOnKeyPressed(this::txtField_KeyPressed);
         txtField03.setOnKeyPressed(this::txtField_KeyPressed);
@@ -112,6 +112,7 @@ public class InvCountController implements Initializable {
         txtDetail09.setOnKeyPressed(this::txtDetail_KeyPressed);    
         txtDetail80.setOnKeyPressed(this::txtDetail_KeyPressed);    
         txtDetail10.setOnKeyPressed(this::txtDetailArea_KeyPressed);
+        txtDetail11.setOnKeyPressed(this::txtDetail_KeyPressed);    
         
         pnEditMode = EditMode.UNKNOWN;
         
@@ -289,7 +290,7 @@ public class InvCountController implements Initializable {
                                     poTrans.getDetailOthers(lnCtr, "sLocatnNm").toString(),
                                     String.valueOf(poTrans.getDetail(lnCtr, "nQtyOnHnd")),
                                     String.valueOf(poTrans.getDetail(lnCtr, "nFinalCtr")),
-                                    "",
+                                    String.valueOf(CommonUtils.xsDateShort((Date) poTrans.getDetail(lnCtr, "dExpiryDt"))),
                                     "",
                                     "",
                                     ""));
@@ -573,13 +574,15 @@ public class InvCountController implements Initializable {
         TableColumn index04 = new TableColumn("Location");
         TableColumn index05 = new TableColumn("On Hand");
         TableColumn index06 = new TableColumn("Count");
+        TableColumn index07 = new TableColumn("Expiration");
         
-        index01.setPrefWidth(70); index01.setStyle("-fx-alignment: CENTER;");
-        index02.setPrefWidth(204);
-        index03.setPrefWidth(204);
+        index01.setPrefWidth(50); index01.setStyle("-fx-alignment: CENTER;");
+        index02.setPrefWidth(150);
+        index03.setPrefWidth(180);
         index04.setPrefWidth(100); index04.setStyle("-fx-alignment: CENTER;");
         index05.setPrefWidth(80); index05.setStyle("-fx-alignment: CENTER;");
         index06.setPrefWidth(80); index06.setStyle("-fx-alignment: CENTER;");
+        index07.setPrefWidth(98); index07.setStyle("-fx-alignment: CENTER;");
         
         index01.setSortable(false); index01.setResizable(false);
         index02.setSortable(false); index02.setResizable(false);
@@ -587,6 +590,7 @@ public class InvCountController implements Initializable {
         index04.setSortable(false); index04.setResizable(false);
         index05.setSortable(false); index05.setResizable(false);
         index06.setSortable(false); index06.setResizable(false);
+        index07.setSortable(false); index07.setResizable(false);
         
         table.getColumns().clear();        
         table.getColumns().add(index01);
@@ -595,6 +599,7 @@ public class InvCountController implements Initializable {
         table.getColumns().add(index04);
         table.getColumns().add(index05);
         table.getColumns().add(index06);
+        table.getColumns().add(index07);
         
         index01.setCellValueFactory(new PropertyValueFactory<org.rmj.cas.food.inventory.fx.views.TableModel,String>("index01"));
         index02.setCellValueFactory(new PropertyValueFactory<org.rmj.cas.food.inventory.fx.views.TableModel,String>("index02"));
@@ -602,6 +607,7 @@ public class InvCountController implements Initializable {
         index04.setCellValueFactory(new PropertyValueFactory<org.rmj.cas.food.inventory.fx.views.TableModel,String>("index04"));
         index05.setCellValueFactory(new PropertyValueFactory<org.rmj.cas.food.inventory.fx.views.TableModel,String>("index05"));
         index06.setCellValueFactory(new PropertyValueFactory<org.rmj.cas.food.inventory.fx.views.TableModel,String>("index06"));
+        index07.setCellValueFactory(new PropertyValueFactory<org.rmj.cas.food.inventory.fx.views.TableModel,String>("index07"));
         
          /*making column's position uninterchangebale*/
         table.widthProperty().addListener(new ChangeListener<Number>() {  
@@ -777,12 +783,34 @@ public class InvCountController implements Initializable {
                         txtDetail03.selectAll();
                     }
                     break;
-            }
-            pnOldRow = table.getSelectionModel().getSelectedIndex();
-        } else {
-            pnIndex = -1;
-            txtDetail.selectAll();
-        }
+                case 11: /*dReceived*/
+                         if (CommonUtils.isDate(txtDetail.getText(), pxeDateFormat)){
+                             poTrans.setDetail(pnRow, "dExpiryDt", CommonUtils.toDate(txtDetail.getText()));
+                             txtDetail.setText(CommonUtils.xsDateMedium((Date) poTrans.getDetail(pnRow, "dExpiryDt")));
+                         }else{
+                             ShowMessageFX.Warning("Invalid date entry.", pxeModuleName, "Date format must be yyyy-MM-dd (e.g. 1991-07-07)");
+                             poTrans.setDetail(pnRow, "dExpiryDt" , CommonUtils.toDate(pxeDateDefault));
+                             txtDetail.setText(CommonUtils.xsDateMedium((Date) poTrans.getDetail(pnRow, "dExpiryDt")));
+                         }
+                         return;
+                 }
+                 pnOldRow = table.getSelectionModel().getSelectedIndex();
+                 pnIndex= lnIndex;
+             } else{
+                 switch (lnIndex){
+                     case 11: /*dReceived*/
+                         try{
+                             txtDetail.setText(CommonUtils.xsDateShort(lsValue));
+                         }catch(ParseException e){
+                             ShowMessageFX.Error(e.getMessage(), pxeModuleName, null);
+                         }
+                         txtDetail.selectAll();
+                         break;
+                     default:
+                 }
+                 pnIndex = -1;
+                 txtDetail.selectAll();
+             }
     };
     
     final ChangeListener<? super Boolean> txtDetailArea_Focus = (o,ov,nv)->{

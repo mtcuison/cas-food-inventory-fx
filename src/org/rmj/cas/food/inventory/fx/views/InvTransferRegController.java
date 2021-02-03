@@ -83,6 +83,7 @@ public class InvTransferRegController implements Initializable {
     @FXML private TextField txtField50;
     @FXML private TextField txtField51;
     @FXML private TextField txtOther02;
+    @FXML private TextField txtDetail08;
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -395,6 +396,7 @@ public class InvTransferRegController implements Initializable {
             txtDetail06.setText(String.valueOf(poTrans.getDetail(pnRow, "nQuantity")));
             txtDetail10.setText(String.valueOf(poTrans.getDetail(pnRow, "sNotesxxx")));
             txtOther02.setText(String.valueOf(poTrans.getDetailOthers(pnRow, "nQtyOnHnd")));
+            txtDetail08.setText(CommonUtils.xsDateMedium((Date) poTrans.getDetail(pnRow, "dExpiryDt")));
         } else{
             txtDetail03.setText("");
             txtDetail04.setText("");
@@ -404,6 +406,7 @@ public class InvTransferRegController implements Initializable {
             txtDetail10.setText("");
             txtDetail80.setText("");
             txtOther02.setText("0");
+            txtDetail08.setText("0");
         }
     }
     

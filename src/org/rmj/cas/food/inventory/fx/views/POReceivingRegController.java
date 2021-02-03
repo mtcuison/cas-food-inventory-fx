@@ -83,6 +83,7 @@ public class POReceivingRegController implements Initializable {
     @FXML private Button btnPrint;
     @FXML private TextField txtField50;
     @FXML private TextField txtField51;
+    @FXML private TextField txtDetail10;
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -199,7 +200,7 @@ public class POReceivingRegController implements Initializable {
             txtDetail07.setText(String.valueOf(poTrans.getDetail(pnRow, 7)));
             txtDetail08.setText(CommonUtils.NumberFormat(Double.valueOf(poTrans.getDetail(pnRow, 8).toString()), "0.00"));
             txtDetail09.setText(CommonUtils.NumberFormat(Double.valueOf(poTrans.getDetail(pnRow, 9).toString()), "0.00"));
-            
+            txtDetail10.setText(CommonUtils.xsDateMedium((Date) poTrans.getDetail(pnRow, "dExpiryDt")));
             Combo06.getSelectionModel().select(Integer.parseInt((String) poTrans.getDetail(pnRow, 6)));
         } else{
             txtDetail03.setText("");
@@ -208,6 +209,7 @@ public class POReceivingRegController implements Initializable {
             txtDetail07.setText("0");
             txtDetail08.setText("0.00");
             txtDetail09.setText("0.00");
+            txtDetail10.setText("");
             txtDetail80.setText("");   
         }
     }

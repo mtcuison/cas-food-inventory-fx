@@ -91,6 +91,7 @@ public class POReceivingController implements Initializable {
     @FXML private TextField txtField50;
     @FXML private TextField txtField51;
     @FXML private TextField txtField29;
+    @FXML private TextField txtDetail10;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -135,6 +136,7 @@ public class POReceivingController implements Initializable {
         txtDetail07.focusedProperty().addListener(txtDetail_Focus);
         txtDetail08.focusedProperty().addListener(txtDetail_Focus);
         txtDetail09.focusedProperty().addListener(txtDetail_Focus);
+        txtDetail10.focusedProperty().addListener(txtDetail_Focus);
         txtDetail80.focusedProperty().addListener(txtDetail_Focus);
                 
         /*Add keypress event for field with search*/
@@ -162,6 +164,7 @@ public class POReceivingController implements Initializable {
         txtDetail07.setOnKeyPressed(this::txtDetail_KeyPressed);
         txtDetail08.setOnKeyPressed(this::txtDetail_KeyPressed);
         txtDetail09.setOnKeyPressed(this::txtDetail_KeyPressed);
+        txtDetail10.setOnKeyPressed(this::txtDetail_KeyPressed);
         txtDetail80.setOnKeyPressed(this::txtDetail_KeyPressed);
         
         Combo06.setOnKeyPressed(this::ComboBox_KeyPressed);
@@ -224,6 +227,7 @@ public class POReceivingController implements Initializable {
             txtDetail07.setText(String.valueOf(poTrans.getDetail(pnRow, "nQuantity")));
             txtDetail08.setText(CommonUtils.NumberFormat(Double.valueOf(poTrans.getDetail(pnRow, 8).toString()), "0.00"));
             txtDetail09.setText(CommonUtils.NumberFormat(Double.valueOf(poTrans.getDetail(pnRow, 9).toString()), "0.00"));
+            txtDetail10.setText(CommonUtils.xsDateMedium((Date) poTrans.getDetail(pnRow, "dExpiryDt")));
             
             Combo06.getSelectionModel().select(Integer.parseInt((String) poTrans.getDetail(pnRow, 6)));
         } else{
@@ -234,6 +238,7 @@ public class POReceivingController implements Initializable {
             txtDetail08.setText("0.00");
             txtDetail09.setText("0.00");
             txtDetail80.setText("");   
+            txtDetail10.setText("");
         }
     }
     
@@ -546,7 +551,6 @@ public class POReceivingController implements Initializable {
         pnRow = 51;
         pnOldRow = -1;
         pnIndex = -1;
-        pdIndex = -1;
         setTranStat("-1");
         
         psOldRec = "";
@@ -572,7 +576,7 @@ public class POReceivingController implements Initializable {
                 case 5: /*sSupplier*/
                 case 8: /*sTermCode*/
                 case 20: /*sInvTypCd*/
-                case 29: /*sDeptIDxx*/    
+                case 29: /*sDeptIDxx*/
                     if (poTrans.SearchMaster(lnIndex, lsValue, false))
                         CommonUtils.SetNextFocus(txtField);
                     return;
@@ -638,7 +642,6 @@ public class POReceivingController implements Initializable {
         
         if (event.getCode() == F3){                    
             if (lsValue.isEmpty()) return;
-            
             switch (lnIndex){
                 case 3:                    
                     loJSON = poTrans.SearchDetail(pnRow, 3, lsValue, false, false);                  
@@ -771,7 +774,6 @@ public class POReceivingController implements Initializable {
     ObservableList<String> cDivision = FXCollections.observableArrayList("Motorcycle", "Mobile Phone", "Hotel", "General");
     
     private int pnIndex = -1;
-    private int pdIndex = -1;
     private int pnRow = -1;
     private int pnOldRow = -1;
     
@@ -889,13 +891,30 @@ public class POReceivingController implements Initializable {
                     }
                     poTrans.setDetail(pnRow, lnIndex, x);
                     break;
-                default:
-                    break;
+                 case 10: /*dExpiryDt*/
+                    if (CommonUtils.isDate(txtDetail.getText(), pxeDateFormat)){
+                        poTrans.setDetail(pnRow, "dExpiryDt", CommonUtils.toDate(txtDetail.getText()));
+                    }else{
+                        ShowMessageFX.Warning("Invalid date entry.", pxeModuleName, "Date format must be yyyy-MM-dd (e.g. 1991-07-07)");
+                        poTrans.setDetail(pnRow, "dExpiryDt",CommonUtils.toDate(pxeDateDefault));
+                    }
+                    return;
             }
             pnOldRow = table.getSelectionModel().getSelectedIndex();
-            pdIndex= lnIndex;
-        } else {
-            pdIndex = -1 ;
+            pnIndex= lnIndex;
+        } else{
+            switch (lnIndex){
+                case 10: /*dExpiryDt*/
+                    try{
+                        txtDetail.setText(CommonUtils.xsDateShort(lsValue));
+                    }catch(ParseException e){
+                        ShowMessageFX.Error(e.getMessage(), pxeModuleName, null);
+                    }
+                    txtDetail.selectAll();
+                    break;
+                default:
+            }
+            pnIndex = -1;
             txtDetail.selectAll();
         }
     };
@@ -1025,6 +1044,9 @@ public class POReceivingController implements Initializable {
                     break;
                 case 9:
                     txtDetail09.setText(CommonUtils.NumberFormat(Double.valueOf(poTrans.getDetail(pnRow, fnIndex).toString()), "0.00"));
+                    loadDetail();
+                case 10:
+                    txtDetail10.setText(CommonUtils.xsDateMedium((Date) poTrans.getDetail(pnRow, fnIndex)));
                     loadDetail();
                     break;
             }

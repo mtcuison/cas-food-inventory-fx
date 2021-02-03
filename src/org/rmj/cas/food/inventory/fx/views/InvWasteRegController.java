@@ -56,6 +56,7 @@ public class InvWasteRegController implements Initializable {
     @FXML private Button btnBrowse;
     @FXML private TextField txtField50;
     @FXML private TextField txtField51;
+    @FXML private TextField txtDetail06;
 
    
     @Override
@@ -172,15 +173,16 @@ public class InvWasteRegController implements Initializable {
                
             case "btnPrint": 
                 if(!psOldRec.equals("")){
-                    if(ShowMessageFX.YesNo(null, pxeModuleName, "Do you want to print this transaction?")==true){
-                        //if (poTrans.printTransaction(psOldRec))
-                        ShowMessageFX.Information(null, pxeModuleName, "Transaction printed successfully.");
-                        clearFields();
-                        initGrid();
-                        pnEditMode = EditMode.UNKNOWN;
-                        break;
-                    }else
-                        return;
+                    ShowMessageFX.Information(null, pxeModuleName, "This feature is coming soon!.");
+//                    if(ShowMessageFX.YesNo(null, pxeModuleName, "Do you want to print this transaction?")==true){
+////                        if (poTrans.printTransaction(psOldRec))
+//                        ShowMessageFX.Information(null, pxeModuleName, "Transaction printed successfully.");
+//                        clearFields();
+//                        initGrid();
+//                        pnEditMode = EditMode.UNKNOWN;
+//                        break;
+//                    }else
+//                        return;
                 }else 
                     ShowMessageFX.Warning(null, pxeModuleName, "Please select a record to print!");
                 break;
@@ -331,11 +333,13 @@ public class InvWasteRegController implements Initializable {
             txtDetail80.setText((String) poTrans.getDetailOthers(pnRow, "sDescript"));
             txtDetail05.setText(String.valueOf(poTrans.getDetail(pnRow, "nInvCostx")));
             txtDetail04.setText(String.valueOf(poTrans.getDetail(pnRow, "nQuantity")));
+            txtDetail06.setText(CommonUtils.xsDateMedium((Date) poTrans.getDetail(pnRow, "dExpiryDt")));
         } else{
             txtDetail03.setText("");
             txtDetail04.setText("0");
             txtDetail05.setText("0.00");
             txtDetail80.setText("");
+            txtDetail06.setText("");
         }
     }
     

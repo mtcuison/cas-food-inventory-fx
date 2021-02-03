@@ -58,6 +58,8 @@ public class InvCountRegController implements Initializable {
     @FXML private TableView table;
     @FXML private TextField txtField51;
     @FXML private TextField txtField50;
+    @FXML
+    private TextField txtDetail11;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -144,6 +146,7 @@ public class InvCountRegController implements Initializable {
             txtDetail05.setText(String.valueOf(poTrans.getDetail(pnRow, "nQtyOnHnd")));
             txtDetail09.setText(String.valueOf(poTrans.getDetail(pnRow, "nFinalCtr")));
             txtDetail10.setText(String.valueOf(poTrans.getDetail(pnRow, "sRemarksx")));
+            txtDetail11.setText(CommonUtils.xsDateMedium((Date) poTrans.getDetail(pnRow, "dExpiryDt")));
         } else{
             txtDetail03.setText("");
             txtDetail04.setText("");
@@ -151,6 +154,7 @@ public class InvCountRegController implements Initializable {
             txtDetail09.setText("0");
             txtDetail10.setText("");
             txtDetail80.setText("");
+            txtDetail11.setText("");
         }
     }
     
@@ -199,7 +203,7 @@ public class InvCountRegController implements Initializable {
             case "btnBrowse":
                  switch(pnIndex){
                     case 50: /*sTransNox*/
-                        if(poTrans.BrowseRecord(txtField50.getText(), true)==true){
+                        if(poTrans.BrowseRecord(txtField50.getText()+"%", false)==true){
                             loadRecord(); 
                             pnEditMode = poTrans.getEditMode();
                             break;
@@ -380,7 +384,6 @@ public class InvCountRegController implements Initializable {
         if (event.getCode() == ENTER || event.getCode() == F3){
             switch (lnIndex){
                 case 50: /*sTransNox*/
-                    if(event.getCode() == F3) lsValue = txtField.getText() + "%";
                      if(poTrans.BrowseRecord(lsValue, true)==true){
                     loadRecord(); 
                     pnEditMode = poTrans.getEditMode();

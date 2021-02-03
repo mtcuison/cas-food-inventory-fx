@@ -82,6 +82,8 @@ public class POReturnController implements Initializable {
     @FXML private ImageView imgTranStat1;
     @FXML private TextField txtField50;
     @FXML private TextField txtField51;
+    @FXML
+    private TextField txtDetail08;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -178,6 +180,7 @@ public class POReturnController implements Initializable {
     
     private void setDetailInfo(){
         String lsStockIDx = (String) poTrans.getDetail(pnRow, "sStockIDx");
+        //&& !lsStockIDx.equals("")
         if (pnRow >= 0 && !lsStockIDx.equals("")){
             Inventory loInventory = poTrans.GetInventory(lsStockIDx, true, false);
             psBarCodex = (String) loInventory.getMaster("sBarCodex");
@@ -188,6 +191,7 @@ public class POReturnController implements Initializable {
             txtDetail05.setText(String.valueOf(poTrans.getDetail(pnRow, 5))); /*Quantity*/
             txtDetail06.setText(CommonUtils.NumberFormat(Double.valueOf(poTrans.getDetail(pnRow, 6).toString()), "###0.00")); /*Unit Price*/
             txtDetail07.setText(CommonUtils.NumberFormat(Double.valueOf(poTrans.getDetail(pnRow, 7).toString()), "###0.00")); /*Freight*/
+            txtDetail08.setText(CommonUtils.xsDateMedium((Date) poTrans.getDetail(pnRow, "dExpiryDt"))); //date
             
             Combo04.getSelectionModel().select(Integer.parseInt((String) poTrans.getDetail(pnRow, 4)));
         } else{
@@ -195,6 +199,7 @@ public class POReturnController implements Initializable {
             txtDetail05.setText("0");
             txtDetail06.setText("0.00");
             txtDetail07.setText("0.00");
+            txtDetail08.setText("");
             txtDetail80.setText("");   
         }
     }
@@ -325,7 +330,11 @@ public class POReturnController implements Initializable {
                 }                        
                 return;
             case "btnNew":
-                if (poTrans.newRecord()) clearFields(); loadRecord(); pnEditMode = poTrans.getEditMode();
+                if (poTrans.newRecord()){
+                    clearFields();
+                    loadRecord();
+                    pnEditMode = poTrans.getEditMode();
+                }
                 break;
             case "btnConfirm":
                 if (!psOldRec.equals("")){
@@ -670,7 +679,6 @@ public class POReturnController implements Initializable {
         ComboBox loField = (ComboBox)((ReadOnlyBooleanPropertyBase)o).getBean();
         
         if(!nv){ /*Lost Focus*/
-            try {
                 switch (loField.getId()){
                     case "Combo04":
                         poTrans.setDetail(pnRow, "cUnitType", String.valueOf(loField.getSelectionModel().getSelectedIndex()));
@@ -681,10 +689,6 @@ public class POReturnController implements Initializable {
                             poTrans.setMaster("cDivision", String.valueOf(loField.getSelectionModel().getSelectedIndex()));
                         } else poTrans.setMaster("cDivision", "");
                 }
-            } catch (SQLException ex) {
-                ShowMessageFX.Error(ex.getMessage(), pxeModuleName, "Please inform MIS Dept.");
-                System.exit(1);
-            }
         }         
     };
     
@@ -750,13 +754,31 @@ public class POReturnController implements Initializable {
                     } catch (Exception e) {
                         ShowMessageFX.Warning("Please input numbers only.", pxeModuleName, e.getMessage());
                         txtField.requestFocus(); 
-                    }
-                        
+                    } 
                     poTrans.setDetail(pnRow, lnIndex, x);
+                case 8: /*dExpiryDt*/
+                        if (CommonUtils.isDate(txtField.getText(), pxeDateFormat)){
+                            poTrans.setDetail(pnRow, "dExpiryDt", CommonUtils.toDate(txtField.getText()));
+                        }else{
+                            ShowMessageFX.Warning("Invalid date entry.", pxeModuleName, "Date format must be yyyy-MM-dd (e.g. 1991-07-07)");
+                            poTrans.setDetail(pnRow, "dExpiryDt",CommonUtils.toDate(pxeDateDefault));
+                        }
+                        return;
+                }
+                pnOldRow = table.getSelectionModel().getSelectedIndex();
+                pnIndex= lnIndex;
+        } else{
+            switch (lnIndex){
+                case 8: /*dExpiryDt*/
+                    try{
+                        txtField.setText(CommonUtils.xsDateShort(lsValue));
+                    }catch(ParseException e){
+                        ShowMessageFX.Error(e.getMessage(), pxeModuleName, null);
+                    }
+                    txtField.selectAll();
+                    break;
+                default:
             }
-            
-            pnOldRow = table.getSelectionModel().getSelectedIndex();
-        } else {
             pnIndex = -1;
             txtField.selectAll();
         }

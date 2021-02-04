@@ -51,6 +51,8 @@ public class FoodInventoryFX extends Application {
     public final static String pxeInvTransPosting = "InvTransPosting.fxml";
     public final static String pxeInvWaste = "InvWaste.fxml";
     public final static String pxeInvWasteReg = "InvWasteReg.fxml";
+    public final static String pxeInvAdjustment = "InvAdjustment.fxml";
+    public final static String pxeInvAdjustmentReg = "InvAdjustmentReg.fxml";
     
     /*Register*/
     public final static String pxePOReceivingReg = "POReceivingReg.fxml";

@@ -241,8 +241,7 @@ public class InvMasterController implements Initializable {
         if (event.getCode() == F3 || event.getCode() == ENTER){
             switch (lnIndex){
                 case 50:
-                    if (event.getCode() == F3) lsValue = txtField.getText() + "%";
-                    
+                    if (event.getCode() == F3) lsValue = txtField.getText() + "%"; 
                     if (poRecord.SearchInventory(lsValue, false, false)==true){ 
                         loadRecord();
                         if(poRecord.getEditMode()==EditMode.ADDNEW){
@@ -259,20 +258,19 @@ public class InvMasterController implements Initializable {
                     
                 case 51:
                     if (event.getCode() == F3) lsValue = txtField.getText() + "%";
-                    
-                   if (poRecord.SearchInventory(lsValue, true, false)==true){ 
-                        loadRecord();
-                        if(poRecord.getEditMode()==EditMode.ADDNEW){
-                            initButton(EditMode.ADDNEW);
-                        }else initButton(EditMode.READY);
-                    }
-                    if(!txtField51.getText().equals(psDescript)){
-                        clearFields();
-                        break;
-                    }else{
-                            txtField51.setText(psDescript);
-                            }
-                    return;
+                    if (poRecord.SearchInventory(lsValue, true, false)==true){ 
+                         loadRecord();
+                         if(poRecord.getEditMode()==EditMode.ADDNEW){
+                             initButton(EditMode.ADDNEW);
+                         }else initButton(EditMode.READY);
+                     }
+                     if(!txtField51.getText().equals(psDescript)){
+                         clearFields();
+                         break;
+                     }else{
+                             txtField51.setText(psDescript);
+                             }
+                     return;
                     
                 default:
                     ShowMessageFX.Warning("Please inform MIS Dept.", pxeModuleName, "Text field with index " + lnIndex + " not registered for QuickSearch.");

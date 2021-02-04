@@ -304,7 +304,7 @@ public class InvCountRegController implements Initializable {
         TableColumn index06 = new TableColumn("Count");
         TableColumn index07 = new TableColumn("Expiration");
         
-       index01.setPrefWidth(50); index01.setStyle("-fx-alignment: CENTER;");
+        index01.setPrefWidth(50); index01.setStyle("-fx-alignment: CENTER;");
         index02.setPrefWidth(150);
         index03.setPrefWidth(180);
         index04.setPrefWidth(100); index04.setStyle("-fx-alignment: CENTER;");
@@ -419,12 +419,12 @@ public class InvCountRegController implements Initializable {
         } 
         
         switch (event.getCode()){
-        case ENTER:
-        case DOWN:
-            CommonUtils.SetNextFocus(txtField);
-            break;
-        case UP:
-            CommonUtils.SetPreviousFocus(txtField);
+            case ENTER:
+            case DOWN:
+                CommonUtils.SetNextFocus(txtField);
+                break;
+            case UP:
+                CommonUtils.SetPreviousFocus(txtField);
         }
     }
     

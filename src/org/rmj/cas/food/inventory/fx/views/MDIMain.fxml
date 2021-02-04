@@ -335,6 +335,18 @@
                                  </font>
                               </Button>
                            </graphic></MenuItem>
+                        <MenuItem fx:id="menu_InvAdjustment" mnemonicParsing="false" onAction="#menu_InvAdjustment_Click" text="Inventory Adjustment">
+                           <graphic>
+                              <Button graphicTextGap="2.0" mnemonicParsing="false">
+                                 <graphic>
+                                    <FontAwesomeIconView glyphName="TAG" size="14" />
+                                 </graphic>
+                                 <font>
+                                    <Font size="1.0" />
+                                 </font>
+                              </Button>
+                           </graphic>
+                        </MenuItem>
                         <MenuItem fx:id="mnuWasteInventory" mnemonicParsing="false" onAction="#mnuWasteInventory" text="Waste Inventory">
                            <graphic>
                               <Button graphicTextGap="2.0" mnemonicParsing="false">
@@ -463,6 +475,18 @@
                               </Button>
                            </graphic></MenuItem>
                         <MenuItem fx:id="mnu_InvWasteReg" mnemonicParsing="false" onAction="#mnu_InvWasteReg" text="Waste Inventory">
+                           <graphic>
+                              <Button graphicTextGap="2.0" mnemonicParsing="false">
+                                 <graphic>
+                                    <FontAwesomeIconView glyphName="SLIDERS" size="14" />
+                                 </graphic>
+                                 <font>
+                                    <Font size="1.0" />
+                                 </font>
+                              </Button>
+                           </graphic>
+                        </MenuItem>
+                        <MenuItem fx:id="mnu_InvAdjustmentReg" mnemonicParsing="false" onAction="#mnu_InvAdjustmentReg_Click" text="Inventory Adjustment">
                            <graphic>
                               <Button graphicTextGap="2.0" mnemonicParsing="false">
                                  <graphic>

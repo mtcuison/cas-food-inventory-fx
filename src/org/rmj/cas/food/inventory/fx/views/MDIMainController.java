@@ -45,8 +45,8 @@ import org.rmj.appdriver.SQLUtil;
 import org.rmj.appdriver.agentfx.ShowMessageFX;
 import org.rmj.appdriver.agentfx.CommonUtils;
 import org.rmj.appdriver.agentfx.callback.IFXML;
-//import org.rmj.appdriver.agentfx.service.ITokenize;
-//import org.rmj.appdriver.agentfx.service.TokenApprovalFactory;
+import org.rmj.appdriver.agentfx.service.ITokenize;
+import org.rmj.appdriver.agentfx.service.TokenApprovalFactory;
 import org.rmj.appdriver.agentfx.ui.showFXDialog;
 import org.rmj.appdriver.constants.UserRight;
 import org.rmj.cas.food.reports.classes.FoodReports;
@@ -115,6 +115,10 @@ public class MDIMainController implements Initializable {
     @FXML private Menu mnuHistory;
     @FXML private Menu mnuSettings;
     @FXML private AnchorPane mnuMain;
+    @FXML
+    private MenuItem menu_InvAdjustment;
+    @FXML
+    private MenuItem mnu_InvAdjustmentReg;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -407,6 +411,17 @@ public class MDIMainController implements Initializable {
                 SerialUploadController loUpload = new SerialUploadController();
                 loUpload.setGRider(poGRider);
                 return loUpload;
+            
+            case FoodInventoryFX.pxeInvAdjustment:
+                InvAdjustmentController loInvAdjustment = new InvAdjustmentController();
+                loInvAdjustment.setGRider(poGRider);
+                return loInvAdjustment;
+            
+            case FoodInventoryFX.pxeInvAdjustmentReg:
+//                InvAdjustmentRegController loInvAdjustmentReg = new InvAdjustmentRegController();
+//                loInvAdjustmentReg.setGRider(poGRider);
+//                return loInvAdjustmentReg;
+                
             default:
                 return null;
         }
@@ -591,22 +606,32 @@ public class MDIMainController implements Initializable {
             if (showFXDialog.resetPOS(poGRider)){
                 ShowMessageFX.Information(null, "Success", "POS was successfully reset.");
             }
-//        } else if (event.getCode() == KeyCode.F10){     
-//            ITokenize instance = TokenApprovalFactory.make("CASys_DBF.PO_Master");
-//            instance.setGRider(poGRider);
-//            instance.setTransNmbr("M00120000001");
-//            if (instance.createCodeRequest()){
-//                System.out.println(instance.getMessage());
-//            } else {
-//                System.err.println(instance.getMessage());
-//            }
-//        } else if (event.getCode() == KeyCode.F11){
-//            if (showFXDialog.getTokenApproval(poGRider, "CASys_DBF.PO_Master", "M00120000001")){
-//                //TODO:
-//                //  execute approving of transaction here
-//                ShowMessageFX.Information(null, "Success", "Transaction was approved successfully..");
-//            }
+        } else if (event.getCode() == KeyCode.F10){     
+            ITokenize instance = TokenApprovalFactory.make("CASys_DBF.PO_Master");
+            instance.setGRider(poGRider);
+            instance.setTransNmbr("M00120000001");
+            if (instance.createCodeRequest()){
+                System.out.println(instance.getMessage());
+            } else {
+                System.err.println(instance.getMessage());
+            }
+        } else if (event.getCode() == KeyCode.F11){
+            if (showFXDialog.getTokenApproval(poGRider, "CASys_DBF.PO_Master", "M00120000001")){
+                //TODO:
+                //  execute approving of transaction here
+                ShowMessageFX.Information(null, "Success", "Transaction was approved successfully..");
+            }
         }     
+    }
+
+    @FXML
+    private void menu_InvAdjustment_Click(ActionEvent event) throws IOException {
+        setDataPane(fadeAnimate(FoodInventoryFX.pxeInvAdjustment));
+    }
+
+    @FXML
+    private void mnu_InvAdjustmentReg_Click(ActionEvent event) throws IOException {
+        setDataPane(fadeAnimate(FoodInventoryFX.pxeInvAdjustment));
     }
        
     public static class MouseGestures {

@@ -60,7 +60,6 @@ public class InvAdjustmentController implements Initializable {
     @FXML private TextField txtDetail05;
     @FXML private TextField txtDetail06;
     @FXML private TextField txtDetail07;
-    @FXML private TextField txtDetail08;
     @FXML private TableView table;
     @FXML private ImageView imgTranStat;
     @FXML private TextField txtField50;
@@ -73,6 +72,7 @@ public class InvAdjustmentController implements Initializable {
     @FXML private Button btnConfirm;
     @FXML private Button btnDel;
     @FXML private Button btnBrowse;
+    @FXML private TextField txtDetail10;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -100,7 +100,7 @@ public class InvAdjustmentController implements Initializable {
         txtDetail05.focusedProperty().addListener(txtDetail_Focus);
         txtDetail06.focusedProperty().addListener(txtDetail_Focus);
         txtDetail07.focusedProperty().addListener(txtDetail_Focus);
-        txtDetail08.focusedProperty().addListener(txtDetail_Focus);
+        txtDetail10.focusedProperty().addListener(txtDetail_Focus);
         txtDetail80.focusedProperty().addListener(txtDetail_Focus);
         
         txtField00.setOnKeyPressed(this::txtField_KeyPressed);
@@ -114,7 +114,7 @@ public class InvAdjustmentController implements Initializable {
         txtDetail05.setOnKeyPressed(this::txtDetail_KeyPressed);
         txtDetail06.setOnKeyPressed(this::txtDetail_KeyPressed);
         txtDetail07.setOnKeyPressed(this::txtDetail_KeyPressed);
-        txtDetail08.setOnKeyPressed(this::txtDetail_KeyPressed);
+        txtDetail10.setOnKeyPressed(this::txtDetail_KeyPressed);
         txtDetail80.setOnKeyPressed(this::txtDetail_KeyPressed);    
         
         pnEditMode = EditMode.UNKNOWN;    
@@ -219,9 +219,11 @@ public class InvAdjustmentController implements Initializable {
                 case 1: /*dTransact*/
                      if (CommonUtils.isDate(txtField.getText(), pxeDateFormat)){
                         poTrans.setMaster("dTransact", CommonUtils.toDate(txtField.getText()));
+                       txtField.setText(CommonUtils.xsDateLong((Date)poTrans.getMaster("dTransact")));
                     } else{
                         ShowMessageFX.Warning("Invalid date entry.", pxeModuleName, "Date format must be yyyy-MM-dd (e.g. 1991-07-07)");
                         poTrans.setMaster("dTransact", CommonUtils.toDate(pxeDateDefault));
+                        txtField.setText(CommonUtils.xsDateLong((Date)poTrans.getMaster("dTransact")));
                     }
                     return;
                 case 0: /*sTransNox*/
@@ -281,18 +283,21 @@ public class InvAdjustmentController implements Initializable {
         
         if(!nv){ /*Lost Focus*/
             switch (lnIndex){
-                case 3: /*dExpiryDt*/
+                case 7: /*dExpiryDt*/
                     if (CommonUtils.isDate(txtDetail.getText(), pxeDateFormat)){
                         poTrans.setDetail(pnRow, "dExpiryDt", CommonUtils.toDate(txtDetail.getText()));
+                        txtDetail.setText(CommonUtils.xsDateLong((Date)poTrans.getDetail(pnRow, "dExpiryDt")));
                     } else{
                         ShowMessageFX.Warning("Invalid date entry.", pxeModuleName, "Date format must be yyyy-MM-dd (e.g. 1991-07-07)");
                         poTrans.setDetail(pnRow, "dExpiryDt" , CommonUtils.toDate(pxeDateDefault));
+                        txtDetail.setText(CommonUtils.xsDateLong((Date)poTrans.getDetail(pnRow, "dExpiryDt")));
                     }
                     return;
-                case 4: /*Barcode Search*/
+                case 3: /*Barcode Search*/
+                    break;
                 case 80:/*sDescript Search*/
                     break;
-                case 5:/*Credit Qty*/
+                case 4:/*Credit Qty*/
                     /*This must be numeric*/
                     int x =0;
                     try{
@@ -302,7 +307,7 @@ public class InvAdjustmentController implements Initializable {
                     }
                     poTrans.setDetail(pnRow, "nCredtQty", x);
                     break;
-                case 6:/*Debit Qty*/
+                case 5:/*Debit Qty*/
                     /*This must be numeric*/
                     int y =0;
                     try{
@@ -312,8 +317,8 @@ public class InvAdjustmentController implements Initializable {
                     }
                     poTrans.setDetail(pnRow, "nDebitQty", y);
                     break;
-                case 7:/*Qty On Hand*/
-                case 8:/*Inv Cost*/
+                case 6:/*Qty On Hand*/
+                case 10:/*Inv Cost*/
                     break;
                     
             }
@@ -321,7 +326,7 @@ public class InvAdjustmentController implements Initializable {
             pnIndex = lnIndex;
         } else{
             switch (lnIndex){
-                case 3: /*dExpiryDt*/
+                case 7: /*dExpiryDt*/
                     try{
                         txtDetail.setText(CommonUtils.xsDateShort(lsValue));
                     }catch(ParseException e){
@@ -418,7 +423,7 @@ public class InvAdjustmentController implements Initializable {
                     }
                     break;
                 case 80:
-                    if (poTrans.SearchDetail(pnRow, 3, "%", true, false)){
+                    if (poTrans.SearchDetail(pnRow, 4, "%", true, false)){
                         txtDetail03.setText(poTrans.getDetailOthers(pnRow, "sBarCodex").toString());
                         txtDetail80.setText(poTrans.getDetailOthers(pnRow, "sDescript").toString());
                     } else {
@@ -506,13 +511,13 @@ public class InvAdjustmentController implements Initializable {
         txtField51.setText(CommonUtils.xsDateLong((Date) java.sql.Date.valueOf(LocalDate.now())));
         
         
-        txtDetail03.setText(CommonUtils.xsDateLong((Date) java.sql.Date.valueOf(LocalDate.now())));
+        txtDetail03.setText("");
         txtDetail04.setText("");
         txtDetail05.setText("");
         txtDetail05.setText("0");
-        txtDetail06.setText("0");
-        txtDetail07.setText("0");
-        txtDetail08.setText("0.00");
+        txtDetail06.setText("0.00");
+        txtDetail07.setText(CommonUtils.xsDateLong((Date) java.sql.Date.valueOf(LocalDate.now())));
+        txtDetail10.setText("0");
         txtDetail80.setText("");
         
         pnRow = -1;
@@ -623,24 +628,32 @@ public class InvAdjustmentController implements Initializable {
         
         if (event.getCode() == F3){
             switch (lnIndex){
-                case 4:
-                    if (poTrans.SearchDetail(pnRow, 4, lsValue, false, false)){
-                        txtDetail04.setText(poTrans.getDetailOthers(pnRow, "sBarCodex").toString());
+                case 3:
+                    if (poTrans.SearchDetail(pnRow, 3, lsValue, false, false)){
+                        txtDetail03.setText(poTrans.getDetailOthers(pnRow, "sBarCodex").toString());
                         txtDetail80.setText(poTrans.getDetailOthers(pnRow, "sDescript").toString());
+                        txtDetail10.setText(String.valueOf(poTrans.getDetailOthers(pnRow, "nQtyOnHnd")));
+                        txtDetail06.setText(String.valueOf(poTrans.getDetail(pnRow, "nInvCostx")));
                     } else {
-                        txtDetail04.setText("");
+                        txtDetail03.setText("");
                         txtDetail80.setText("");
+                        txtDetail10.setText("0");
+                        txtDetail06.setText("0.00");
                     }
                     break;
 
                 case 80:
                     if (poTrans.SearchDetail(pnRow, 4, lsValue, true, false)){
-                        txtDetail04.setText(poTrans.getDetailOthers(pnRow, "sBarCodex").toString());
+                        txtDetail03.setText(poTrans.getDetailOthers(pnRow, "sBarCodex").toString());
                         txtDetail80.setText(poTrans.getDetailOthers(pnRow, "sDescript").toString());
+                        txtDetail10.setText(String.valueOf(poTrans.getDetailOthers(pnRow, "nQtyOnHnd")));
+                        txtDetail06.setText(String.valueOf(poTrans.getDetail(pnRow, "nInvCostx")));
                         
                     } else {
-                        txtDetail04.setText("");
+                        txtDetail03.setText("");
                         txtDetail80.setText("");
+                        txtDetail10.setText("0");
+                        txtDetail06.setText("0.00");
                     }
                     
                     break;
@@ -696,7 +709,7 @@ public class InvAdjustmentController implements Initializable {
                                     (String) poTrans.getDetailOthers(lnCtr, "sBarCodex"), 
                                     (String) poTrans.getDetailOthers(lnCtr, "sDescript"),
                                     CommonUtils.xsDateMedium((Date) poTrans.getDetail(lnCtr, "dExpiryDt")),
-                                    String.valueOf(poTrans.getDetail(lnCtr, "nQuantity")),
+                                    String.valueOf(poTrans.getDetailOthers(lnCtr, "nQtyOnHnd")),
                                     "",
                                     "",
                                     "",
@@ -721,20 +734,20 @@ public class InvAdjustmentController implements Initializable {
         pnRow = lnRow;
         
         if (pnRow >= 0){
-            txtDetail03.setText(CommonUtils.xsDateMedium((Date) poTrans.getDetail(pnRow, "dExpiryDt")));
-            txtDetail04.setText((String) poTrans.getDetailOthers(pnRow, "sBarCodex"));
+            txtDetail07.setText(CommonUtils.xsDateMedium((Date) poTrans.getDetail(pnRow, "dExpiryDt")));
+            txtDetail03.setText((String) poTrans.getDetailOthers(pnRow, "sBarCodex"));
             txtDetail80.setText((String) poTrans.getDetailOthers(pnRow, "sDescript"));
-            txtDetail05.setText(String.valueOf(poTrans.getDetail(pnRow, "nCredtQty")));
-            txtDetail06.setText(String.valueOf(poTrans.getDetail(pnRow, "nDebitQty")));
-            txtDetail07.setText(String.valueOf(poTrans.getDetail(pnRow, "nQuantity")));
-            txtDetail08.setText(String.valueOf(poTrans.getDetail(pnRow, "nInvCostx")));
+            txtDetail04.setText(String.valueOf(poTrans.getDetail(pnRow, "nCredtQty")));
+            txtDetail05.setText(String.valueOf(poTrans.getDetail(pnRow, "nDebitQty")));
+            txtDetail10.setText(String.valueOf(poTrans.getDetailOthers(pnRow, "nQtyOnHnd")));
+            txtDetail06.setText(String.valueOf(poTrans.getDetail(pnRow, "nInvCostx")));
         } else{
             txtDetail03.setText("");
-            txtDetail04.setText("");
+            txtDetail04.setText("0");
             txtDetail05.setText("0");
-            txtDetail06.setText("0");
+            txtDetail06.setText("0.00");
             txtDetail07.setText("0");
-            txtDetail08.setText("0.00");
+            txtDetail10.setText("0");
             txtDetail80.setText("");
         }
     }
@@ -765,11 +778,11 @@ public class InvAdjustmentController implements Initializable {
         @Override
         public void DetailRetreive(int fnIndex) {
             switch(fnIndex){
-                case 3:
+                case 7:
                     /*get the value from the class*/
-                    txtDetail04.setText(CommonUtils.xsDateLong((Date)poTrans.getDetail(pnRow,"dExpiryDt")));
+                    txtDetail07.setText(CommonUtils.xsDateLong((Date)poTrans.getDetail(pnRow,"dExpiryDt")));
                     break;
-                case 5:
+                case 4:
                     txtDetail04.setText(String.valueOf(poTrans.getDetail(pnRow,"nCredtQty")));
                 
                     loadDetail();
@@ -792,7 +805,7 @@ public class InvAdjustmentController implements Initializable {
                         txtDetail03.selectAll();
                     }
                      break;
-                case 6:
+                case 5:
                     txtDetail05.setText(String.valueOf(poTrans.getDetail(pnRow,"nDebitQty")));
                     loadDetail();
                     if (!poTrans.getDetail(poTrans.ItemCount()- 1, "sStockIDx").toString().isEmpty() && 
@@ -807,8 +820,8 @@ public class InvAdjustmentController implements Initializable {
                     loadDetail();
                     
                      if (!txtDetail03.getText().isEmpty()){
-                        txtDetail04.requestFocus();
-                        txtDetail04.selectAll();
+                        txtDetail05.requestFocus();
+                        txtDetail05.selectAll();
                     } else{
                         txtDetail03.requestFocus();
                         txtDetail03.selectAll();

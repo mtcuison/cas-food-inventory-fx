@@ -230,6 +230,18 @@
                               </Button>
                            </graphic>
                         </Menu>
+                        <MenuItem fx:id="mnu_Dashboard" mnemonicParsing="false" onAction="#mnuDashBoard_Click" text="Dashboard" visible="true">
+                           <graphic>
+                              <Button graphicTextGap="2.0" mnemonicParsing="false">
+                                 <graphic>
+                                    <FontAwesomeIconView glyphName="DASHBOARD" size="14" />
+                                 </graphic>
+                                 <font>
+                                    <Font size="1.0" />
+                                 </font>
+                              </Button>
+                           </graphic>
+                        </MenuItem>
                         <MenuItem fx:id="mnuClose" mnemonicParsing="false" onAction="#mnuClose_Click" text="Exit">
                            <graphic>
                               <Button graphicTextGap="2.0" mnemonicParsing="false">

@@ -17,6 +17,7 @@ import javafx.animation.FadeTransition;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -25,6 +26,7 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.layout.VBox;
 import javafx.util.Duration;
 import javafx.event.EventHandler;
+import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckMenuItem;
@@ -33,12 +35,15 @@ import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.Tooltip;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
+import org.controlsfx.control.Notifications;
 import org.rmj.appdriver.GRider;
 import org.rmj.appdriver.MiscUtil;
 import org.rmj.appdriver.SQLUtil;
@@ -119,6 +124,8 @@ public class MDIMainController implements Initializable {
     private MenuItem menu_InvAdjustment;
     @FXML
     private MenuItem mnu_InvAdjustmentReg;
+    @FXML
+    private MenuItem mnu_Dashboard;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -632,6 +639,25 @@ public class MDIMainController implements Initializable {
     @FXML
     private void mnu_InvAdjustmentReg_Click(ActionEvent event) throws IOException {
         setDataPane(fadeAnimate(FoodInventoryFX.pxeInvAdjustment));
+    }
+
+    @FXML
+    private void mnuDashBoard_Click(ActionEvent event) {
+        Image img = new Image("org/rmj/cas/food/inventory/fx/images/check.png");
+        Notifications notifBuilder = Notifications.create()
+                .title("Download Complete")
+                .text("")
+                .graphic(new ImageView(img))
+                .hideAfter(Duration.seconds(5))
+                .position(Pos.BOTTOM_RIGHT)
+                .onAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                ShowMessageFX.Information(null, pxeModuleName, "Notif");
+            }
+        });
+        notifBuilder.darkStyle();
+        notifBuilder.showConfirm();
     }
        
     public static class MouseGestures {

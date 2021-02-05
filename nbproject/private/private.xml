@@ -25,6 +25,8 @@
         <group>
             <file>file:/D:/Jovan/GitHub/cas-food-inventory-fx/src/org/rmj/cas/food/inventory/fx/views/DailyProductionController.java</file>
             <file>file:/D:/Jovan/GitHub/cas-food-inventory-fx/src/org/rmj/cas/food/inventory/fx/views/InvAdjustmentController.java</file>
+            <file>file:/D:/Jovan/GitHub/cas-food-inventory-fx/src/org/rmj/cas/food/inventory/fx/views/MDIMainController.java</file>
+            <file>file:/D:/Jovan/GitHub/cas-food-inventory-fx/src/org/rmj/cas/food/inventory/fx/views/FoodInventoryFX.java</file>
         </group>
     </open-files>
 </project-private>

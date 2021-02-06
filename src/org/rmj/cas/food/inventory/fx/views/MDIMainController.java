@@ -28,6 +28,8 @@ import javafx.util.Duration;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckMenuItem;
 import javafx.scene.control.Label;
@@ -41,8 +43,10 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.stage.Modality;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import org.controlsfx.control.Notifications;
 import org.rmj.appdriver.GRider;
 import org.rmj.appdriver.MiscUtil;
@@ -54,6 +58,7 @@ import org.rmj.appdriver.agentfx.service.ITokenize;
 import org.rmj.appdriver.agentfx.service.TokenApprovalFactory;
 import org.rmj.appdriver.agentfx.ui.showFXDialog;
 import org.rmj.appdriver.constants.UserRight;
+import org.rmj.cas.food.inventory.fx.views.child.DashboardController;
 import org.rmj.cas.food.reports.classes.FoodReports;
 import org.rmj.cas.parameter.fx.ParameterFX;
 import org.rmj.cas.pos.reports.BIRReports;
@@ -120,12 +125,9 @@ public class MDIMainController implements Initializable {
     @FXML private Menu mnuHistory;
     @FXML private Menu mnuSettings;
     @FXML private AnchorPane mnuMain;
-    @FXML
-    private MenuItem menu_InvAdjustment;
-    @FXML
-    private MenuItem mnu_InvAdjustmentReg;
-    @FXML
-    private MenuItem mnu_Dashboard;
+    @FXML private MenuItem menu_InvAdjustment;
+    @FXML private MenuItem mnu_InvAdjustmentReg;
+    @FXML private MenuItem mnu_Dashboard;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -653,7 +655,46 @@ public class MDIMainController implements Initializable {
                 .onAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                ShowMessageFX.Information(null, pxeModuleName, "Notif");
+                    DashboardController dashboard = new DashboardController();
+                    
+                    FXMLLoader fxmlLoader = new FXMLLoader();
+                    fxmlLoader.setLocation(getClass().getResource("child/Dashboard.fxml"));
+                    fxmlLoader.setController(dashboard);
+
+                    Parent parent;
+                    try {
+
+                        parent = fxmlLoader.load();
+
+                        Stage stage = new Stage();
+
+                        parent.setOnMousePressed(new EventHandler<MouseEvent>() {
+                            @Override
+                            public void handle(MouseEvent event) {
+                                xOffset = event.getSceneX();
+                                yOffset = event.getSceneY();
+                            }
+                        });
+                        parent.setOnMouseDragged(new EventHandler<MouseEvent>() {
+                            @Override
+                            public void handle(MouseEvent event) {
+                                stage.setX(event.getScreenX() - xOffset);
+                                stage.setY(event.getScreenY() - yOffset); 
+
+                            }
+                        });
+
+                        Scene scene = new Scene(parent);
+                        stage.initModality(Modality.APPLICATION_MODAL);
+                        stage.initStyle(StageStyle.UNDECORATED);
+                        stage.setAlwaysOnTop(true);
+                        stage.setScene(scene);
+                        stage.showAndWait();
+
+                    } catch (IOException ex) {
+                        ShowMessageFX.Error(ex.getMessage(), pxeModuleName, "Please inform MIS department.");
+                        System.exit(1);
+                    }
             }
         });
         notifBuilder.darkStyle();
@@ -699,6 +740,8 @@ public class MDIMainController implements Initializable {
     
     private final String pxeModuleName = "Pedritos Integrated System";
     private static GRider poGRider;
+    private double xOffset = 0; 
+    private double yOffset = 0;
     
     public boolean changeTheme(){
         if(chkLight.isSelected()){

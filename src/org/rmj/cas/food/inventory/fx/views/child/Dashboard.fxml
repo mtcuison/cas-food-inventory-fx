@@ -6,6 +6,7 @@
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
@@ -13,7 +14,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox fx:id="VBox" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="440.0" prefWidth="721.0" style="-fx-background-color: #B3B6B7; -fx-border-color: black;" stylesheets="@../../styles/child.css" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1">
+<VBox fx:id="VBox" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="539.0" prefWidth="721.0" style="-fx-background-color: #B3B6B7; -fx-border-color: black;" stylesheets="@../../styles/child.css" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <AnchorPane prefHeight="30.0" prefWidth="600.0" style="-fx-background-color: #000000;">
          <children>
@@ -23,7 +24,7 @@
                   <Font name="System Bold" size="13.0" />
                </font>
             </Label>
-            <Button fx:id="btnExit" layoutX="574.0" mnemonicParsing="false" AnchorPane.bottomAnchor="3.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <Button fx:id="btnExit" layoutX="574.0" mnemonicParsing="false" onMouseClicked="#btnExit_Clicked" AnchorPane.bottomAnchor="3.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                <graphic>
                   <FontAwesomeIconView glyphName="CLOSE" />
                </graphic>
@@ -35,17 +36,41 @@
             </ImageView>
          </children>
       </AnchorPane>
-      <TabPane prefHeight="403.0" prefWidth="719.0" tabClosingPolicy="UNAVAILABLE">
+      <TabPane prefHeight="507.0" prefWidth="719.0" tabClosingPolicy="UNAVAILABLE">
         <tabs>
           <Tab closable="false" text="Inventory Expiration">
             <content>
-              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="345.0" prefWidth="719.0">
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="436.0" prefWidth="719.0">
                      <children>
-                        <TableView fx:id="table" layoutX="8.0" layoutY="7.0" prefHeight="360.0" prefWidth="704.0" />
+                        <TableView fx:id="table" layoutX="8.0" layoutY="16.0" prefHeight="454.0" prefWidth="704.0">
+                           <columns>
+                              <TableColumn fx:id="index01" editable="false" prefWidth="75.0" sortable="false" text="No" />
+                              <TableColumn fx:id="index02" editable="false" prefWidth="152.0" sortable="false" text="Barcode" />
+                              <TableColumn fx:id="index03" editable="false" prefWidth="234.0" sortable="false" text="Description" />
+                              <TableColumn fx:id="index04" editable="false" prefWidth="145.0" sortable="false" text="Expiration" />
+                              <TableColumn fx:id="index05" editable="false" prefWidth="93.0" sortable="false" text="Qty On Hand" />
+                           </columns></TableView>
                      </children>
                   </AnchorPane>
             </content>
           </Tab>
+            <Tab text="Expired Inventory">
+              <content>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <TableView fx:id="table01" layoutX="9.0" layoutY="15.0" prefHeight="454.0" prefWidth="704.0">
+                           <columns>
+                              <TableColumn fx:id="index06" editable="false" prefWidth="75.0" sortable="false" text="No" />
+                              <TableColumn fx:id="index07" editable="false" prefWidth="152.0" sortable="false" text="Barcode" />
+                              <TableColumn fx:id="index08" editable="false" prefWidth="234.0" sortable="false" text="Description" />
+                              <TableColumn fx:id="index09" editable="false" prefWidth="145.0" sortable="false" text="Expiration" />
+                              <TableColumn fx:id="index10" editable="false" prefWidth="93.0" sortable="false" text="Qty On Hand" />
+                           </columns>
+                        </TableView>
+                     </children>
+                  </AnchorPane>
+              </content>
+            </Tab>
         </tabs>
       </TabPane>
    </children>

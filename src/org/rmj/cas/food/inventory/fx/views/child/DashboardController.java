@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package org.rmj.cas.food.inventory.fx.views.child;
 
 import java.net.URL;
@@ -19,14 +14,17 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 import org.rmj.appdriver.GRider;
 import org.rmj.appdriver.MiscUtil;
+import org.rmj.appdriver.SQLUtil;
+import org.rmj.appdriver.agentfx.CommonUtils;
 
 /**
  * FXML Controller class
  *
- * @author user
+ * @author jovan
  */
 public class DashboardController implements Initializable {
 
@@ -35,18 +33,60 @@ public class DashboardController implements Initializable {
     @FXML private TableView table;
     
     private ObservableList<TableModel> data = FXCollections.observableArrayList();
+    private ObservableList<TableModel> data01 = FXCollections.observableArrayList();
     private final String pxeModuleName = "DashboardController";
-    private ResultSet poRS = null;
     private static GRider poGRider;
+    @FXML private TableColumn index01;
+    @FXML private TableColumn index02;
+    @FXML private TableColumn index03;
+    @FXML private TableColumn index04;
+    @FXML private TableColumn index05;
+    @FXML private TableView table01;
+    @FXML private TableColumn index06;
+    @FXML private TableColumn index07;
+    @FXML private TableColumn index08;
+    @FXML private TableColumn index09;
+    @FXML private TableColumn index10;
 
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         initGridLedger();
+        loadDetail2Grid();
+        loadExpiredInv();
     }
     
     public void setGRider(GRider foGRider){this.poGRider = foGRider;}
-   
+    
+    private void initGridLedger(){
+        index01.setStyle("-fx-alignment: CENTER;");
+        index02.setStyle("-fx-alignment: CENTER-LEFT;");
+        index03.setStyle("-fx-alignment: CENTER-LEFT;");
+        index04.setStyle("-fx-alignment: CENTER;");
+        index05.setStyle("-fx-alignment: CENTER;");
+        
+        index06.setStyle("-fx-alignment: CENTER;");
+        index07.setStyle("-fx-alignment: CENTER-LEFT;");
+        index08.setStyle("-fx-alignment: CENTER-LEFT;");
+        index09.setStyle("-fx-alignment: CENTER;");
+        index10.setStyle("-fx-alignment: CENTER;");
+     
+        index01.setCellValueFactory(new PropertyValueFactory<org.rmj.cas.food.inventory.fx.views.child.TableModel,String>("index01"));
+        index02.setCellValueFactory(new PropertyValueFactory<org.rmj.cas.food.inventory.fx.views.child.TableModel,String>("index02"));
+        index03.setCellValueFactory(new PropertyValueFactory<org.rmj.cas.food.inventory.fx.views.child.TableModel,String>("index03"));
+        index04.setCellValueFactory(new PropertyValueFactory<org.rmj.cas.food.inventory.fx.views.child.TableModel,String>("index04"));
+        index05.setCellValueFactory(new PropertyValueFactory<org.rmj.cas.food.inventory.fx.views.child.TableModel,String>("index05"));
+        
+        
+        index06.setCellValueFactory(new PropertyValueFactory<org.rmj.cas.food.inventory.fx.views.child.TableModel,String>("index01"));
+        index07.setCellValueFactory(new PropertyValueFactory<org.rmj.cas.food.inventory.fx.views.child.TableModel,String>("index02"));
+        index08.setCellValueFactory(new PropertyValueFactory<org.rmj.cas.food.inventory.fx.views.child.TableModel,String>("index03"));
+        index09.setCellValueFactory(new PropertyValueFactory<org.rmj.cas.food.inventory.fx.views.child.TableModel,String>("index04"));
+        index10.setCellValueFactory(new PropertyValueFactory<org.rmj.cas.food.inventory.fx.views.child.TableModel,String>("index05"));
+        
+        table.setItems(data);
+        table01.setItems(data01);
+    }
 
     private String getSQLInventory(){
         return "SELECT" +
@@ -55,37 +95,72 @@ public class DashboardController implements Initializable {
             ",c.dBegInvxx" +
             ",c.dExpiryDt" +
             ",c.nQtyOnHnd" +
-            "   FROM Inventory a" +
-            "      ,Inv_Master b" +
-            "      ,Inv_Master_Expiration c" +
-            "	WHERE  a.sStockIDx = b.sStockIDx" +
-            "		AND b.sStockIDx = c.sStockIDx" +
-            "		AND b.sBranchCd = c.sBranchCd" +
-            "		AND b.sBranchCd = oaap.branchcd" +
-            "		AND b.nQtyOnHnd > 0" +
-            "		AND c.nQtyOnHnd > 0" +
-            "		AND (c.dExpiryDt < " + "OR" +
-            "			DATEDIFF(c.dExpiryDt, SYSDATE()) >= 5)" +
-            "ORDER BY c.dExpiryDt, a.sBarCodex;";
+            " FROM Inventory a" +
+            ",Inv_Master b" +
+            ",Inv_Master_Expiration c" +
+            " WHERE a.sStockIDx = b.sStockIDx" +
+            " AND b.sStockIDx = c.sStockIDx" +
+            " AND b.sBranchCd = c.sBranchCd" +
+            " AND b.sBranchCd  =" + SQLUtil.toSQL(poGRider.getBranchCode())+
+            " AND b.nQtyOnHnd > 0" +
+            " AND c.nQtyOnHnd > 0" +
+            " AND DATEDIFF(c.dExpiryDt, "+ SQLUtil.toSQL(CommonUtils.xsDateShort(poGRider.getServerDate()))+") BETWEEN 0 AND 5" +
+            " ORDER BY c.dExpiryDt, a.sBarCodex;";
         
     }
     
-    public void loadDetail2Grid() {               
-        data.clear();
+    
+    private String getExpiredInventory(){
+        return "SELECT" +
+            " a.sBarCodex" +
+            ",a.sDescript" +
+            ",c.dBegInvxx" +
+            ",c.dExpiryDt" +
+            ",c.nQtyOnHnd" +
+            " FROM Inventory a" +
+            ",Inv_Master b" +
+            ",Inv_Master_Expiration c" +
+            " WHERE a.sStockIDx = b.sStockIDx" +
+            " AND b.sStockIDx = c.sStockIDx" +
+            " AND b.sBranchCd = c.sBranchCd" +
+            " AND b.sBranchCd  =" + SQLUtil.toSQL(poGRider.getBranchCode())+
+            " AND b.nQtyOnHnd > 0" +
+            " AND c.nQtyOnHnd > 0" +
+            " AND c.dExpiryDt < " + SQLUtil.toSQL(CommonUtils.xsDateShort(poGRider.getServerDate()))+
+            " ORDER BY c.dExpiryDt, a.sBarCodex;";
         
-        if (poRS == null) return;
+    }
+    
+    public void loadExpiredInv(){
+        ResultSet poRS = null;
+        data01.clear();
         
+        poRS = poGRider.executeQuery(getExpiredInventory());
+        if (MiscUtil.RecordCount(poRS) <= 0){
+            data01.add(new TableModel(String.valueOf(1), 
+                                           "",
+                                            "",
+                                            "",
+                                            "",
+                                            "",
+                                            "",
+                                            "",
+                                            "",
+                                            ""));
+        
+             return;
+        }
         try {
             poRS.first();
             for (int lnCtr = 1; lnCtr <= MiscUtil.RecordCount(poRS); lnCtr++){
                
                     poRS.absolute(lnCtr);
-                    data.add(new TableModel(String.valueOf(lnCtr), 
-                                            poRS.getString("dTransact"),
+                    data01.add(new TableModel(String.valueOf(lnCtr), 
+                                            poRS.getString("sBarCodex"),
                                             poRS.getString("sDescript"),
-                                            poRS.getString("sSourceNo"),
-                                            poRS.getString("nQtyInxxx"),
-                                            poRS.getString("nQtyOutxx"),
+                                            poRS.getString("dExpiryDt"),
+                                            poRS.getString("nQtyOnHnd"),
+                                            "",
                                             "",
                                             "",
                                             "",
@@ -97,23 +172,50 @@ public class DashboardController implements Initializable {
         }
     }
     
-    private void initGridLedger(){
-        TableColumn index01= new TableColumn("Barcode");
-        TableColumn index02= new TableColumn("Description");
-        TableColumn index03= new TableColumn("Expiration");
-        TableColumn index04= new TableColumn("Quantiy");
+    public void loadDetail2Grid() {
+        ResultSet poRS = null;
+        data.clear();
         
-        index01.setStyle("-fx-alignment: CENTER;");
-        index02.setStyle("-fx-alignment: CENTER-LEFT;");
-        index03.setStyle("-fx-alignment: CENTER-LEFT;");
-        index04.setStyle("-fx-alignment: CENTER;");
-     
-        index01.setCellValueFactory(new PropertyValueFactory<org.rmj.cas.food.inventory.fx.views.child.TableModel,String>("index01"));
-        index02.setCellValueFactory(new PropertyValueFactory<org.rmj.cas.food.inventory.fx.views.child.TableModel,String>("index02"));
-        index03.setCellValueFactory(new PropertyValueFactory<org.rmj.cas.food.inventory.fx.views.child.TableModel,String>("index03"));
-        index04.setCellValueFactory(new PropertyValueFactory<org.rmj.cas.food.inventory.fx.views.child.TableModel,String>("index04"));
+        poRS = poGRider.executeQuery(getSQLInventory());
+        if (MiscUtil.RecordCount(poRS) <= 0){
+            data.add(new TableModel(String.valueOf(1), 
+                                    "",
+                                     "",
+                                     "",
+                                     "",
+                                     "",
+                                     "",
+                                     "",
+                                     "",
+                                     ""));
         
-        table.setItems(data);
+             return;
+        }
+        try {
+            poRS.first();
+            for (int lnCtr = 1; lnCtr <= MiscUtil.RecordCount(poRS); lnCtr++){
+               
+                    poRS.absolute(lnCtr);
+                    data.add(new TableModel(String.valueOf(lnCtr), 
+                                            poRS.getString("sBarCodex"),
+                                            poRS.getString("sDescript"),
+                                            poRS.getString("dExpiryDt"),
+                                            poRS.getString("nQtyOnHnd"),
+                                            "",
+                                            "",
+                                            "",
+                                            "",
+                                            ""));
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(FoodLedgerController.class.getName()).log(Level.SEVERE, null, ex);
+            return;
+        }
+    }
+
+    @FXML
+    private void btnExit_Clicked(MouseEvent event) {
+        CommonUtils.closeStage(btnExit);
     }
     
 }

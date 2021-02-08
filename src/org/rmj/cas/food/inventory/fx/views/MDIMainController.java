@@ -17,7 +17,6 @@ import javafx.animation.FadeTransition;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
-import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -427,9 +426,9 @@ public class MDIMainController implements Initializable {
                 return loInvAdjustment;
             
             case FoodInventoryFX.pxeInvAdjustmentReg:
-//                InvAdjustmentRegController loInvAdjustmentReg = new InvAdjustmentRegController();
-//                loInvAdjustmentReg.setGRider(poGRider);
-//                return loInvAdjustmentReg;
+                InvAdjustmentRegController loInvAdjustmentReg = new InvAdjustmentRegController();
+                loInvAdjustmentReg.setGRider(poGRider);
+                return loInvAdjustmentReg;
                 
             default:
                 return null;
@@ -640,22 +639,24 @@ public class MDIMainController implements Initializable {
 
     @FXML
     private void mnu_InvAdjustmentReg_Click(ActionEvent event) throws IOException {
-        setDataPane(fadeAnimate(FoodInventoryFX.pxeInvAdjustment));
+        setDataPane(fadeAnimate(FoodInventoryFX.pxeInvAdjustmentReg));
     }
 
     @FXML
     private void mnuDashBoard_Click(ActionEvent event) {
         Image img = new Image("org/rmj/cas/food/inventory/fx/images/check.png");
         Notifications notifBuilder = Notifications.create()
-                .title("Download Complete")
-                .text("")
+                .title("Inventory Expiration Notice")
+                .text("Kindly check inventory about to expire!")
                 .graphic(new ImageView(img))
-                .hideAfter(Duration.seconds(5))
+                .hideAfter(Duration.seconds(3))
                 .position(Pos.BOTTOM_RIGHT)
                 .onAction(new EventHandler<ActionEvent>() {
+                    
             @Override
             public void handle(ActionEvent event) {
                     DashboardController dashboard = new DashboardController();
+                    dashboard.setGRider(poGRider);
                     
                     FXMLLoader fxmlLoader = new FXMLLoader();
                     fxmlLoader.setLocation(getClass().getResource("child/Dashboard.fxml"));
@@ -665,9 +666,7 @@ public class MDIMainController implements Initializable {
                     try {
 
                         parent = fxmlLoader.load();
-
                         Stage stage = new Stage();
-
                         parent.setOnMousePressed(new EventHandler<MouseEvent>() {
                             @Override
                             public void handle(MouseEvent event) {
@@ -675,6 +674,7 @@ public class MDIMainController implements Initializable {
                                 yOffset = event.getSceneY();
                             }
                         });
+                        
                         parent.setOnMouseDragged(new EventHandler<MouseEvent>() {
                             @Override
                             public void handle(MouseEvent event) {

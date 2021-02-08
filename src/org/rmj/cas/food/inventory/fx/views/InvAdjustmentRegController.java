@@ -5,11 +5,9 @@ import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import java.net.URL;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.text.ParseException;
 import java.time.LocalDate;
 import java.util.Date;
 import java.util.ResourceBundle;
-import javafx.beans.property.ReadOnlyBooleanPropertyBase;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -38,7 +36,6 @@ import org.rmj.appdriver.GRider;
 import org.rmj.appdriver.MiscUtil;
 import org.rmj.appdriver.agentfx.CommonUtils;
 import org.rmj.appdriver.agentfx.ShowMessageFX;
-import org.rmj.appdriver.agentfx.callback.IMasterDetail;
 import org.rmj.appdriver.constants.EditMode;
 import org.rmj.appdriver.constants.TransactionStatus;
 import org.rmj.cas.inventory.base.InvAdjustment;
@@ -46,9 +43,9 @@ import org.rmj.cas.inventory.base.InvAdjustment;
 /**
  * FXML Controller class
  *
- * @author jovan
+ * @author user
  */
-public class InvAdjustmentController implements Initializable {
+public class InvAdjustmentRegController implements Initializable {
 
     @FXML private VBox VBoxForm;
     @FXML private Button btnExit;
@@ -57,75 +54,44 @@ public class InvAdjustmentController implements Initializable {
     @FXML private Label lblHeader;
     @FXML private TextField txtField01;
     @FXML private TextField txtField02;
+    @FXML private TextArea txtField04;
+    @FXML private TextField txtDetail07;
     @FXML private TextField txtDetail03;
-    @FXML private TextField txtDetail04;
     @FXML private TextField txtDetail80;
+    @FXML private TextField txtDetail04;
     @FXML private TextField txtDetail05;
     @FXML private TextField txtDetail06;
-    @FXML private TextField txtDetail07;
     @FXML private TableView table;
     @FXML private ImageView imgTranStat;
     @FXML private TextField txtField50;
-    @FXML private Button btnNew;
-    @FXML private Button btnSave;
-    @FXML private Button btnCancel;
-    @FXML private Button btnClose;
-    @FXML private Button btnSearch;
-    @FXML private Button btnConfirm;
-    @FXML private Button btnDel;
-    @FXML private Button btnBrowse;
     @FXML private TableView tableDetail;
-    @FXML private TextArea txtField04;
+    @FXML private Button btnClose;
+    @FXML private Button btnBrowse;
+    
+    private static GRider poGRider;
 
+    /**
+     * Initializes the controller class.
+     */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         poTrans = new InvAdjustment(poGRider, poGRider.getBranchCode(), false);
-        poTrans.setCallBack(poCallBack);
+        poTrans.setTranStat(1);
         
-        btnCancel.setOnAction(this::cmdButton_Click);
-        btnSearch.setOnAction(this::cmdButton_Click);
-        btnSave.setOnAction(this::cmdButton_Click);
-        btnDel.setOnAction(this::cmdButton_Click);
-        btnNew.setOnAction(this::cmdButton_Click);
-        btnConfirm.setOnAction(this::cmdButton_Click);
         btnClose.setOnAction(this::cmdButton_Click);
-        btnExit.setOnAction(this::cmdButton_Click);
         btnBrowse.setOnAction(this::cmdButton_Click);
         
-        txtField01.focusedProperty().addListener(txtField_Focus);
-        txtField02.focusedProperty().addListener(txtField_Focus);
-        txtField04.focusedProperty().addListener(txtArea_Focus);
-        txtField50.focusedProperty().addListener(txtField_Focus);
-        
-        txtDetail03.focusedProperty().addListener(txtDetail_Focus);
-        txtDetail04.focusedProperty().addListener(txtDetail_Focus);
-        txtDetail05.focusedProperty().addListener(txtDetail_Focus);
-        txtDetail06.focusedProperty().addListener(txtDetail_Focus);
-        txtDetail07.focusedProperty().addListener(txtDetail_Focus);
-        txtDetail80.focusedProperty().addListener(txtDetail_Focus);
-        
-        txtField01.setOnKeyPressed(this::txtField_KeyPressed);
-        txtField02.setOnKeyPressed(this::txtField_KeyPressed);
-        txtField04.setOnKeyPressed(this::txtFieldArea_KeyPressed);
         txtField50.setOnKeyPressed(this::txtField_KeyPressed);
-        
-        txtDetail03.setOnKeyPressed(this::txtDetail_KeyPressed);
-        txtDetail04.setOnKeyPressed(this::txtDetail_KeyPressed);
-        txtDetail05.setOnKeyPressed(this::txtDetail_KeyPressed);
-        txtDetail06.setOnKeyPressed(this::txtDetail_KeyPressed);
-        txtDetail07.setOnKeyPressed(this::txtDetail_KeyPressed);
-        txtDetail80.setOnKeyPressed(this::txtDetail_KeyPressed);    
         
         pnEditMode = EditMode.UNKNOWN;    
         clearFields();
         
         initGrid();
         initLisView();
-        initButton(pnEditMode);
         
         pbLoaded = true;
-
-    }
+        
+    }  
     
     private void initGrid(){
         TableColumn index01 = new TableColumn("No.");
@@ -187,11 +153,10 @@ public class InvAdjustmentController implements Initializable {
         pnRow = table.getSelectionModel().getSelectedIndex();
         loadDetailData(pnRow);
         setDetailInfo(pnRow);
+        
     }
     
     public void setGRider(GRider foGRider){this.poGRider = foGRider;}
-    private final String pxeModuleName = "Inventory Adjustment Controller";
-    private static GRider poGRider;
     private InvAdjustment poTrans;
     
     private int pnEditMode = -1;
@@ -211,180 +176,7 @@ public class InvAdjustmentController implements Initializable {
     private String psOldRec = "";
     private String psTransNox = "";
     private String psdTransact = "";
-    
-    final ChangeListener<? super Boolean> txtField_Focus = (o,ov,nv)->{
-        if (!pbLoaded) return;
-        
-        TextField txtField = (TextField)((ReadOnlyBooleanPropertyBase)o).getBean();
-        int lnIndex = Integer.parseInt(txtField.getId().substring(8, 10));
-        String lsValue = txtField.getText();
-        
-        if (lsValue == null) return;
-            
-        if(!nv){ /*Lost Focus*/
-            switch (lnIndex){
-                case 2: /*dTransact*/
-                     if (CommonUtils.isDate(txtField.getText(), pxeDateFormat)){
-                        poTrans.setMaster("dTransact", CommonUtils.toDate(txtField.getText()));
-                       txtField.setText(CommonUtils.xsDateLong((Date)poTrans.getMaster("dTransact")));
-                    } else{
-                        ShowMessageFX.Warning("Invalid date entry.", pxeModuleName, "Date format must be yyyy-MM-dd (e.g. 1991-07-07)");
-                        poTrans.setMaster("dTransact", CommonUtils.toDate(pxeDateDefault));
-                        txtField.setText(CommonUtils.xsDateLong((Date)poTrans.getMaster("dTransact")));
-                    }
-                    return;
-                case 1: /*sTransNox*/
-                        break; 
-                case 50:
-                   if(lsValue.equals("") || lsValue.equals("%"))
-                       txtField.setText("");
-                       break;
-                       
-                case 51:
-                    if(CommonUtils.isDate(txtField.getText(), pxeDateFormat)){
-                         txtField.setText(CommonUtils.xsDateLong(CommonUtils.toDate(txtField.getText())));
-                    }else{
-                        txtField.setText(CommonUtils.xsDateLong(CommonUtils.toDate(pxeDateDefault)));
-                    }
-                   
-                   break;
-                default:
-                    ShowMessageFX.Warning(null, pxeModuleName, "Text field with name " + txtField.getId() + " not registered.");
-                    return;
-            }
-            pnIndex = lnIndex;
-        } else{
-            switch (lnIndex){
-                case 2: /*dTransact*/
-                    try{
-                        txtField.setText(CommonUtils.xsDateShort(lsValue));
-                    }catch(ParseException e){
-                        ShowMessageFX.Error(e.getMessage(), pxeModuleName, null);
-                    }
-                    txtField.selectAll();
-                    break;
-                case 51:
-                    try{
-                        txtField.setText(CommonUtils.xsDateShort(lsValue));
-                    }catch(ParseException e){
-                        ShowMessageFX.Error(e.getMessage(), pxeModuleName, null);
-                    }
-                    txtField.selectAll();
-                    break;
-                default:
-            }
-            pnIndex = lnIndex;
-            txtField.selectAll();
-        }
-    };
-    
-    final ChangeListener<? super Boolean> txtDetail_Focus = (o,ov,nv)->{
-        if (!pbLoaded) return;
-        
-        TextField txtDetail = (TextField)((ReadOnlyBooleanPropertyBase)o).getBean();
-        int lnIndex = Integer.parseInt(txtDetail.getId().substring(9, 11));
-        String lsValue = txtDetail.getText();
-        
-        if (pnRow < 0) return;
-        if (lsValue == null) return;
-        
-        if(!nv){ /*Lost Focus*/
-            switch (lnIndex){
-                case 7: /*dExpiryDt*/
-                    if (CommonUtils.isDate(txtDetail.getText(), pxeDateFormat)){
-                        poTrans.setDetail(pnRow, "dExpiryDt", CommonUtils.toDate(txtDetail.getText()));
-                        txtDetail.setText(CommonUtils.xsDateLong((Date)poTrans.getDetail(pnRow, "dExpiryDt")));
-                    } else{
-                        ShowMessageFX.Warning("Invalid date entry.", pxeModuleName, "Date format must be yyyy-MM-dd (e.g. 1991-07-07)");
-                        poTrans.setDetail(pnRow, "dExpiryDt" , CommonUtils.toDate(pxeDateDefault));
-                        txtDetail.setText(CommonUtils.xsDateLong((Date)poTrans.getDetail(pnRow, "dExpiryDt")));
-                    }
-                    return;
-                case 3: /*Barcode Search*/
-                    break;
-                case 80:/*sDescript Search*/
-                    break;
-                case 4:/*Credit Qty*/
-                    /*This must be numeric*/
-                    int x =0;
-                    
-                    try{
-                        x =Integer.parseInt(lsValue);
-                    }catch (NumberFormatException e){
-                        x = 0;
-                    }
-                    if((int) poTrans.getDetail(pnRow, "nDebitQty") > 0) {
-                        ShowMessageFX.Warning(null, pxeModuleName, "Debit Qty must be zero");
-                        x = 0;
-                        txtDetail.setText("0");
-                    }
-                    poTrans.setDetail(pnRow, "nCredtQty", x);
-                    break;
-                case 5:/*Debit Qty*/
-                    /*This must be numeric*/
-                    int y =0;
-                    
-                    try{
-                        y =Integer.parseInt(lsValue);
-                    }catch (NumberFormatException e){
-                        y = 0;
-                    }
-                    
-                    if((int) poTrans.getDetail(pnRow, "nCredtQty") > 0){
-                        ShowMessageFX.Warning(null, pxeModuleName, "Debit Qty must be zero");
-                        y =0;
-                        txtDetail.setText("0");
-                    } 
-                    poTrans.setDetail(pnRow, "nDebitQty", y);
-                    break;
-                case 6:/*Qty On Hand*/
-                case 10:/*Inv Cost*/
-                    break;
-                    
-            }
-            pnOldRow = table.getSelectionModel().getSelectedIndex();
-            pnIndex = lnIndex;
-        } else{
-            switch (lnIndex){
-                case 7: /*dExpiryDt*/
-                    try{
-                        txtDetail.setText(CommonUtils.xsDateShort(lsValue));
-                    }catch(ParseException e){
-                        ShowMessageFX.Error(e.getMessage(), pxeModuleName, null);
-                    }
-                    txtDetail.selectAll();
-                    break;
-                default:
-            }
-            pnIndex = -1;
-            txtDetail.selectAll();
-        }
-    };
-    
-    final ChangeListener<? super Boolean> txtArea_Focus = (o,ov,nv)->{
-        if (!pbLoaded) return;
-        
-        TextArea txtField = (TextArea)((ReadOnlyBooleanPropertyBase)o).getBean();
-        int lnIndex = Integer.parseInt(txtField.getId().substring(8, 10));
-        String lsValue = txtField.getText();
-        
-        if (lsValue == null) return;
-        
-        if(!nv){ /*Lost Focus*/            
-            switch (lnIndex){
-                case 2: /*sRemarksx*/
-                    if (lsValue.length() > 256) lsValue = lsValue.substring(0, 512);
-                    
-                    poTrans.setMaster("sRemarksx", CommonUtils.TitleCase(lsValue));
-                    txtField.setText((String)poTrans.getMaster("sRemarksx"));
-                    break;
-            }
-        }else{ 
-            pnIndex = -1;
-            txtField.selectAll();
-        }
-    };
-    
+    private final String pxeModuleName = "Inventory Adjustment Controller";
     
     private void loadDetailData(int fnRow){
         ResultSet loRS = null;
@@ -456,33 +248,6 @@ public class InvAdjustmentController implements Initializable {
         String lsButton = ((Button)event.getSource()).getId();
         
         switch (lsButton){
-            case "btnNew":
-                if (poTrans.newTransaction()){
-                    clearFields();
-                    loadRecord();
-                    txtField50.setText("");
-                    pnEditMode = EditMode.ADDNEW;
-                }  
-                break;
-                
-            case "btnConfirm":
-               if (!psOldRec.equals("")){
-                    if(!poTrans.getMaster("cTranStat").equals(TransactionStatus.STATE_OPEN)){
-                        ShowMessageFX.Warning("Trasaction may be CANCELLED/POSTED.", pxeModuleName, "Can't update processed transactions!!!");
-                        return;
-                    }
-                    if( ShowMessageFX.YesNo(null, pxeModuleName, "Do you want to confirm this transasction?")== true){
-                        if (poTrans.closeTransaction(psOldRec)){
-                            ShowMessageFX.Information(null, pxeModuleName, "Transaction CONFIRMED successfully.");
-                            clearFields();
-                            initGrid();
-                            pnEditMode = EditMode.UNKNOWN;
-                            initButton(pnEditMode);
-                        }
-                    }
-                    
-                } else ShowMessageFX.Warning(null, pxeModuleName, "Please select a record to confirm!");
-                break;
                 
             case "btnClose":
             case "btnExit":
@@ -496,45 +261,7 @@ public class InvAdjustmentController implements Initializable {
                     break;
                 } else
                     return;
-                
-            case "btnSearch":
-                switch (pnIndex){
-                 case 3:
-                    if (poTrans.SearchDetail(pnRow, 3, "%", false, false)){
-                        txtDetail03.setText(poTrans.getDetailOthers(pnRow, "sBarCodex").toString());
-                        txtDetail80.setText(poTrans.getDetailOthers(pnRow, "sDescript").toString());
-                    } else {
-                        txtDetail03.setText("");
-                        txtDetail80.setText("");
-                    }
-                    break;
-                case 80:
-                    if (poTrans.SearchDetail(pnRow, 4, "%", true, false)){
-                        txtDetail03.setText(poTrans.getDetailOthers(pnRow, "sBarCodex").toString());
-                        txtDetail80.setText(poTrans.getDetailOthers(pnRow, "sDescript").toString());
-                    } else {
-                        txtDetail03.setText("");
-                        txtDetail80.setText("");
-                    }
-                    break;
-                }
-                return;
-                
-            case "btnSave": 
-                if (poTrans.saveTransaction()){
-                    ShowMessageFX.Information(null, pxeModuleName, "Transaction saved successfuly.");
-                    clearFields();
-                    initGrid();
-                    pnEditMode = EditMode.UNKNOWN;
-                    initButton(pnEditMode);
-                    break;
-                } else{
-                    if (!poTrans.getErrMsg().equals(""))
-                        ShowMessageFX.Error(poTrans.getErrMsg(), pxeModuleName, "Please inform MIS Department.");
-                    else
-                        ShowMessageFX.Warning(poTrans.getMessage(), pxeModuleName, "Please verify your entry.");
-                    return;
-                } 
+            
             case "btnBrowse":
                 switch(pnIndex){
                     case 50: /*sTransNox*/
@@ -555,23 +282,11 @@ public class InvAdjustmentController implements Initializable {
                 }
                 
                 return;
-            case "btnDel":  
-               int lnIndex = table.getSelectionModel().getFocusedIndex();    
-                if(table.getSelectionModel().getSelectedItem() == null){
-                     ShowMessageFX.Warning(null, pxeModuleName, "Please select item to remove!");
-                     break;
-                }
-                if(ShowMessageFX.OkayCancel(null, pxeModuleName, "Do you want to remove this item?") == true){
-                    poTrans.deleteDetail(lnIndex);
-                    loadDetail();
-                    
-                }     
-                break;
+                
             default:
                 ShowMessageFX.Warning(null, pxeModuleName, "Button with name " + lsButton + " not registered.");
                 return;
         }
-        initButton(pnEditMode);
     }
     
     private void clearFields(){
@@ -599,38 +314,6 @@ public class InvAdjustmentController implements Initializable {
         dataDetail.clear();
     }
     
-     private void initButton(int fnValue){
-        boolean lbShow = (fnValue == EditMode.ADDNEW || fnValue == EditMode.UPDATE);
-        
-        btnCancel.setVisible(lbShow);
-        btnSearch.setVisible(lbShow);
-        btnSave.setVisible(lbShow);
-        btnDel.setVisible(lbShow);
-        lblHeader.setVisible(lbShow);
-        
-        txtField50.setDisable(lbShow);
-        
-        btnBrowse.setVisible(!lbShow);
-        btnNew.setVisible(!lbShow);
-        btnConfirm.setVisible(!lbShow);
-        btnClose.setVisible(!lbShow);
-        
-//        txtField01.setDisable(!lbShow);
-        txtField02.setDisable(!lbShow);
-        txtField04.setDisable(!lbShow);
-        
-        txtDetail03.setDisable(!lbShow);
-        txtDetail04.setDisable(!lbShow);
-        txtDetail05.setDisable(!lbShow);
-        txtDetail06.setDisable(!lbShow);
-        txtDetail80.setDisable(!lbShow);
-        
-        if (lbShow)
-            txtField02.requestFocus();
-        else
-            txtField50.requestFocus();
-    }
-     
     private void txtField_KeyPressed(KeyEvent event){
         TextField txtField = (TextField)event.getSource();
         int lnIndex = Integer.parseInt(txtField.getId().substring(8, 10));
@@ -706,52 +389,6 @@ public class InvAdjustmentController implements Initializable {
         }
     }
     
-    private void txtDetail_KeyPressed(KeyEvent event){
-        TextField txtDetail = (TextField) event.getSource();
-        int lnIndex = Integer.parseInt(txtDetail.getId().substring(9, 11));
-        String lsValue = txtDetail.getText() + "%";
-        
-        if (event.getCode() == F3){
-            switch (lnIndex){
-                case 3:
-                    if (poTrans.SearchDetail(pnRow, 3, lsValue, false, false)){
-                        txtDetail03.setText(poTrans.getDetailOthers(pnRow, "sBarCodex").toString());
-                        txtDetail80.setText(poTrans.getDetailOthers(pnRow, "sDescript").toString());
-                        txtDetail06.setText(String.valueOf(poTrans.getDetail(pnRow, "nInvCostx")));
-                    } else {
-                        txtDetail03.setText("");
-                        txtDetail80.setText("");
-                        txtDetail06.setText("0.00");
-                    }
-                    break;
-
-                case 80:
-                    if (poTrans.SearchDetail(pnRow, 3, lsValue, true, false)){
-                        txtDetail03.setText(poTrans.getDetailOthers(pnRow, "sBarCodex").toString());
-                        txtDetail80.setText(poTrans.getDetailOthers(pnRow, "sDescript").toString());
-                        txtDetail06.setText(String.valueOf(poTrans.getDetail(pnRow, "nInvCostx")));
-                        
-                    } else {
-                        txtDetail03.setText("");
-                        txtDetail80.setText("");
-                        txtDetail06.setText("0.00");
-                    }
-                    
-                    break;
-                   
-            }
-        }
-        
-        switch (event.getCode()){
-        case ENTER:
-        case DOWN:
-            CommonUtils.SetNextFocus(txtDetail);
-            break;
-        case UP:
-            CommonUtils.SetPreviousFocus(txtDetail);
-        }
-    }
-    
     private void unloadForm(){
         VBox myBox = (VBox) VBoxForm.getParent();
         myBox.getChildren().clear();
@@ -809,12 +446,12 @@ public class InvAdjustmentController implements Initializable {
     
     private void setDetailInfo(int fnRow){
         if (!poTrans.getDetail(fnRow, "sStockIDx").equals("")){
-            txtDetail07.setText(CommonUtils.xsDateMedium((Date) poTrans.getDetail(fnRow, "dExpiryDt")));
             txtDetail03.setText((String) poTrans.getDetailOthers(fnRow, "sBarCodex"));
             txtDetail80.setText((String) poTrans.getDetailOthers(fnRow, "sDescript"));
             txtDetail04.setText(String.valueOf(poTrans.getDetail(fnRow, "nCredtQty")));
             txtDetail05.setText(String.valueOf(poTrans.getDetail(fnRow, "nDebitQty")));
             txtDetail06.setText(String.valueOf(poTrans.getDetail(fnRow, "nInvCostx")));
+            txtDetail07.setText(CommonUtils.xsDateMedium((Date) poTrans.getDetail(fnRow, "dExpiryDt")));
             txtDetail03.requestFocus();
         } else{
             txtDetail03.setText("");
@@ -842,51 +479,6 @@ public class InvAdjustmentController implements Initializable {
             default:
                 imgTranStat.setImage(new Image("org/rmj/cas/food/inventory/fx/images/unknown.png"));
         }    
-    }
-    
-    IMasterDetail poCallBack = new IMasterDetail() {
-        @Override
-        public void MasterRetreive(int fnIndex) {
-            getMaster(fnIndex);
-        }
-
-        @Override
-        public void DetailRetreive(int fnIndex) {
-            switch(fnIndex){
-                case 4:
-                    txtDetail04.setText(String.valueOf(poTrans.getDetail(pnRow,"nCredtQty")));
-                    if (!poTrans.getDetail(pnRow, "sStockIDx").toString().isEmpty()){
-                        poTrans.addDetail();
-                    }
-                    loadDetail();
- 
-                     break;
-                case 5:
-                    txtDetail05.setText(String.valueOf(poTrans.getDetail(pnRow,"nDebitQty")));
-                    if (!poTrans.getDetail(pnRow, "sStockIDx").toString().isEmpty()){
-                        poTrans.addDetail();
-                    }
-                    loadDetail();
-                    
-                    break;
-                case 7:
-                    /*get the value from the class*/
-                    txtDetail07.setText(CommonUtils.xsDateLong((Date)poTrans.getDetail(pnRow,"dExpiryDt")));
-                    loadDetail();
-                    break;
-            }
-        }
-    };
-    
-    private void getMaster(int fnIndex){
-        switch(fnIndex){
-            case 1:
-                txtField01.setText(CommonUtils.xsDateLong((Date)poTrans.getMaster("dTransact")));
-                break;
-            case 3:
-                txtField02.setText(CommonUtils.TitleCase((String) poTrans.getMaster("sRemarksx")));
-                break;
-        }
     }
     
 }

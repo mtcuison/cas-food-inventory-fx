@@ -23,10 +23,7 @@
         <group name="GCard"/>
         <group name="POS"/>
         <group>
-            <file>file:/D:/Jovan/GitHub/cas-food-inventory-fx/src/org/rmj/cas/food/inventory/fx/views/child/DashboardController.java</file>
-            <file>file:/D:/Jovan/GitHub/cas-food-inventory-fx/src/org/rmj/cas/food/inventory/fx/views/InvMasterController.java</file>
             <file>file:/D:/Jovan/GitHub/cas-food-inventory-fx/src/org/rmj/cas/food/inventory/fx/views/InvAdjustmentController.java</file>
-            <file>file:/D:/Jovan/GitHub/cas-food-inventory-fx/src/org/rmj/cas/food/inventory/fx/views/MDIMainController.java</file>
         </group>
     </open-files>
 </project-private>

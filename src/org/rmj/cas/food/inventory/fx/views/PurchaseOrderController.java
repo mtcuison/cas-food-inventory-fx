@@ -210,8 +210,8 @@ public class PurchaseOrderController implements Initializable {
         index01.setPrefWidth(30);
         index02.setPrefWidth(110);
         index03.setPrefWidth(200);
-        index04.setPrefWidth(50); index04.setStyle("-fx-alignment: CENTER-RIGHT;");
-        index05.setPrefWidth(80); index05.setStyle("-fx-alignment: CENTER-RIGHT;");
+        index04.setPrefWidth(45); index04.setStyle("-fx-alignment: CENTER-RIGHT;");
+        index05.setPrefWidth(75); index05.setStyle("-fx-alignment: CENTER-RIGHT;");
         
         index01.setSortable(false); index01.setResizable(false);
         index02.setSortable(false); index02.setResizable(false);
@@ -474,11 +474,29 @@ public class PurchaseOrderController implements Initializable {
             case F3:
                 switch (lnIndex){
                 case 2: /*sBranchCd*/
+                    if (!poTrans.SearchMaster(lnIndex, txtField.getText(), false)==true){
+                        txtField.setText("");
+                    }
+                    break;
                 case 5: /*sDestinat*/
+                    if (!poTrans.SearchMaster(lnIndex, txtField.getText(), false)==true){
+                        txtField.setText("");
+                    }
+                    break;
                 case 6: /*sSupplier*/
+                    if (!poTrans.SearchMaster(lnIndex, txtField.getText(), false)==true){
+                        txtField.setText("");
+                    }
+                    break;
                 case 8: /*sTermCode*/
+                    if (!poTrans.SearchMaster(lnIndex, txtField.getText(), false)==true){
+                        txtField.setText("");
+                    }
+                    break;
                 case 16: /*sInvTypCd*/
-                    poTrans.SearchMaster(lnIndex, txtField.getText(), false);
+                    if (!poTrans.SearchMaster(lnIndex, txtField.getText(), false)==true){
+                        txtField.setText("");
+                    }
                     break;
                 case 50: /*ReferNox*/
                     if(poTrans.BrowseRecord(txtField.getText(), true)==true){
@@ -539,7 +557,6 @@ public class PurchaseOrderController implements Initializable {
                     }
                 } else if (lnIndex == 80){
                     lsValue = txtDetail.getText();
-                    
                     if (lsValue.isEmpty()) return;
                     
                     loJSON = poTrans.SearchDetail(pnRow, 3, lsValue, true, false);

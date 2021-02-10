@@ -644,8 +644,15 @@ public class POReceivingController implements Initializable {
             if (lsValue.isEmpty()) return;
             switch (lnIndex){
                 case 3:                    
-                    loJSON = poTrans.SearchDetail(pnRow, 3, lsValue, false, false);                  
-                    if (loJSON != null) txtDetail03.setText((String) loJSON.get("sTransNox"));
+                    loJSON = poTrans.SearchDetail(pnRow, 3, lsValue, false, true);                  
+                    if (loJSON != null){
+                        txtDetail03.setText((String) loJSON.get("sReferNox"));
+                        psBarCodex = (String) loJSON.get("sBarCodex");
+                        psDescript = (String) loJSON.get("sDescript");
+                        txtDetail04.setText(psBarCodex);
+                        txtDetail80.setText(psDescript);
+                        loadDetail();
+                    }
                     break;
                 case 4:
                     loJSON = poTrans.SearchDetail(pnRow, 4, lsValue, false, false);

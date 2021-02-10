@@ -81,6 +81,7 @@ public class PurchaseOrderController implements Initializable {
         poTrans = new XMPurchaseOrder(poGRider, poGRider.getBranchCode(), false);
         poTrans.setTranStat(0);
         poTrans.setCallBack(poCallBack);
+        poTrans.setClientNm(System.getProperty("user.name"));
                 
         /*Set action event handler for the buttons*/
         btnCancel.setOnAction(this::cmdButton_Click);
@@ -389,6 +390,7 @@ public class PurchaseOrderController implements Initializable {
         
         initButton(pnEditMode);
     }
+    
     
     private void loadRecord(){
         txtField01.setText((String) poTrans.getMaster(1));

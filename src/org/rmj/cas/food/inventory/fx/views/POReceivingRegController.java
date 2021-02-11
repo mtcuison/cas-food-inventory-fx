@@ -90,6 +90,7 @@ public class POReceivingRegController implements Initializable {
         
         poTrans = new XMPOReceiving(poGRider, poGRider.getBranchCode(), false);
         poTrans.setTranStat(1230);
+        poTrans.setClientNm(System.getProperty("user.name"));
         
         btnClose.setOnAction(this::cmdButton_Click);
         btnExit.setOnAction(this::cmdButton_Click);

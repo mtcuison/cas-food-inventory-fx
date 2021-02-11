@@ -408,8 +408,6 @@ public class InvTransferController implements Initializable {
                         txtOther02.setText("0");
                     }
                     break;
-                case 5:
-                    break;
                 case 80: /*Description Search*/
                     if (poTrans.SearchDetail(pnRow, 3, lsValue, true, false)){
                         txtDetail03.setText(poTrans.getDetailOthers(pnRow, "sBarCodex").toString());
@@ -437,6 +435,8 @@ public class InvTransferController implements Initializable {
                         txtDetail.setText("");
                     
                     break;
+                case 5:
+                    break;
             }
         }
         
@@ -457,10 +457,19 @@ public class InvTransferController implements Initializable {
             if (event.getCode() == ENTER || event.getCode() == F3){
                 switch (lnIndex){
                     case 4: /*sDestinat*/
-                    case 6: /*sTruckIDx*/
-                    case 18: /*sOrderNox */
-                        if (poTrans.SearchMaster(lnIndex, txtField.getText(), false))
+                        if (poTrans.SearchMaster(lnIndex, txtField.getText(), false)){
                             CommonUtils.SetNextFocus(txtField); 
+                        }else txtField.setText("");
+                        break;
+                    case 6: /*sTruckIDx*/
+                        if (poTrans.SearchMaster(lnIndex, txtField.getText(), false)){
+                            CommonUtils.SetNextFocus(txtField); 
+                        }else txtField.setText("");
+                        break;
+                    case 18: /*sOrderNox */
+                        if (poTrans.SearchMaster(lnIndex, txtField.getText(), false)){
+                            CommonUtils.SetNextFocus(txtField); 
+                        }else txtField.setText("");
                         break;
                     case 50: /*sTransNox*/
                         if(poTrans.BrowseRecord(lsValue, true)==true){
@@ -992,7 +1001,6 @@ public class InvTransferController implements Initializable {
             else
                 lsSQL = (String) poTrans.getMaster("sDestinat");
         } catch (SQLException ex) {
-            System.err.println(ex.getMessage());
             ShowMessageFX.Error(ex.getMessage(), pxeModuleName, "Unable to print...");
             System.exit(1);
         }
@@ -1004,8 +1012,8 @@ public class InvTransferController implements Initializable {
         params.put("sDestinat", lsSQL);
         
         params.put("sTransNox", poTrans.getMaster("sTransNox").toString().substring(1));
-        params.put("sReportDt", poTrans.getMaster("dTransact").toString());
-        params.put("sPrintdBy", poGRider.getUserID());
+        params.put("sReportDt", CommonUtils.xsDateMedium((Date)poTrans.getMaster("dTransact")));
+        params.put("sPrintdBy", System.getProperty("user.name"));
                 
         try {
             InputStream stream = new ByteArrayInputStream(json_arr.toJSONString().getBytes("UTF-8"));

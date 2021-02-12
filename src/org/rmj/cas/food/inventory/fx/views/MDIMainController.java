@@ -10,6 +10,8 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.ResourceBundle;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.animation.Animation;
@@ -25,10 +27,7 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.layout.VBox;
 import javafx.util.Duration;
 import javafx.event.EventHandler;
-import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckMenuItem;
 import javafx.scene.control.Label;
@@ -36,8 +35,6 @@ import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.Tooltip;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
@@ -126,7 +123,6 @@ public class MDIMainController implements Initializable {
     @FXML private AnchorPane mnuMain;
     @FXML private MenuItem menu_InvAdjustment;
     @FXML private MenuItem mnu_InvAdjustmentReg;
-    @FXML private MenuItem mnu_Dashboard;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -191,9 +187,12 @@ public class MDIMainController implements Initializable {
         Tooltip.install(btnExit, new Tooltip("Exit"));
         Tooltip.install(btnMinimize, new Tooltip("Minimize"));
         Tooltip.install(btnRestoreDown, new Tooltip("Restore down"));
+        poTrans.setGRider(poGRider);
         getTime();
         lblCompany.setText(poGRider.getClientName());
         loadRecord();
+        Timer timer = new Timer();
+        timer.schedule(poTrans, 5000, DEFAULT_TIMEOUT);
     }
     
     public void loadRecord(){
@@ -642,64 +641,6 @@ public class MDIMainController implements Initializable {
         setDataPane(fadeAnimate(FoodInventoryFX.pxeInvAdjustmentReg));
     }
 
-    @FXML
-    private void mnuDashBoard_Click(ActionEvent event) {
-        Image img = new Image("org/rmj/cas/food/inventory/fx/images/check.png");
-        Notifications notifBuilder = Notifications.create()
-                .title("Inventory Expiration Notice")
-                .text("Kindly check inventory about to expire!")
-                .graphic(new ImageView(img))
-                .hideAfter(Duration.seconds(3))
-                .position(Pos.BOTTOM_RIGHT)
-                .onAction(new EventHandler<ActionEvent>() {
-                    
-            @Override
-            public void handle(ActionEvent event) {
-                    DashboardController dashboard = new DashboardController();
-                    dashboard.setGRider(poGRider);
-                    
-                    FXMLLoader fxmlLoader = new FXMLLoader();
-                    fxmlLoader.setLocation(getClass().getResource("child/Dashboard.fxml"));
-                    fxmlLoader.setController(dashboard);
-
-                    Parent parent;
-                    try {
-
-                        parent = fxmlLoader.load();
-                        Stage stage = new Stage();
-                        parent.setOnMousePressed(new EventHandler<MouseEvent>() {
-                            @Override
-                            public void handle(MouseEvent event) {
-                                xOffset = event.getSceneX();
-                                yOffset = event.getSceneY();
-                            }
-                        });
-                        
-                        parent.setOnMouseDragged(new EventHandler<MouseEvent>() {
-                            @Override
-                            public void handle(MouseEvent event) {
-                                stage.setX(event.getScreenX() - xOffset);
-                                stage.setY(event.getScreenY() - yOffset); 
-
-                            }
-                        });
-
-                        Scene scene = new Scene(parent);
-                        stage.initModality(Modality.APPLICATION_MODAL);
-                        stage.initStyle(StageStyle.UNDECORATED);
-                        stage.setAlwaysOnTop(true);
-                        stage.setScene(scene);
-                        stage.showAndWait();
-
-                    } catch (IOException ex) {
-                        ShowMessageFX.Error(ex.getMessage(), pxeModuleName, "Please inform MIS department.");
-                        System.exit(1);
-                    }
-            }
-        });
-        notifBuilder.darkStyle();
-        notifBuilder.showConfirm();
-    }
        
     public static class MouseGestures {
         class DragContext {
@@ -737,11 +678,10 @@ public class MDIMainController implements Initializable {
     }
     
     public void setGRider(GRider foGRider){this.poGRider = foGRider;}
-    
+    final long DEFAULT_TIMEOUT = 60000;
     private final String pxeModuleName = "Pedritos Integrated System";
     private static GRider poGRider;
-    private double xOffset = 0; 
-    private double yOffset = 0;
+   
     
     public boolean changeTheme(){
         if(chkLight.isSelected()){
@@ -913,4 +853,6 @@ public class MDIMainController implements Initializable {
                 return null;
         }
     }
+    
+    TimerDashBoard poTrans = new TimerDashBoard();
 }

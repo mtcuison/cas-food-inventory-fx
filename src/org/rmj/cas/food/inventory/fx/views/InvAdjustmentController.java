@@ -389,64 +389,25 @@ public class InvAdjustmentController implements Initializable {
     private void loadDetailData(int fnRow){
         ResultSet loRS = null;
         loRS = poTrans.getExpiration((String)poTrans.getDetail(fnRow, "sStockIDx"));
-        boolean lbGetExpiry =false;
-        int rowCount = 0;
         try {
                 dataDetail.clear();
                 if (poTrans.getDetail(fnRow, "sStockIDx").equals("")) return;
-                if(MiscUtil.RecordCount(loRS)==0){
+                    loRS.first();
+                    for( int rowCount = 0; rowCount <= MiscUtil.RecordCount(loRS) -1; rowCount++){
                     dataDetail.add(new TableModel(String.valueOf(rowCount +1),
                         String.valueOf(CommonUtils.xsDateMedium(loRS.getDate("dExpiryDt"))),
                         String.valueOf(loRS.getInt("nQtyOnHnd")),
-                        String.valueOf((Integer) poTrans.getDetailOthers(fnRow, "nQtyOnHnd")),
-                        String.valueOf(loRS.getInt("nQtyOnHnd") -(Integer) poTrans.getDetailOthers(pnRow, "nQtyOnHnd")),
+                        String.valueOf((int)loRS.getInt("nQtyOnHnd") +((int)poTrans.getDetail(fnRow, "nCredtQty") - (int)poTrans.getDetail(fnRow, "nDebitQty"))),
+                        "",
                         "",
                         "",
                         "",
                         "",
                         ""     
                     ));
-                    poTrans.setDetail(fnRow, "dExpiryDt", loRS.getDate("dExpiryDt"));
-                }else{
-                    int lnQtyOut = (Integer) poTrans.getDetailOthers(fnRow, "nQtyOnHnd");
-                    loRS.first();
-                    for (int lnRow = 0; lnRow <= MiscUtil.RecordCount(loRS) - 1; lnRow ++){
-                        if(!lbGetExpiry){
-                            poTrans.setDetail(fnRow, "dExpiryDt", loRS.getDate("dExpiryDt"));
-                            lbGetExpiry = true;
-                        }
-                        if(lnQtyOut<=loRS.getInt("nQtyOnHnd")){
-                           dataDetail.add(new TableModel(String.valueOf(rowCount +1),
-                                        String.valueOf(CommonUtils.xsDateMedium(loRS.getDate("dExpiryDt"))),
-                                        String.valueOf(loRS.getInt("nQtyOnHnd")),
-                                        String.valueOf(lnQtyOut),
-                                        String.valueOf(loRS.getInt("nQtyOnHnd") -lnQtyOut),
-                                        "",
-                                        "",
-                                        "",
-                                        "",
-                                        ""     
-                                    ));
-                            lnQtyOut =  0;
-                        }else{
-                            dataDetail.add(new TableModel(String.valueOf(rowCount +1),
-                                        String.valueOf(CommonUtils.xsDateMedium(loRS.getDate("dExpiryDt"))),
-                                        String.valueOf(loRS.getInt("nQtyOnHnd")),
-                                        String.valueOf(loRS.getInt("nQtyOnHnd")),
-                                        String.valueOf(loRS.getInt("nQtyOnHnd")-loRS.getInt("nQtyOnHnd")),
-                                        "",
-                                        "",
-                                        "",
-                                        "",
-                                        ""     
-                                    ));
-
-                            lnQtyOut =  lnQtyOut - loRS.getInt("nQtyOnHnd");
-                        }
-                        rowCount++;
-                        loRS.next();
-                    }
-            }
+                    loRS.next();
+                }
+            
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
@@ -669,8 +630,8 @@ public class InvAdjustmentController implements Initializable {
     private void initLisView(){
         TableColumn index01 = new TableColumn("No.");
         TableColumn index02 = new TableColumn("Expiration");
-        TableColumn index03 = new TableColumn("OnHnd");
-        TableColumn index04 = new TableColumn("Res");
+        TableColumn index03 = new TableColumn("ActualQty");
+        TableColumn index04 = new TableColumn("Quantity");
         
         index01.setPrefWidth(30); index01.setStyle("-fx-alignment: CENTER;");
         index02.setPrefWidth(90); index02.setStyle("-fx-alignment: CENTER;");

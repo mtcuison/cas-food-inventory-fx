@@ -104,7 +104,7 @@ public class DashboardController implements Initializable {
             " AND b.sBranchCd  =" + SQLUtil.toSQL(poGRider.getBranchCode())+
             " AND b.nQtyOnHnd > 0" +
             " AND c.nQtyOnHnd > 0" +
-            " AND DATEDIFF(c.dExpiryDt, "+ SQLUtil.toSQL(CommonUtils.xsDateShort(poGRider.getServerDate()))+") BETWEEN 0 AND 5" +
+            " AND DATEDIFF(c.dExpiryDt, "+ SQLUtil.toSQL(CommonUtils.xsDateShort(poGRider.getServerDate()))+") BETWEEN 0 AND " +getDateLimit()+
             " ORDER BY c.dExpiryDt, a.sBarCodex;";
         
     }
@@ -131,6 +131,26 @@ public class DashboardController implements Initializable {
         
     }
     
+    private String getDateLimit(){
+        String lsDateLimit= "";
+        try {
+            ResultSet loRS = null;
+            String lsSQL = "SELECT" +
+                    "  sValuexxx" +
+                    " FROM xxxOtherConfig" +
+                    " WHERE sConfigID = 'Expiry'" +
+                    " AND sProdctID =" + SQLUtil.toSQL(poGRider.getProductID());
+            loRS = poGRider.executeQuery(lsSQL);
+            
+            while(loRS.next()){
+                lsDateLimit = loRS.getString("sValuexxx");
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(DashboardController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return lsDateLimit;
+    }
+    
     public void loadExpiredInv(){
         ResultSet poRS = null;
         data01.clear();
@@ -138,16 +158,15 @@ public class DashboardController implements Initializable {
         poRS = poGRider.executeQuery(getExpiredInventory());
         if (MiscUtil.RecordCount(poRS) <= 0){
             data01.add(new TableModel(String.valueOf(1), 
-                                           "",
-                                            "",
-                                            "",
-                                            "",
-                                            "",
-                                            "",
-                                            "",
-                                            "",
-                                            ""));
-        
+                                        "",
+                                         "",
+                                         "",
+                                         "",
+                                         "",
+                                         "",
+                                         "",
+                                         "",
+                                         ""));
              return;
         }
         try {
@@ -156,16 +175,16 @@ public class DashboardController implements Initializable {
                
                     poRS.absolute(lnCtr);
                     data01.add(new TableModel(String.valueOf(lnCtr), 
-                                            poRS.getString("sBarCodex"),
-                                            poRS.getString("sDescript"),
-                                            poRS.getString("dExpiryDt"),
-                                            poRS.getString("nQtyOnHnd"),
-                                            "",
-                                            "",
-                                            "",
-                                            "",
-                                            ""));
-            }
+                                poRS.getString("sBarCodex"),
+                                poRS.getString("sDescript"),
+                                poRS.getString("dExpiryDt"),
+                                poRS.getString("nQtyOnHnd"),
+                                "",
+                                "",
+                                "",
+                                "",
+                                ""));
+    }
         } catch (SQLException ex) {
             Logger.getLogger(FoodLedgerController.class.getName()).log(Level.SEVERE, null, ex);
             return;
@@ -194,7 +213,6 @@ public class DashboardController implements Initializable {
         try {
             poRS.first();
             for (int lnCtr = 1; lnCtr <= MiscUtil.RecordCount(poRS); lnCtr++){
-               
                     poRS.absolute(lnCtr);
                     data.add(new TableModel(String.valueOf(lnCtr), 
                                             poRS.getString("sBarCodex"),

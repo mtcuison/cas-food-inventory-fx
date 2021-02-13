@@ -66,6 +66,7 @@ public class FoodInventoryFX extends Application {
 
     public static GRider poGRider;
     
+    @Override
     public void start(Stage stage) throws Exception {
         FXMLLoader fxmlLoader = new FXMLLoader();
         fxmlLoader.setLocation(getClass().getResource(pxeMainForm));
@@ -118,4 +119,11 @@ public class FoodInventoryFX extends Application {
     public void setGRider(GRider foGRider){
         this.poGRider = foGRider;
     }
+    
+    @Override
+    public void stop() throws Exception{
+        super.stop();
+        System.exit(0);
+    }
+
 }

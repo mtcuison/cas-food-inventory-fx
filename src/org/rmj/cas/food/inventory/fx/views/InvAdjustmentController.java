@@ -385,19 +385,24 @@ public class InvAdjustmentController implements Initializable {
         }
     };
     
-    
     private void loadDetailData(int fnRow){
         ResultSet loRS = null;
         loRS = poTrans.getExpiration((String)poTrans.getDetail(fnRow, "sStockIDx"));
+        int lnQuantity = 0;
         try {
                 dataDetail.clear();
                 if (poTrans.getDetail(fnRow, "sStockIDx").equals("")) return;
-                    loRS.first();
+                loRS.first();
                     for( int rowCount = 0; rowCount <= MiscUtil.RecordCount(loRS) -1; rowCount++){
+                        if (CommonUtils.xsDateShort(loRS.getDate("dExpiryDt")).equals(CommonUtils.xsDateShort((Date) poTrans.getDetail(fnRow, "dExpiryDt")))){
+                            lnQuantity = (int)loRS.getInt("nQtyOnHnd") +((int)poTrans.getDetail(fnRow, "nCredtQty") - (int)poTrans.getDetail(fnRow, "nDebitQty"));
+                        }else{
+                            lnQuantity = 0;
+                        }
                     dataDetail.add(new TableModel(String.valueOf(rowCount +1),
                         String.valueOf(CommonUtils.xsDateMedium(loRS.getDate("dExpiryDt"))),
                         String.valueOf(loRS.getInt("nQtyOnHnd")),
-                        String.valueOf((int)loRS.getInt("nQtyOnHnd") +((int)poTrans.getDetail(fnRow, "nCredtQty") - (int)poTrans.getDetail(fnRow, "nDebitQty"))),
+                        String.valueOf(lnQuantity),
                         "",
                         "",
                         "",
@@ -407,7 +412,6 @@ public class InvAdjustmentController implements Initializable {
                     ));
                     loRS.next();
                 }
-            
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
@@ -818,6 +822,7 @@ public class InvAdjustmentController implements Initializable {
                     txtDetail04.setText(String.valueOf(poTrans.getDetail(pnRow,"nCredtQty")));
                     if (!poTrans.getDetail(pnRow, "sStockIDx").toString().isEmpty()){
                         poTrans.addDetail();
+                        addDetailData();
                     }
                     loadDetail();
  
@@ -826,6 +831,7 @@ public class InvAdjustmentController implements Initializable {
                     txtDetail05.setText(String.valueOf(poTrans.getDetail(pnRow,"nDebitQty")));
                     if (!poTrans.getDetail(pnRow, "sStockIDx").toString().isEmpty()){
                         poTrans.addDetail();
+                        addDetailData();
                     }
                     loadDetail();
                     
@@ -838,6 +844,19 @@ public class InvAdjustmentController implements Initializable {
             }
         }
     };
+    
+    private void addDetailData(){
+        dataDetail.add(new TableModel(String.valueOf(dataDetail.size()),
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                ""));
+    }
     
     private void getMaster(int fnIndex){
         switch(fnIndex){

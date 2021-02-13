@@ -191,9 +191,12 @@ public class MDIMainController implements Initializable {
         getTime();
         lblCompany.setText(poGRider.getClientName());
         loadRecord();
+        
         Timer timer = new Timer();
         timer.schedule(poTrans, 5000, DEFAULT_TIMEOUT);
+
     }
+    
     
     public void loadRecord(){
         ResultSet name;
@@ -855,4 +858,5 @@ public class MDIMainController implements Initializable {
     }
     
     TimerDashBoard poTrans = new TimerDashBoard();
+    
 }

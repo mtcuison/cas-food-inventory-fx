@@ -34,6 +34,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
+import org.apache.poi.ss.usermodel.Table;
 import org.rmj.appdriver.GRider;
 import org.rmj.appdriver.MiscUtil;
 import org.rmj.appdriver.agentfx.CommonUtils;
@@ -76,6 +77,8 @@ public class InvAdjustmentController implements Initializable {
     @FXML private Button btnBrowse;
     @FXML private TableView tableDetail;
     @FXML private TextArea txtField04;
+    @FXML
+    private Button btnVoid;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -91,6 +94,7 @@ public class InvAdjustmentController implements Initializable {
         btnClose.setOnAction(this::cmdButton_Click);
         btnExit.setOnAction(this::cmdButton_Click);
         btnBrowse.setOnAction(this::cmdButton_Click);
+        btnVoid.setOnAction(this::cmdButton_Click);
         
         txtField01.focusedProperty().addListener(txtField_Focus);
         txtField02.focusedProperty().addListener(txtField_Focus);
@@ -193,6 +197,9 @@ public class InvAdjustmentController implements Initializable {
     private final String pxeModuleName = "Inventory Adjustment Controller";
     private static GRider poGRider;
     private InvAdjustment poTrans;
+    private int pnCrdtTotl=0;
+    private int pnDbtTotl=0;
+    private int pnValTotl=0;
     
     private int pnEditMode = -1;
     private boolean pbLoaded = false;
@@ -448,6 +455,24 @@ public class InvAdjustmentController implements Initializable {
                     
                 } else ShowMessageFX.Warning(null, pxeModuleName, "Please select a record to confirm!");
                 break;
+            case "btnVoid":
+                if (!psOldRec.equals("")){
+                    if(!poTrans.getMaster("cTranStat").equals(TransactionStatus.STATE_OPEN)){
+                        ShowMessageFX.Warning("Trasaction may be CANCELLED/POSTED.", pxeModuleName, "Can't update processed transactions!!!");
+                        return;
+                    }
+                    if( ShowMessageFX.YesNo(null, pxeModuleName, "Do you want to void this transasction?")== true){
+                        if (poTrans.voidTransaction(psOldRec)){
+                            ShowMessageFX.Information(null, pxeModuleName, "Transaction VOIDED successfully.");
+                            clearFields();
+                            initGrid();
+                            pnEditMode = EditMode.UNKNOWN;
+                            initButton(pnEditMode);
+                        }
+                    }
+                    
+                } else ShowMessageFX.Warning(null, pxeModuleName, "Please select a record to void!");
+                break;
                 
             case "btnClose":
             case "btnExit":
@@ -486,6 +511,7 @@ public class InvAdjustmentController implements Initializable {
                 return;
                 
             case "btnSave": 
+                if (!isEntryOk()) return;
                 if (poTrans.saveTransaction()){
                     ShowMessageFX.Information(null, pxeModuleName, "Transaction saved successfuly.");
                     clearFields();
@@ -562,6 +588,9 @@ public class InvAdjustmentController implements Initializable {
         psdTransact = "";
         data.clear();
         dataDetail.clear();
+        pnCrdtTotl=0;
+        pnDbtTotl=0;
+        pnValTotl=0;
     }
     
      private void initButton(int fnValue){
@@ -578,6 +607,7 @@ public class InvAdjustmentController implements Initializable {
         btnBrowse.setVisible(!lbShow);
         btnNew.setVisible(!lbShow);
         btnConfirm.setVisible(!lbShow);
+        btnVoid.setVisible(!lbShow);
         btnClose.setVisible(!lbShow);
         
 //        txtField01.setDisable(!lbShow);
@@ -748,6 +778,10 @@ public class InvAdjustmentController implements Initializable {
         int lnCtr;
         int lnRow = poTrans.ItemCount();
         
+        pnValTotl = 0;
+        pnCrdtTotl = 0;
+        pnDbtTotl = 0;
+        
         data.clear();
         /*ADD THE DETAIL*/
         for(lnCtr = 0; lnCtr <= lnRow -1; lnCtr++){
@@ -761,6 +795,10 @@ public class InvAdjustmentController implements Initializable {
                                     "",
                                     "",
                                     ""));
+            
+            pnValTotl = pnValTotl+ (int) poTrans.getDetailOthers(lnCtr, "nQtyOnHnd");
+            pnCrdtTotl = pnCrdtTotl + (int) poTrans.getDetail(lnCtr, "nCredtQty");
+            pnDbtTotl = pnDbtTotl + (int) poTrans.getDetail(lnCtr, "nDebitQty");
         }
     
         /*FOCUS ON FIRST ROW*/
@@ -770,6 +808,17 @@ public class InvAdjustmentController implements Initializable {
             pnRow = table.getSelectionModel().getSelectedIndex();           
             setDetailInfo(pnRow);
         }
+    }
+    
+    public boolean isEntryOk(){
+        if(pnCrdtTotl != 0 && pnDbtTotl != 0){
+            if (pnCrdtTotl != pnDbtTotl){
+            ShowMessageFX.Warning(null, pxeModuleName, "Qty on credit and debit must be equal to QTY on hand!");
+            return false;
+            }
+        }
+        
+        return true;
     }
     
     private void setDetailInfo(int fnRow){
@@ -823,6 +872,10 @@ public class InvAdjustmentController implements Initializable {
                     if (!poTrans.getDetail(pnRow, "sStockIDx").toString().isEmpty()){
                         poTrans.addDetail();
                         addDetailData();
+                        dataDetail.set(dataDetail.size() -1, new TableModel("", "", "", "", "", "", "", "", "", ""));
+                        for (int lnCtr = 0; lnCtr <= dataDetail.size() -1; lnCtr++){
+                            System.out.println();
+                        }
                     }
                     loadDetail();
  

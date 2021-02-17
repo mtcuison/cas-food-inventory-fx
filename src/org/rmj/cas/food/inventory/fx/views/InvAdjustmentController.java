@@ -77,8 +77,7 @@ public class InvAdjustmentController implements Initializable {
     @FXML private Button btnBrowse;
     @FXML private TableView tableDetail;
     @FXML private TextArea txtField04;
-    @FXML
-    private Button btnVoid;
+    @FXML private Button btnVoid;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -189,7 +188,10 @@ public class InvAdjustmentController implements Initializable {
     @FXML
     private void table_Clicked(MouseEvent event) {
         pnRow = table.getSelectionModel().getSelectedIndex();
-        loadDetailData(pnRow);
+        tableDetail.setItems(getRecordData(pnRow));
+        if(!pbFound){
+            addDetailData(pnlRow);
+        }
         setDetailInfo(pnRow);
     }
     
@@ -201,6 +203,14 @@ public class InvAdjustmentController implements Initializable {
     private int pnDbtTotl=0;
     private int pnValTotl=0;
     
+    private boolean pbFound;
+    private int pnlRow=0;
+    
+    TableColumn index01 = new TableColumn("No.");
+    TableColumn index02 = new TableColumn("Expiration");
+    TableColumn index03 = new TableColumn("ActualQty");
+    TableColumn index04 = new TableColumn("Quantity");
+    
     private int pnEditMode = -1;
     private boolean pbLoaded = false;
     
@@ -209,7 +219,6 @@ public class InvAdjustmentController implements Initializable {
     
     private TableModel model;
     private ObservableList<TableModel> data = FXCollections.observableArrayList();
-    private ObservableList<TableModel> dataDetail =  FXCollections.observableArrayList();
     
     private int pnIndex = -1;
     private int pnRow = -1;
@@ -392,16 +401,53 @@ public class InvAdjustmentController implements Initializable {
         }
     };
     
-    private void loadDetailData(int fnRow){
+//    private void loadDetailData(int fnRow){
+//        ResultSet loRS = null;
+//        loRS = poTrans.getExpiration((String)poTrans.getDetail(fnRow, "sStockIDx"));
+//        int lnQuantity = 0;
+//        try {
+//                dataDetail.clear();
+//                if (poTrans.getDetail(fnRow, "sStockIDx").equals("")) return;
+//                loRS.first();
+//                    for( int rowCount = 0; rowCount <= MiscUtil.RecordCount(loRS) -1; rowCount++){
+//                        if (CommonUtils.xsDateShort(loRS.getDate("dExpiryDt")).equals(CommonUtils.xsDateShort((Date) poTrans.getDetail(fnRow, "dExpiryDt")))){
+//                            lnQuantity = (int)loRS.getInt("nQtyOnHnd") +((int)poTrans.getDetail(fnRow, "nCredtQty") - (int)poTrans.getDetail(fnRow, "nDebitQty"));
+//                        }else{
+//                            lnQuantity = 0;
+//                        }
+//                    dataDetail.add(new TableModel(String.valueOf(rowCount +1),
+//                        String.valueOf(CommonUtils.xsDateMedium(loRS.getDate("dExpiryDt"))),
+//                        String.valueOf(loRS.getInt("nQtyOnHnd")),
+//                        String.valueOf(lnQuantity),
+//                        "",
+//                        "",
+//                        "",
+//                        "",
+//                        "",
+//                        ""     
+//                    ));
+//                    loRS.next();
+//                }
+//        } catch (SQLException ex) {
+//            ex.printStackTrace();
+//        }
+//        
+//    }
+    
+    private ObservableList getRecordData(int fnRow){
+        ObservableList dataDetail = FXCollections.observableArrayList();
         ResultSet loRS = null;
         loRS = poTrans.getExpiration((String)poTrans.getDetail(fnRow, "sStockIDx"));
         int lnQuantity = 0;
+        pnlRow = 0;
+        pbFound = false;
+        
         try {
                 dataDetail.clear();
-                if (poTrans.getDetail(fnRow, "sStockIDx").equals("")) return;
                 loRS.first();
                     for( int rowCount = 0; rowCount <= MiscUtil.RecordCount(loRS) -1; rowCount++){
                         if (CommonUtils.xsDateShort(loRS.getDate("dExpiryDt")).equals(CommonUtils.xsDateShort((Date) poTrans.getDetail(fnRow, "dExpiryDt")))){
+                            if(!pbFound) pbFound = true;
                             lnQuantity = (int)loRS.getInt("nQtyOnHnd") +((int)poTrans.getDetail(fnRow, "nCredtQty") - (int)poTrans.getDetail(fnRow, "nDebitQty"));
                         }else{
                             lnQuantity = 0;
@@ -417,11 +463,13 @@ public class InvAdjustmentController implements Initializable {
                         "",
                         ""     
                     ));
+                    pnlRow++;
                     loRS.next();
                 }
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
+        return dataDetail;
     }
     
     private void cmdButton_Click(ActionEvent event) {
@@ -587,10 +635,11 @@ public class InvAdjustmentController implements Initializable {
         psTransNox = "";
         psdTransact = "";
         data.clear();
-        dataDetail.clear();
         pnCrdtTotl=0;
         pnDbtTotl=0;
         pnValTotl=0;
+        pbFound = false;
+        pnlRow = 0;
     }
     
      private void initButton(int fnValue){
@@ -662,10 +711,6 @@ public class InvAdjustmentController implements Initializable {
     }
     
     private void initLisView(){
-        TableColumn index01 = new TableColumn("No.");
-        TableColumn index02 = new TableColumn("Expiration");
-        TableColumn index03 = new TableColumn("ActualQty");
-        TableColumn index04 = new TableColumn("Quantity");
         
         index01.setPrefWidth(30); index01.setStyle("-fx-alignment: CENTER;");
         index02.setPrefWidth(90); index02.setStyle("-fx-alignment: CENTER;");
@@ -688,7 +733,6 @@ public class InvAdjustmentController implements Initializable {
         index03.setCellValueFactory(new PropertyValueFactory<org.rmj.cas.food.inventory.fx.views.TableModel,String>("index03"));
         index04.setCellValueFactory(new PropertyValueFactory<org.rmj.cas.food.inventory.fx.views.TableModel,String>("index04"));
         
-        tableDetail.setItems(dataDetail);
     }
      
     private void txtFieldArea_KeyPressed(KeyEvent event){
@@ -776,7 +820,7 @@ public class InvAdjustmentController implements Initializable {
     
     private void loadDetail(){
         int lnCtr;
-        int lnRow = poTrans.ItemCount();
+        int pnlRow = poTrans.ItemCount();
         
         pnValTotl = 0;
         pnCrdtTotl = 0;
@@ -784,7 +828,7 @@ public class InvAdjustmentController implements Initializable {
         
         data.clear();
         /*ADD THE DETAIL*/
-        for(lnCtr = 0; lnCtr <= lnRow -1; lnCtr++){
+        for(lnCtr = 0; lnCtr <= pnlRow -1; lnCtr++){
             data.add(new TableModel(String.valueOf(lnCtr + 1), 
                                     (String) poTrans.getDetailOthers(lnCtr, "sBarCodex"), 
                                     (String) poTrans.getDetailOthers(lnCtr, "sDescript"),
@@ -803,8 +847,8 @@ public class InvAdjustmentController implements Initializable {
     
         /*FOCUS ON FIRST ROW*/
         if (!data.isEmpty()){
-            table.getSelectionModel().select(lnRow -1);
-            table.getFocusModel().focus(lnRow -1);
+            table.getSelectionModel().select(pnlRow -1);
+            table.getFocusModel().focus(pnlRow -1);
             pnRow = table.getSelectionModel().getSelectedIndex();           
             setDetailInfo(pnRow);
         }
@@ -871,11 +915,6 @@ public class InvAdjustmentController implements Initializable {
                     txtDetail04.setText(String.valueOf(poTrans.getDetail(pnRow,"nCredtQty")));
                     if (!poTrans.getDetail(pnRow, "sStockIDx").toString().isEmpty()){
                         poTrans.addDetail();
-                        addDetailData();
-                        dataDetail.set(dataDetail.size() -1, new TableModel("", "", "", "", "", "", "", "", "", ""));
-                        for (int lnCtr = 0; lnCtr <= dataDetail.size() -1; lnCtr++){
-                            System.out.println();
-                        }
                     }
                     loadDetail();
  
@@ -884,7 +923,6 @@ public class InvAdjustmentController implements Initializable {
                     txtDetail05.setText(String.valueOf(poTrans.getDetail(pnRow,"nDebitQty")));
                     if (!poTrans.getDetail(pnRow, "sStockIDx").toString().isEmpty()){
                         poTrans.addDetail();
-                        addDetailData();
                     }
                     loadDetail();
                     
@@ -898,17 +936,31 @@ public class InvAdjustmentController implements Initializable {
         }
     };
     
-    private void addDetailData(){
-        dataDetail.add(new TableModel(String.valueOf(dataDetail.size()),
-                "",
-                "",
-                "",
-                "",
-                "",
-                "",
-                "",
-                "",
-                ""));
+    private void addDetailData(int fnRow){
+        if (poTrans.getDetail(pnRow, "sStockIDx").equals("")) return;
+        TableModel newData = new TableModel();
+        newData.setIndex01(String.valueOf(fnRow + 1));
+        newData.setIndex02(CommonUtils.xsDateMedium((Date) poTrans.getDetail(pnRow, "dExpiryDt")));
+        newData.setIndex03("0");
+        if ((int) poTrans.getDetail(pnRow, "nCredtQty")> 0){
+            newData.setIndex04(String.valueOf(poTrans.getDetail(pnRow, "nCredtQty")));
+        }else if((int) poTrans.getDetail(pnRow, "nDebitQty")> 0){
+            newData.setIndex04(String.valueOf(poTrans.getDetail(pnRow, "nDebitQty")));
+        }else{
+            newData.setIndex04("0");
+        }
+        newData.setIndex05("");
+        newData.setIndex06("");
+        newData.setIndex07("");
+        newData.setIndex08("");
+        newData.setIndex09("");
+        newData.setIndex10("");
+        tableDetail.getItems().add(newData);
+        
+        index02.setSortType(TableColumn.SortType.ASCENDING);
+        tableDetail.getSortOrder().add(index02);
+        tableDetail.sort();
+        
     }
     
     private void getMaster(int fnIndex){

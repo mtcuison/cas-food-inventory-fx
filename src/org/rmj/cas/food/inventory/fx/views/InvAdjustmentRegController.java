@@ -34,10 +34,11 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import org.rmj.appdriver.GRider;
 import org.rmj.appdriver.MiscUtil;
+
 import org.rmj.appdriver.agentfx.CommonUtils;
 import org.rmj.appdriver.agentfx.ShowMessageFX;
 import org.rmj.appdriver.constants.EditMode;
-import org.rmj.appdriver.constants.TransactionStatus;
+
 import org.rmj.cas.inventory.base.InvAdjustment;
 
 /**
@@ -151,38 +152,8 @@ public class InvAdjustmentRegController implements Initializable {
     @FXML
     private void table_Clicked(MouseEvent event) {
         pnRow = table.getSelectionModel().getSelectedIndex();
-       tableDetail.setItems(getRecordData(pnRow));
-        if(!pbFound){
-            addDetailData(pnlRow);
-        }
+        getRecordData(pnRow);
         setDetailInfo(pnRow);
-        
-    }
-    
-    private void addDetailData(int fnRow){
-        if (poTrans.getDetail(pnRow, "sStockIDx").equals("")) return;
-        TableModel newData = new TableModel();
-        newData.setIndex01(String.valueOf(fnRow + 1));
-        newData.setIndex02(CommonUtils.xsDateMedium((Date) poTrans.getDetail(pnRow, "dExpiryDt")));
-        newData.setIndex03("0");
-        if ((int) poTrans.getDetail(pnRow, "nCredtQty")> 0){
-            newData.setIndex04(String.valueOf(poTrans.getDetail(pnRow, "nCredtQty")));
-        }else if((int) poTrans.getDetail(pnRow, "nDebitQty")> 0){
-            newData.setIndex04(String.valueOf(poTrans.getDetail(pnRow, "nDebitQty")));
-        }else{
-            newData.setIndex04("0");
-        }
-        newData.setIndex05("");
-        newData.setIndex06("");
-        newData.setIndex07("");
-        newData.setIndex08("");
-        newData.setIndex09("");
-        newData.setIndex10("");
-        tableDetail.getItems().add(newData);
-        
-        index02.setSortType(TableColumn.SortType.ASCENDING);
-        tableDetail.getSortOrder().add(index02);
-        tableDetail.sort();
         
     }
     
@@ -191,8 +162,6 @@ public class InvAdjustmentRegController implements Initializable {
     
     private int pnEditMode = -1;
     private boolean pbLoaded = false;
-    private boolean pbFound;
-    private int pnlRow=0;
     
     private final String pxeDateFormat = "yyyy-MM-dd";
     private final String pxeDateDefault = java.time.LocalDate.now().toString();
@@ -205,37 +174,22 @@ public class InvAdjustmentRegController implements Initializable {
     private int pnRow = -1;
     private int pnOldRow = -1;
     
-    TableColumn index01 = new TableColumn("No.");
-    TableColumn index02 = new TableColumn("Expiration");
-    TableColumn index03 = new TableColumn("OnHnd");
-    TableColumn index04 = new TableColumn("Res");
-    
     private String psOldRec = "";
     private String psTransNox = "";
     private String psdTransact = "";
     private final String pxeModuleName = "Inventory Adjustment Controller";
     
-    private ObservableList getRecordData(int fnRow){
-        ObservableList dataDetail = FXCollections.observableArrayList();
+    private void getRecordData(int fnRow){
         ResultSet loRS = null;
         loRS = poTrans.getExpiration((String)poTrans.getDetail(fnRow, "sStockIDx"));
-        int lnQuantity = 0;
-        pnlRow = 0;
-        pbFound = false;
         try {
                 dataDetail.clear();
                 loRS.first();
-                    for( int rowCount = 0; rowCount <= MiscUtil.RecordCount(loRS) -1; rowCount++){
-                        if (CommonUtils.xsDateShort(loRS.getDate("dExpiryDt")).equals(CommonUtils.xsDateShort((Date) poTrans.getDetail(fnRow, "dExpiryDt")))){
-                            if(!pbFound) pbFound = true;
-                            lnQuantity = (int)loRS.getInt("nQtyOnHnd") +((int)poTrans.getDetail(fnRow, "nCredtQty") - (int)poTrans.getDetail(fnRow, "nDebitQty"));
-                        }else{
-                            lnQuantity = 0;
-                        }
+                for( int rowCount = 0; rowCount <= MiscUtil.RecordCount(loRS) -1; rowCount++){
                     dataDetail.add(new TableModel(String.valueOf(rowCount +1),
                         String.valueOf(CommonUtils.xsDateMedium(loRS.getDate("dExpiryDt"))),
                         String.valueOf(loRS.getInt("nQtyOnHnd")),
-                        String.valueOf(lnQuantity),
+                        "",
                         "",
                         "",
                         "",
@@ -243,13 +197,11 @@ public class InvAdjustmentRegController implements Initializable {
                         "",
                         ""     
                     ));
-                    pnlRow++;
-                    loRS.next();
+                      loRS.next();
                 }
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
-        return dataDetail;
     }
     
     private void cmdButton_Click(ActionEvent event) {
@@ -358,27 +310,28 @@ public class InvAdjustmentRegController implements Initializable {
     }
     
     private void initLisView(){
+        TableColumn index01 = new TableColumn("No.");
+        TableColumn index02 = new TableColumn("Expiration");
+        TableColumn index03 = new TableColumn("OnHnd");
         
         index01.setPrefWidth(30); index01.setStyle("-fx-alignment: CENTER;");
-        index02.setPrefWidth(90); index02.setStyle("-fx-alignment: CENTER;");
-        index03.setPrefWidth(65); index03.setStyle("-fx-alignment: CENTER;");
-        index04.setPrefWidth(65); index04.setStyle("-fx-alignment: CENTER;");
+        index02.setPrefWidth(120); index02.setStyle("-fx-alignment: CENTER;");
+        index03.setPrefWidth(90); index03.setStyle("-fx-alignment: CENTER;");
         
         index01.setSortable(false); index01.setResizable(false);
         index02.setSortable(true); index02.setResizable(false);
         index03.setSortable(false); index03.setResizable(false);
-        index04.setSortable(false); index04.setResizable(false);
 
         tableDetail.getColumns().clear();
         tableDetail.getColumns().add(index01);
         tableDetail.getColumns().add(index02);
         tableDetail.getColumns().add(index03);
-        tableDetail.getColumns().add(index04);
         
         index01.setCellValueFactory(new PropertyValueFactory<org.rmj.cas.food.inventory.fx.views.TableModel,String>("index01"));
         index02.setCellValueFactory(new PropertyValueFactory<org.rmj.cas.food.inventory.fx.views.TableModel,String>("index02"));
         index03.setCellValueFactory(new PropertyValueFactory<org.rmj.cas.food.inventory.fx.views.TableModel,String>("index03"));
-        index04.setCellValueFactory(new PropertyValueFactory<org.rmj.cas.food.inventory.fx.views.TableModel,String>("index04"));
+        
+        tableDetail.setItems(dataDetail);
         
     }
      

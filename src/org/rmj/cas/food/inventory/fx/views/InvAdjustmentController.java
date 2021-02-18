@@ -34,7 +34,6 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
-import org.apache.poi.ss.usermodel.Table;
 import org.rmj.appdriver.GRider;
 import org.rmj.appdriver.MiscUtil;
 import org.rmj.appdriver.agentfx.CommonUtils;
@@ -400,39 +399,6 @@ public class InvAdjustmentController implements Initializable {
             txtField.selectAll();
         }
     };
-    
-//    private void loadDetailData(int fnRow){
-//        ResultSet loRS = null;
-//        loRS = poTrans.getExpiration((String)poTrans.getDetail(fnRow, "sStockIDx"));
-//        int lnQuantity = 0;
-//        try {
-//                dataDetail.clear();
-//                if (poTrans.getDetail(fnRow, "sStockIDx").equals("")) return;
-//                loRS.first();
-//                    for( int rowCount = 0; rowCount <= MiscUtil.RecordCount(loRS) -1; rowCount++){
-//                        if (CommonUtils.xsDateShort(loRS.getDate("dExpiryDt")).equals(CommonUtils.xsDateShort((Date) poTrans.getDetail(fnRow, "dExpiryDt")))){
-//                            lnQuantity = (int)loRS.getInt("nQtyOnHnd") +((int)poTrans.getDetail(fnRow, "nCredtQty") - (int)poTrans.getDetail(fnRow, "nDebitQty"));
-//                        }else{
-//                            lnQuantity = 0;
-//                        }
-//                    dataDetail.add(new TableModel(String.valueOf(rowCount +1),
-//                        String.valueOf(CommonUtils.xsDateMedium(loRS.getDate("dExpiryDt"))),
-//                        String.valueOf(loRS.getInt("nQtyOnHnd")),
-//                        String.valueOf(lnQuantity),
-//                        "",
-//                        "",
-//                        "",
-//                        "",
-//                        "",
-//                        ""     
-//                    ));
-//                    loRS.next();
-//                }
-//        } catch (SQLException ex) {
-//            ex.printStackTrace();
-//        }
-//        
-//    }
     
     private ObservableList getRecordData(int fnRow){
         ObservableList dataDetail = FXCollections.observableArrayList();
@@ -913,16 +879,16 @@ public class InvAdjustmentController implements Initializable {
             switch(fnIndex){
                 case 4:
                     txtDetail04.setText(String.valueOf(poTrans.getDetail(pnRow,"nCredtQty")));
-                    if (!poTrans.getDetail(pnRow, "sStockIDx").toString().isEmpty()){
-                        poTrans.addDetail();
+                    if (!poTrans.getDetail(poTrans.ItemCount()-1, "sStockIDx").toString().isEmpty()){
+                        if((int) poTrans.getDetail(pnRow, "nCredtQty") != 0) poTrans.addDetail();
                     }
                     loadDetail();
  
                      break;
                 case 5:
                     txtDetail05.setText(String.valueOf(poTrans.getDetail(pnRow,"nDebitQty")));
-                    if (!poTrans.getDetail(pnRow, "sStockIDx").toString().isEmpty()){
-                        poTrans.addDetail();
+                    if (!poTrans.getDetail(poTrans.ItemCount()-1, "sStockIDx").toString().isEmpty()){
+                        if((int) poTrans.getDetail(pnRow, "nDebitQty") != 0) poTrans.addDetail();
                     }
                     loadDetail();
                     
@@ -942,10 +908,13 @@ public class InvAdjustmentController implements Initializable {
         newData.setIndex01(String.valueOf(fnRow + 1));
         newData.setIndex02(CommonUtils.xsDateMedium((Date) poTrans.getDetail(pnRow, "dExpiryDt")));
         newData.setIndex03("0");
+        
         if ((int) poTrans.getDetail(pnRow, "nCredtQty")> 0){
             newData.setIndex04(String.valueOf(poTrans.getDetail(pnRow, "nCredtQty")));
         }else if((int) poTrans.getDetail(pnRow, "nDebitQty")> 0){
-            newData.setIndex04(String.valueOf(poTrans.getDetail(pnRow, "nDebitQty")));
+            ShowMessageFX.Warning(null,pxeModuleName,"Cannot debit an empty inventory!");
+            poTrans.setDetail(pnRow, "nDebitQty", 0);
+            return;
         }else{
             newData.setIndex04("0");
         }

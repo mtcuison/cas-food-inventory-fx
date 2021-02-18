@@ -2,7 +2,6 @@ package org.rmj.cas.food.inventory.fx.views;
 
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import java.net.URL;
-import java.sql.SQLException;
 import java.util.ResourceBundle;
 import javafx.beans.property.ReadOnlyBooleanPropertyBase;
 import javafx.beans.value.ChangeListener;

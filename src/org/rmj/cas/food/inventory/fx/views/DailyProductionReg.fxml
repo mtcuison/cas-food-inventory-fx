@@ -93,9 +93,9 @@
             </AnchorPane>
             <AnchorPane prefHeight="498.0" prefWidth="90.0" style="-fx-background-color: #686868;" AnchorPane.topAnchor="30.0">
                <children>
-                  <Button fx:id="btnVoid" alignment="BOTTOM_CENTER" contentDisplay="TOP" layoutY="60.0" mnemonicParsing="false" prefHeight="60.0" prefWidth="90.0" text="Cancel" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="60.0">
+                  <Button fx:id="btnVoid" alignment="BOTTOM_CENTER" contentDisplay="TOP" layoutY="60.0" mnemonicParsing="false" prefHeight="60.0" prefWidth="90.0" text="Void" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="60.0">
                      <graphic>
-                        <FontAwesomeIconView glyphName="TRASH" size="30" />
+                        <FontAwesomeIconView glyphName="BAN" size="30" />
                      </graphic>
                   </Button>
                   <Button fx:id="btnClose" alignment="BOTTOM_CENTER" contentDisplay="TOP" layoutY="180.0" mnemonicParsing="false" prefHeight="60.0" prefWidth="90.0" text="Close" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="180.0">

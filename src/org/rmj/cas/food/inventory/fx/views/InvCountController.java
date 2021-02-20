@@ -3,6 +3,8 @@ package org.rmj.cas.food.inventory.fx.views;
 import com.sun.javafx.scene.control.skin.TableHeaderRow;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import java.net.URL;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.text.ParseException;
 import java.util.Date;
 import java.util.ResourceBundle;
@@ -34,6 +36,8 @@ import javafx.scene.layout.VBox;
 import org.rmj.appdriver.constants.EditMode;
 import org.rmj.appdriver.constants.TransactionStatus;
 import org.rmj.appdriver.GRider;
+import org.rmj.appdriver.MiscUtil;
+import org.rmj.appdriver.SQLUtil;
 import org.rmj.appdriver.agentfx.ShowMessageFX;
 import org.rmj.appdriver.agentfx.CommonUtils;
 import org.rmj.cas.inventory.base.InvCount;
@@ -68,6 +72,7 @@ public class InvCountController implements Initializable {
     @FXML private TextField txtField51;
     @FXML private TextField txtField50;
     @FXML private TextField txtDetail11;
+    @FXML private TableView tableDetail;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -118,9 +123,83 @@ public class InvCountController implements Initializable {
         
         clearFields();
         initGrid();
+        initLisView();
         initButton(pnEditMode);
         
         pbLoaded = true;
+    }
+    
+    private void initLisView(){
+        index01.setPrefWidth(30); index01.setStyle("-fx-alignment: CENTER;");
+        index02.setPrefWidth(90); index02.setStyle("-fx-alignment: CENTER;");
+        index03.setPrefWidth(65); index03.setStyle("-fx-alignment: CENTER;");
+        index04.setPrefWidth(65); index04.setStyle("-fx-alignment: CENTER;");
+        
+        index01.setSortable(false); index01.setResizable(false);
+        index02.setSortable(true); index02.setResizable(false);
+        index03.setSortable(false); index03.setResizable(false);
+        index04.setSortable(false); index04.setResizable(false);
+
+        tableDetail.getColumns().clear();
+        tableDetail.getColumns().add(index01);
+        tableDetail.getColumns().add(index02);
+        tableDetail.getColumns().add(index03);
+        tableDetail.getColumns().add(index04);
+        
+        index01.setCellValueFactory(new PropertyValueFactory<org.rmj.cas.food.inventory.fx.views.TableModel,String>("index01"));
+        index02.setCellValueFactory(new PropertyValueFactory<org.rmj.cas.food.inventory.fx.views.TableModel,String>("index02"));
+        index03.setCellValueFactory(new PropertyValueFactory<org.rmj.cas.food.inventory.fx.views.TableModel,String>("index03"));
+        index04.setCellValueFactory(new PropertyValueFactory<org.rmj.cas.food.inventory.fx.views.TableModel,String>("index04"));
+    }
+    
+     public ResultSet getExpiration(String fsStockIDx){
+        String lsSQL = "SELECT * FROM Inv_Master_Expiration" +
+                        " WHERE sStockIDx = " + SQLUtil.toSQL(fsStockIDx) +
+                            " AND sBranchCd = " + SQLUtil.toSQL(poGRider.getBranchCode()) +
+                            " AND nQtyOnHnd > 0" +
+                        " ORDER BY dExpiryDt";     
+        
+        ResultSet loRS = poGRider.executeQuery(lsSQL);
+        
+        return loRS;
+    }
+    
+    private ObservableList getRecordData(int fnRow){
+        ObservableList dataDetail = FXCollections.observableArrayList();
+        ResultSet loRS = null;
+        loRS = getExpiration((String)poTrans.getDetail(fnRow, "sStockIDx"));
+        int lnQuantity = 0;
+        pnlRow = 0;
+        pbFound = false;
+        
+        try {
+                dataDetail.clear();
+                loRS.first();
+                    for( int rowCount = 0; rowCount <= MiscUtil.RecordCount(loRS) -1; rowCount++){
+                        if (CommonUtils.xsDateShort(loRS.getDate("dExpiryDt")).equals(CommonUtils.xsDateShort((Date) poTrans.getDetail(fnRow, "dExpiryDt")))){
+                            if(!pbFound) pbFound = true;
+                            lnQuantity = (int)poTrans.getDetail(fnRow, "nFinalCtr");
+                        }else{
+                            lnQuantity = 0;
+                        }
+                    dataDetail.add(new TableModel(String.valueOf(rowCount +1),
+                        String.valueOf(CommonUtils.xsDateMedium(loRS.getDate("dExpiryDt"))),
+                        String.valueOf(loRS.getInt("nQtyOnHnd")),
+                        String.valueOf(lnQuantity),
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        ""     
+                    ));
+                    pnlRow++;
+                    loRS.next();
+                }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return dataDetail;
     }
     
     private void txtField_KeyPressed(KeyEvent event){
@@ -279,18 +358,18 @@ public class InvCountController implements Initializable {
     
     private void loadDetail(){
         int lnCtr;
-        int lnRow = poTrans.ItemCount();
+        pnlRow = poTrans.ItemCount();
         
         data.clear();
         /*ADD THE DETAIL*/
-        for(lnCtr = 0; lnCtr <= lnRow -1; lnCtr++){
+        for(lnCtr = 0; lnCtr <= pnlRow -1; lnCtr++){
             data.add(new TableModel(String.valueOf(lnCtr + 1), 
                                     poTrans.getDetailOthers(lnCtr, "sBarCodex").toString(), 
                                     poTrans.getDetailOthers(lnCtr, "sDescript").toString(),
-                                    poTrans.getDetailOthers(lnCtr, "sLocatnNm").toString(),
-                                    String.valueOf(poTrans.getDetail(lnCtr, "nQtyOnHnd")),
                                     String.valueOf(poTrans.getDetail(lnCtr, "nFinalCtr")),
                                     String.valueOf(CommonUtils.xsDateShort((Date) poTrans.getDetail(lnCtr, "dExpiryDt"))),
+                                    "",
+                                    "",
                                     "",
                                     "",
                                     ""));
@@ -298,29 +377,25 @@ public class InvCountController implements Initializable {
     
         /*FOCUS ON FIRST ROW*/
         if (!data.isEmpty()){
-            table.getSelectionModel().select(lnRow -1);
-            table.getFocusModel().focus(lnRow -1);
+            table.getSelectionModel().select(pnlRow -1);
+            table.getFocusModel().focus(pnlRow -1);
             
             pnRow = table.getSelectionModel().getSelectedIndex();           
             
-            setDetailInfo();
+            setDetailInfo(pnRow);
         }
     }
     
-    private void setDetailInfo(){
-        int lnRow = table.getSelectionModel().getSelectedIndex();
-        
-        pnRow = lnRow;
-        
-        if (pnRow >= 0){
-            txtDetail05.setText(String.valueOf(poTrans.getDetail(pnRow, "sOrderNox")));
-            txtDetail03.setText((String) poTrans.getDetailOthers(pnRow, "sBarCodex"));
-            txtDetail80.setText((String) poTrans.getDetailOthers(pnRow, "sDescript"));
-            txtDetail04.setText((String) poTrans.getDetailOthers(pnRow, "sLocatnNm"));
-            txtDetail05.setText(String.valueOf(poTrans.getDetail(pnRow, "nQtyOnHnd")));
-            txtDetail09.setText(String.valueOf(poTrans.getDetail(pnRow, "nFinalCtr")));
-            txtDetail10.setText(String.valueOf(poTrans.getDetail(pnRow, "sRemarksx")));
-            txtDetail11.setText(CommonUtils.xsDateMedium((Date) poTrans.getDetail(pnRow, "dExpiryDt")));
+    private void setDetailInfo(int fnRow){
+        if (!poTrans.getDetail(fnRow, "sStockIDx").equals("")){
+            txtDetail05.setText(String.valueOf(poTrans.getDetail(fnRow, "sOrderNox")));
+            txtDetail03.setText((String) poTrans.getDetailOthers(fnRow, "sBarCodex"));
+            txtDetail80.setText((String) poTrans.getDetailOthers(fnRow, "sDescript"));
+            txtDetail04.setText((String) poTrans.getDetailOthers(fnRow, "sLocatnNm"));
+            txtDetail05.setText(String.valueOf(poTrans.getDetail(fnRow, "nQtyOnHnd")));
+            txtDetail09.setText(String.valueOf(poTrans.getDetail(fnRow, "nFinalCtr")));
+            txtDetail10.setText(String.valueOf(poTrans.getDetail(fnRow, "sRemarksx")));
+            txtDetail11.setText(CommonUtils.xsDateMedium((Date) poTrans.getDetail(fnRow, "dExpiryDt")));
         } else{
             txtDetail03.setText("");
             txtDetail04.setText("");
@@ -330,6 +405,27 @@ public class InvCountController implements Initializable {
             txtDetail80.setText("");
             txtDetail11.setText("");
         }
+    }
+    
+    private void addDetailData(int fnRow){
+        if (poTrans.getDetail(pnRow, "sStockIDx").equals("")) return;
+        TableModel newData = new TableModel();
+        newData.setIndex01(String.valueOf(fnRow + 1));
+        newData.setIndex02(CommonUtils.xsDateMedium((Date) poTrans.getDetail(pnRow, "dExpiryDt")));
+        newData.setIndex03("0");
+        newData.setIndex04(String.valueOf(poTrans.getDetail(pnRow, "nFinalCtr")));
+        newData.setIndex05("");
+        newData.setIndex06("");
+        newData.setIndex07("");
+        newData.setIndex08("");
+        newData.setIndex09("");
+        newData.setIndex10("");
+        tableDetail.getItems().add(newData);
+        
+        index02.setSortType(TableColumn.SortType.ASCENDING);
+        tableDetail.getSortOrder().add(index02);
+        tableDetail.sort();
+        
     }
     
     private void setTranStat(String fsValue){
@@ -528,7 +624,11 @@ public class InvCountController implements Initializable {
         psInvType = "";
         psInvTypCd = "";
         
+        pbFound = false;
+        pnlRow = 0;
+        
         data.clear();
+        dataDetail.clear();
     }
     
     private void initButton(int fnValue){
@@ -571,26 +671,21 @@ public class InvCountController implements Initializable {
         TableColumn index01 = new TableColumn("No.");
         TableColumn index02 = new TableColumn("Barcode.");
         TableColumn index03 = new TableColumn("Description");
-        TableColumn index04 = new TableColumn("Location");
-        TableColumn index05 = new TableColumn("On Hand");
-        TableColumn index06 = new TableColumn("Count");
-        TableColumn index07 = new TableColumn("Expiration");
+        TableColumn index04 = new TableColumn("Count");
+        TableColumn index05 = new TableColumn("Expiration");
         
         index01.setPrefWidth(50); index01.setStyle("-fx-alignment: CENTER;");
-        index02.setPrefWidth(150);
-        index03.setPrefWidth(180);
-        index04.setPrefWidth(100); index04.setStyle("-fx-alignment: CENTER;");
-        index05.setPrefWidth(80); index05.setStyle("-fx-alignment: CENTER;");
-        index06.setPrefWidth(80); index06.setStyle("-fx-alignment: CENTER;");
-        index07.setPrefWidth(98); index07.setStyle("-fx-alignment: CENTER;");
+        index02.setPrefWidth(100);
+        index03.setPrefWidth(120);
+        index04.setPrefWidth(80); index04.setStyle("-fx-alignment: CENTER;");
+        index05.setPrefWidth(98); index05.setStyle("-fx-alignment: CENTER;");
         
         index01.setSortable(false); index01.setResizable(false);
         index02.setSortable(false); index02.setResizable(false);
         index03.setSortable(false); index03.setResizable(false);
         index04.setSortable(false); index04.setResizable(false);
         index05.setSortable(false); index05.setResizable(false);
-        index06.setSortable(false); index06.setResizable(false);
-        index07.setSortable(false); index07.setResizable(false);
+       
         
         table.getColumns().clear();        
         table.getColumns().add(index01);
@@ -598,16 +693,12 @@ public class InvCountController implements Initializable {
         table.getColumns().add(index03);
         table.getColumns().add(index04);
         table.getColumns().add(index05);
-        table.getColumns().add(index06);
-        table.getColumns().add(index07);
         
         index01.setCellValueFactory(new PropertyValueFactory<org.rmj.cas.food.inventory.fx.views.TableModel,String>("index01"));
         index02.setCellValueFactory(new PropertyValueFactory<org.rmj.cas.food.inventory.fx.views.TableModel,String>("index02"));
         index03.setCellValueFactory(new PropertyValueFactory<org.rmj.cas.food.inventory.fx.views.TableModel,String>("index03"));
         index04.setCellValueFactory(new PropertyValueFactory<org.rmj.cas.food.inventory.fx.views.TableModel,String>("index04"));
         index05.setCellValueFactory(new PropertyValueFactory<org.rmj.cas.food.inventory.fx.views.TableModel,String>("index05"));
-        index06.setCellValueFactory(new PropertyValueFactory<org.rmj.cas.food.inventory.fx.views.TableModel,String>("index06"));
-        index07.setCellValueFactory(new PropertyValueFactory<org.rmj.cas.food.inventory.fx.views.TableModel,String>("index07"));
         
          /*making column's position uninterchangebale*/
         table.widthProperty().addListener(new ChangeListener<Number>() {  
@@ -628,7 +719,12 @@ public class InvCountController implements Initializable {
 
     @FXML
     private void table_Clicked(MouseEvent event) {
-        setDetailInfo(); 
+        pnRow = table.getSelectionModel().getSelectedIndex();
+        tableDetail.setItems(getRecordData(pnRow));
+        if(!pbFound){
+            addDetailData(pnlRow);
+        }
+        setDetailInfo(pnRow);
         txtDetail03.requestFocus();
         txtDetail03.selectAll();
     }
@@ -638,15 +734,24 @@ public class InvCountController implements Initializable {
     private static GRider poGRider;
     private InvCount poTrans;
     
+    private boolean pbFound;
+    private int pnlRow=0;
+    
     private String psInvType = "";
     private int pnEditMode = -1;
     private boolean pbLoaded = false;
+    
+    TableColumn index01 = new TableColumn("No.");
+    TableColumn index02 = new TableColumn("Expiration");
+    TableColumn index03 = new TableColumn("On Hand");
+    TableColumn index04 = new TableColumn("Count");
     
     private final String pxeDateFormat = "yyyy-MM-dd";
     private final String pxeDateDefault = java.time.LocalDate.now().toString();
     
     private TableModel model;
     private ObservableList<TableModel> data = FXCollections.observableArrayList();
+    private ObservableList<TableModel> dataDetail =  FXCollections.observableArrayList();
     
     private int pnIndex = -1;
     private int pnRow = -1;

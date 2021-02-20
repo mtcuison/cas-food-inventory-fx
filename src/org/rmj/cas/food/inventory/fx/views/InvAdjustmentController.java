@@ -786,7 +786,7 @@ public class InvAdjustmentController implements Initializable {
     
     private void loadDetail(){
         int lnCtr;
-        int pnlRow = poTrans.ItemCount();
+        pnlRow = poTrans.ItemCount();
         
         pnValTotl = 0;
         pnCrdtTotl = 0;

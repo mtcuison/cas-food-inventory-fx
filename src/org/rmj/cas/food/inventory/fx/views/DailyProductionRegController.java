@@ -33,6 +33,7 @@ import org.rmj.appdriver.constants.EditMode;
 import org.rmj.appdriver.GRider;
 import org.rmj.appdriver.agentfx.ShowMessageFX;
 import org.rmj.appdriver.agentfx.CommonUtils;
+import org.rmj.appdriver.constants.TransactionStatus;
 import org.rmj.cas.inventory.production.base.DailyProduction;
 
 public class DailyProductionRegController implements Initializable {
@@ -219,21 +220,21 @@ public class DailyProductionRegController implements Initializable {
                 return;
             case "btnVoid":
                if (!psOldRec.equals("")){
-                    /*if(!poTrans.getMaster("cTranStat").equals(TransactionStatus.STATE_OPEN)){
+                    if(!poTrans.getMaster("cTranStat").equals(TransactionStatus.STATE_OPEN)){
                         ShowMessageFX.Warning("Trasaction may be CANCELLED/POSTED.", pxeModuleName, "Can't update processed transactions!!!");
                         return;
-                    }*/
+                    }
                     
-                    if(ShowMessageFX.YesNo(null, pxeModuleName, "Do you want to cancel this transaction?")==true){
-                        if (poTrans.cancelTransaction(psOldRec)){
-                            ShowMessageFX.Information(null, pxeModuleName, "Transaction CANCELLED successfully.");
+                    if(ShowMessageFX.YesNo(null, pxeModuleName, "Do you want to void this transaction?")==true){
+                        if (poTrans.voidTransaction(psOldRec)){
+                            ShowMessageFX.Information(null, pxeModuleName, "Transaction VOIDED successfully.");
                             clearFields();
                             initGrid();
                             pnEditMode = EditMode.UNKNOWN;
                         } else ShowMessageFX.Warning(null, pxeModuleName, poTrans.getMessage());
                     }else return;
                 }else 
-                   ShowMessageFX.Warning(null, pxeModuleName, "Please select a record to cancel!");
+                   ShowMessageFX.Warning(null, pxeModuleName, "Please select a record to void!");
                 break;
             default:
                 ShowMessageFX.Warning(null, pxeModuleName, "Button with name " + lsButton + " not registered.");

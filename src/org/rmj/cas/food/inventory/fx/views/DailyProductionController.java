@@ -66,6 +66,7 @@ public class DailyProductionController implements Initializable {
     @FXML private Button btnBrowse;
     @FXML private TextField txtField50;
     @FXML private TextField txtField51;
+    @FXML private Button btnVoid;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -81,6 +82,7 @@ public class DailyProductionController implements Initializable {
         btnClose.setOnAction(this::cmdButton_Click);
         btnExit.setOnAction(this::cmdButton_Click);
         btnBrowse.setOnAction(this::cmdButton_Click);
+        btnVoid.setOnAction(this::cmdButton_Click);
         
         txtField01.focusedProperty().addListener(txtField_Focus);
         txtField02.focusedProperty().addListener(txtField_Focus);
@@ -124,7 +126,7 @@ public class DailyProductionController implements Initializable {
         index02.setPrefWidth(280);
         index03.setPrefWidth(289); 
         index04.setPrefWidth(100); index04.setStyle("-fx-alignment: CENTER;");
-        index05.setPrefWidth(95); index04.setStyle("-fx-alignment: CENTER;");
+        index05.setPrefWidth(95); index05.setStyle("-fx-alignment: CENTER;");
         
         index01.setSortable(false); index01.setResizable(false);
         index02.setSortable(false); index02.setResizable(false);
@@ -364,6 +366,24 @@ public class DailyProductionController implements Initializable {
                     
                 } else ShowMessageFX.Warning(null, pxeModuleName, "Please select a record to confirm!");
                 break;
+            case "btnVoid":
+               if (!psOldRec.equals("")){
+                    if(!poTrans.getMaster("cTranStat").equals(TransactionStatus.STATE_OPEN)){
+                        ShowMessageFX.Warning("Trasaction may be CANCELLED/POSTED.", pxeModuleName, "Can't update processed transactions!!!");
+                        return;
+                    }
+                    if( ShowMessageFX.YesNo(null, pxeModuleName, "Do you want to void this transasction?")== true){
+                        if (poTrans.voidTransaction(psOldRec)){
+                            ShowMessageFX.Information(null, pxeModuleName, "Transaction VOIDED successfully.");
+                            clearFields();
+                            initGrid();
+                            pnEditMode = EditMode.UNKNOWN;
+                            initButton(pnEditMode);
+                        }
+                    }
+                    
+                } else ShowMessageFX.Warning(null, pxeModuleName, "Please select a record to void!");
+                break;
                 
             case "btnClose":
             case "btnExit":
@@ -507,6 +527,7 @@ public class DailyProductionController implements Initializable {
         btnBrowse.setVisible(!lbShow);
         btnNew.setVisible(!lbShow);
         btnConfirm.setVisible(!lbShow);
+        btnVoid.setVisible(!lbShow);
         btnClose.setVisible(!lbShow);
         
         txtField01.setDisable(!lbShow);
@@ -585,12 +606,12 @@ public class DailyProductionController implements Initializable {
     private void txtDetail_KeyPressed(KeyEvent event){
         TextField txtDetail = (TextField) event.getSource();
         int lnIndex = Integer.parseInt(txtDetail.getId().substring(9, 11));
-        String lsValue = txtDetail.getText() + "%";
+        String lsValue = txtDetail.getText();
         
         if (event.getCode() == F3){
             switch (lnIndex){
                 case 3:
-                    if (poTrans.SearchDetail(pnRow, 3, lsValue, false, false)){
+                    if (poTrans.SearchDetail(pnRow, 3, lsValue, true, true)){
                         txtDetail03.setText(poTrans.getDetailOthers(pnRow, "sBarCodex").toString());
                         txtDetail80.setText(poTrans.getDetailOthers(pnRow, "sDescript").toString());
                     } else {
@@ -600,7 +621,7 @@ public class DailyProductionController implements Initializable {
                     break;
 
                 case 80:
-                    if (poTrans.SearchDetail(pnRow, 3, lsValue, true, false)){
+                    if (poTrans.SearchDetail(pnRow, 3, lsValue, false, false)){
                         txtDetail03.setText(poTrans.getDetailOthers(pnRow, "sBarCodex").toString());
                         txtDetail80.setText(poTrans.getDetailOthers(pnRow, "sDescript").toString());
                         

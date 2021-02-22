@@ -54,7 +54,6 @@ import org.rmj.appdriver.agentfx.service.ITokenize;
 import org.rmj.appdriver.agentfx.service.TokenApprovalFactory;
 import org.rmj.appdriver.agentfx.ui.showFXDialog;
 import org.rmj.appdriver.constants.UserRight;
-import org.rmj.cas.food.inventory.fx.views.child.DashboardController;
 import org.rmj.cas.food.reports.classes.FoodReports;
 import org.rmj.cas.parameter.fx.ParameterFX;
 import org.rmj.cas.pos.reports.BIRReports;

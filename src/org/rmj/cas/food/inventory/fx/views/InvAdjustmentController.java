@@ -79,7 +79,7 @@ public class InvAdjustmentController implements Initializable {
     @FXML private Button btnVoid;
 
     @Override
-    public void initialize(URL url, ResourceBundle rb) {
+    public void initialize(URL url, ResourceBundle rb){
         poTrans = new InvAdjustment(poGRider, poGRider.getBranchCode(), false);
         poTrans.setCallBack(poCallBack);
         

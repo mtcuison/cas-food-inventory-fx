@@ -2,8 +2,8 @@ package org.rmj.cas.food.inventory.fx.views;
 
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import java.net.URL;
-import java.sql.SQLException;
 import java.text.ParseException;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.ResourceBundle;
 import javafx.beans.property.ReadOnlyBooleanPropertyBase;
@@ -82,8 +82,7 @@ public class POReturnController implements Initializable {
     @FXML private ImageView imgTranStat1;
     @FXML private TextField txtField50;
     @FXML private TextField txtField51;
-    @FXML
-    private TextField txtDetail08;
+    @FXML private TextField txtDetail08;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -127,6 +126,7 @@ public class POReturnController implements Initializable {
         txtDetail05.focusedProperty().addListener(txtDetail_Focus);
         txtDetail06.focusedProperty().addListener(txtDetail_Focus);
         txtDetail07.focusedProperty().addListener(txtDetail_Focus);
+        txtDetail08.focusedProperty().addListener(txtDetail_Focus);
         txtDetail80.focusedProperty().addListener(txtDetail_Focus);
                 
         /*Add keypress event for field with search*/
@@ -148,6 +148,7 @@ public class POReturnController implements Initializable {
         txtDetail05.setOnKeyPressed(this::txtDetail_KeyPressed);
         txtDetail06.setOnKeyPressed(this::txtDetail_KeyPressed);
         txtDetail07.setOnKeyPressed(this::txtDetail_KeyPressed);
+        txtDetail08.setOnKeyPressed(this::txtDetail_KeyPressed);
         txtDetail80.setOnKeyPressed(this::txtDetail_KeyPressed);
         
         Combo04.setOnKeyPressed(this::ComboBox_KeyPressed);
@@ -456,6 +457,7 @@ public class POReturnController implements Initializable {
         txtDetail05.setText("0");
         txtDetail06.setText("0.00");
         txtDetail07.setText("0.00");
+        txtDetail08.setText(CommonUtils.xsDateLong((Date) java.sql.Date.valueOf(LocalDate.now())));
         
         
         Label06.setText("0.00");
@@ -491,8 +493,8 @@ public class POReturnController implements Initializable {
                 case 5: /*sSupplier*/
                 case 18: /*sInvTypCd*/
                 case 27: /*sDeptIDxx*/
-                    if (poTrans.SearchMaster(lnIndex, txtField.getText(), false))
-                        CommonUtils.SetNextFocus(txtField);
+                    if (poTrans.SearchMaster(lnIndex, txtField.getText(), false)==true)CommonUtils.SetNextFocus(txtField);
+                    else txtField.setText("");
                     return;
                 case 16: /*sPOTransx*/
                     if (poTrans.SearchMaster(lnIndex, txtField.getText(), false))
@@ -685,9 +687,15 @@ public class POReturnController implements Initializable {
                         loadDetail();
                         break;
                     case "Combo28":
-                        if (loField.getSelectionModel().getSelectedIndex() != cDivision.size() -1){
-                            poTrans.setMaster("cDivision", String.valueOf(loField.getSelectionModel().getSelectedIndex()));
-                        } else poTrans.setMaster("cDivision", "");
+                        String sDivision = (String) loField.getValue();
+//                        if (loField.getSelectionModel().getSelectedIndex() != cDivision.size() -1){
+//                            poTrans.setMaster("cDivision", String.valueOf(loField.getSelectionModel().getSelectedIndex()));
+//                        } else poTrans.setMaster("cDivision", "");
+                        if(!cDivision.contains(sDivision)){
+                        Combo28.getSelectionModel().select(0);
+                    }
+                    Combo28.getSelectionModel().getSelectedIndex();
+                    poTrans.setMaster("cDivision", String.valueOf(loField.getSelectionModel().getSelectedIndex()));
                 }
         }         
     };
@@ -756,6 +764,7 @@ public class POReturnController implements Initializable {
                         txtField.requestFocus(); 
                     } 
                     poTrans.setDetail(pnRow, lnIndex, x);
+                    break;
                 case 8: /*dExpiryDt*/
                         if (CommonUtils.isDate(txtField.getText(), pxeDateFormat)){
                             poTrans.setDetail(pnRow, "dExpiryDt", CommonUtils.toDate(txtField.getText()));
@@ -876,6 +885,8 @@ public class POReturnController implements Initializable {
                 case 7:
                     txtField07.setText(CommonUtils.NumberFormat(Double.valueOf(poTrans.getDetail(pnRow, fnIndex).toString()), "0.00"));
                     loadDetail();
+                case 8:
+                    txtDetail08.setText(CommonUtils.xsDateLong((Date)poTrans.getDetail(pnRow,"dExpiryDt")));
             }
         }
     };
@@ -892,7 +903,7 @@ public class POReturnController implements Initializable {
             break;
         case 16:
             XMPOReceiving loPORec = poTrans.GetPOReceving((String)poTrans.getMaster(fnIndex), true);
-            if (loPORec != null) txtField16.setText((String) loPORec.getMaster("sReferNox"));
+            if (loPORec != null) txtField16.setText((String) loPORec.getMaster("sTransNox"));
             break;
         case 18:
             XMInventoryType loInv = poTrans.GetInventoryType((String)poTrans.getMaster(fnIndex), true);

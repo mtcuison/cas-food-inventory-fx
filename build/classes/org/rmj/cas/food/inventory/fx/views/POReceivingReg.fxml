@@ -159,7 +159,7 @@
                      </font>
                   </Label>
                   <TextField fx:id="txtField51" layoutX="441.0" layoutY="5.0" prefHeight="27.0" prefWidth="254.0" promptText="Press F3 to search" />
-                  <Label alignment="CENTER_RIGHT" layoutX="681.0" layoutY="84.0" prefHeight="17.0" prefWidth="69.0" text="Order No." />
+                  <Label alignment="CENTER_RIGHT" layoutX="660.0" layoutY="84.0" prefHeight="17.0" prefWidth="90.0" text="Expiration Date:" />
                   <TextField fx:id="txtDetail10" disable="true" editable="false" layoutX="757.0" layoutY="80.0" prefHeight="27.0" prefWidth="101.0" />
                </children>
             </AnchorPane>

@@ -2,6 +2,7 @@ package org.rmj.cas.food.inventory.fx.views;
 
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import java.net.URL;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.ResourceBundle;
 import javafx.beans.property.ReadOnlyBooleanPropertyBase;
@@ -77,7 +78,7 @@ public class POReturnRegController implements Initializable {
     @FXML private TextField txtField11;
     @FXML private TextField txtField09;
     @FXML private TextField txtField13;
-    @FXML private ImageView imgTranStat1;
+    @FXML private TextField txtDetail08;
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -183,6 +184,7 @@ public class POReturnRegController implements Initializable {
             txtDetail05.setText(String.valueOf(poTrans.getDetail(pnRow, 5))); /*Quantity*/
             txtDetail06.setText(CommonUtils.NumberFormat(Double.valueOf(poTrans.getDetail(pnRow, 6).toString()), "###0.00")); /*Unit Price*/
             txtDetail07.setText(CommonUtils.NumberFormat(Double.valueOf(poTrans.getDetail(pnRow, 7).toString()), "###0.00")); /*Freight*/
+            txtDetail08.setText(CommonUtils.xsDateMedium((Date) poTrans.getDetail(pnRow, "dExpiryDt"))); //date
             
             Combo04.getSelectionModel().select(Integer.parseInt((String) poTrans.getDetail(pnRow, 4)));
         } else{
@@ -190,6 +192,7 @@ public class POReturnRegController implements Initializable {
             txtDetail05.setText("0");
             txtDetail06.setText("0.00");
             txtDetail07.setText("0.00");
+            txtDetail08.setText(""); //date
             txtDetail80.setText("");   
         }
     }
@@ -327,7 +330,7 @@ public class POReturnRegController implements Initializable {
         if (loInv != null) txtField18.setText((String) loInv.getMaster("sDescript"));
         
         XMDepartment loDept = poTrans.GetDepartment((String)poTrans.getMaster(27), true);
-        if (loBranch != null) txtField27.setText((String) loBranch.getMaster("sDeptName"));
+        if (loDept != null) txtField27.setText((String) loDept.getMaster("sDeptName"));
 
         txtField07.setText(CommonUtils.NumberFormat(Double.valueOf(poTrans.getMaster(7).toString()), "0.00"));
         txtField09.setText(CommonUtils.NumberFormat(Double.valueOf(poTrans.getMaster(9).toString()), "0.00"));
@@ -335,6 +338,7 @@ public class POReturnRegController implements Initializable {
         txtField10.setText(CommonUtils.NumberFormat(Double.valueOf(poTrans.getMaster(10).toString()), "#,##0.00"));
         txtField11.setText(CommonUtils.NumberFormat(Double.valueOf(poTrans.getMaster(11).toString()), "#,##0.00"));
         txtField13.setText(CommonUtils.NumberFormat(Double.valueOf(poTrans.getMaster(13).toString()), "#,##0.00"));
+        txtField16.setText(poTrans.getMaster(16).toString());
         
         if (!String.valueOf(poTrans.getMaster("cDivision")).equals("")){
             Combo28.getSelectionModel().select(Integer.parseInt((String) poTrans.getMaster("cDivision")));
@@ -376,6 +380,7 @@ public class POReturnRegController implements Initializable {
         txtDetail05.setText("0");
         txtDetail06.setText("0.00");
         txtDetail07.setText("0.00");
+        txtDetail08.setText(CommonUtils.xsDateLong((Date) java.sql.Date.valueOf(LocalDate.now())));
         
         
         Label06.setText("0.00");

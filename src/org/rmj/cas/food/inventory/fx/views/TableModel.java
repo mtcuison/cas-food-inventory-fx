@@ -14,6 +14,20 @@ public class TableModel {
     private SimpleStringProperty index09;
     private SimpleStringProperty index10;
     
+    public TableModel(){
+        this.index01 = new SimpleStringProperty("");
+        this.index02 = new SimpleStringProperty("");
+        this.index03 = new SimpleStringProperty("");
+        this.index04 = new SimpleStringProperty("");
+        this.index05 = new SimpleStringProperty("");
+        this.index06 = new SimpleStringProperty("");
+        this.index07 = new SimpleStringProperty("");
+        this.index08 = new SimpleStringProperty("");
+        this.index09 = new SimpleStringProperty("");
+        this.index10 = new SimpleStringProperty("");
+    
+    }
+    
     TableModel(String index01, String index02, String index03, String index04, String index05,
                 String index06, String index07, String index08, String index09, String index10){
         this.index01 = new SimpleStringProperty(index01);

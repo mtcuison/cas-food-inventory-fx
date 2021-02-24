@@ -51,6 +51,8 @@ public class FoodInventoryFX extends Application {
     public final static String pxeInvTransPosting = "InvTransPosting.fxml";
     public final static String pxeInvWaste = "InvWaste.fxml";
     public final static String pxeInvWasteReg = "InvWasteReg.fxml";
+    public final static String pxeInvAdjustment = "InvAdjustment.fxml";
+    public final static String pxeInvAdjustmentReg = "InvAdjustmentReg.fxml";
     
     /*Register*/
     public final static String pxePOReceivingReg = "POReceivingReg.fxml";
@@ -64,6 +66,7 @@ public class FoodInventoryFX extends Application {
 
     public static GRider poGRider;
     
+    @Override
     public void start(Stage stage) throws Exception {
         FXMLLoader fxmlLoader = new FXMLLoader();
         fxmlLoader.setLocation(getClass().getResource(pxeMainForm));
@@ -116,4 +119,11 @@ public class FoodInventoryFX extends Application {
     public void setGRider(GRider foGRider){
         this.poGRider = foGRider;
     }
+    
+    @Override
+    public void stop() throws Exception{
+        super.stop();
+        System.exit(0);
+    }
+
 }

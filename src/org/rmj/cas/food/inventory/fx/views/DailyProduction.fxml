@@ -112,7 +112,7 @@
                         <FontAwesomeIconView glyphName="SIGN_OUT" size="30" />
                      </graphic>
                   </Button>
-                  <Button fx:id="btnClose" alignment="BOTTOM_CENTER" contentDisplay="TOP" layoutX="128.0" layoutY="192.0" mnemonicParsing="false" prefHeight="60.0" prefWidth="90.0" text="Close" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="180.0">
+                  <Button fx:id="btnClose" alignment="BOTTOM_CENTER" contentDisplay="TOP" layoutX="128.0" layoutY="192.0" mnemonicParsing="false" prefHeight="60.0" prefWidth="90.0" text="Close" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="240.0">
                      <graphic>
                         <FontAwesomeIconView glyphName="POWER_OFF" size="30" />
                      </graphic>
@@ -135,6 +135,11 @@
                   <Button fx:id="btnBrowse" alignment="BOTTOM_CENTER" contentDisplay="TOP" layoutX="10.0" layoutY="1.0" mnemonicParsing="false" prefHeight="60.0" prefWidth="90.0" text="Browse" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <graphic>
                         <FontAwesomeIconView glyphName="FOLDER_OPEN" size="30" />
+                     </graphic>
+                  </Button>
+                  <Button fx:id="btnVoid" alignment="BOTTOM_CENTER" contentDisplay="TOP" layoutX="30.0" layoutY="186.0" mnemonicParsing="false" prefHeight="60.0" prefWidth="90.0" text="Void" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="180.0">
+                     <graphic>
+                        <FontAwesomeIconView glyphName="BAN" size="30" />
                      </graphic>
                   </Button>
                   <Separator layoutX="73.0" layoutY="120.0" minWidth="1.0" orientation="VERTICAL" prefHeight="200.0" prefWidth="1.0" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="1.0" AnchorPane.topAnchor="0.0" />

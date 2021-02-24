@@ -81,6 +81,7 @@ public class PurchaseOrderController implements Initializable {
         poTrans = new XMPurchaseOrder(poGRider, poGRider.getBranchCode(), false);
         poTrans.setTranStat(0);
         poTrans.setCallBack(poCallBack);
+        poTrans.setClientNm(System.getProperty("user.name"));
                 
         /*Set action event handler for the buttons*/
         btnCancel.setOnAction(this::cmdButton_Click);
@@ -210,8 +211,8 @@ public class PurchaseOrderController implements Initializable {
         index01.setPrefWidth(30);
         index02.setPrefWidth(110);
         index03.setPrefWidth(200);
-        index04.setPrefWidth(50); index04.setStyle("-fx-alignment: CENTER-RIGHT;");
-        index05.setPrefWidth(80); index05.setStyle("-fx-alignment: CENTER-RIGHT;");
+        index04.setPrefWidth(45); index04.setStyle("-fx-alignment: CENTER-RIGHT;");
+        index05.setPrefWidth(75); index05.setStyle("-fx-alignment: CENTER-RIGHT;");
         
         index01.setSortable(false); index01.setResizable(false);
         index02.setSortable(false); index02.setResizable(false);
@@ -390,6 +391,7 @@ public class PurchaseOrderController implements Initializable {
         initButton(pnEditMode);
     }
     
+    
     private void loadRecord(){
         txtField01.setText((String) poTrans.getMaster(1));
         txtField03.setText(CommonUtils.xsDateMedium((Date) poTrans.getMaster(3)));
@@ -474,11 +476,29 @@ public class PurchaseOrderController implements Initializable {
             case F3:
                 switch (lnIndex){
                 case 2: /*sBranchCd*/
+                    if (!poTrans.SearchMaster(lnIndex, txtField.getText(), false)==true){
+                        txtField.setText("");
+                    }
+                    break;
                 case 5: /*sDestinat*/
+                    if (!poTrans.SearchMaster(lnIndex, txtField.getText(), false)==true){
+                        txtField.setText("");
+                    }
+                    break;
                 case 6: /*sSupplier*/
+                    if (!poTrans.SearchMaster(lnIndex, txtField.getText(), false)==true){
+                        txtField.setText("");
+                    }
+                    break;
                 case 8: /*sTermCode*/
+                    if (!poTrans.SearchMaster(lnIndex, txtField.getText(), false)==true){
+                        txtField.setText("");
+                    }
+                    break;
                 case 16: /*sInvTypCd*/
-                    poTrans.SearchMaster(lnIndex, txtField.getText(), false);
+                    if (!poTrans.SearchMaster(lnIndex, txtField.getText(), false)==true){
+                        txtField.setText("");
+                    }
                     break;
                 case 50: /*ReferNox*/
                     if(poTrans.BrowseRecord(txtField.getText(), true)==true){
@@ -529,7 +549,7 @@ public class PurchaseOrderController implements Initializable {
                     
                     if (lsValue.isEmpty()) return;
                     
-                    loJSON = poTrans.SearchDetail(pnRow, 3, lsValue, false, false);
+                    loJSON = poTrans.SearchDetail(pnRow, 3, lsValue, true, true);
                     
                     if (loJSON != null){
                         psBarCodex = (String) loJSON.get("sBarCodex");
@@ -539,10 +559,9 @@ public class PurchaseOrderController implements Initializable {
                     }
                 } else if (lnIndex == 80){
                     lsValue = txtDetail.getText();
-                    
                     if (lsValue.isEmpty()) return;
                     
-                    loJSON = poTrans.SearchDetail(pnRow, 3, lsValue, true, false);
+                    loJSON = poTrans.SearchDetail(pnRow, 3, lsValue, false, false);
                     if (loJSON != null){
                         psBarCodex = (String) loJSON.get("sBarCodex");
                         psDescript = (String) loJSON.get("sDescript");

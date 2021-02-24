@@ -2,8 +2,8 @@ package org.rmj.cas.food.inventory.fx.views;
 
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import java.net.URL;
-import java.sql.SQLException;
 import java.text.ParseException;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.ResourceBundle;
 import javafx.beans.property.ReadOnlyBooleanPropertyBase;
@@ -82,8 +82,7 @@ public class POReturnController implements Initializable {
     @FXML private ImageView imgTranStat1;
     @FXML private TextField txtField50;
     @FXML private TextField txtField51;
-    @FXML
-    private TextField txtDetail08;
+    @FXML private TextField txtDetail08;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -127,6 +126,7 @@ public class POReturnController implements Initializable {
         txtDetail05.focusedProperty().addListener(txtDetail_Focus);
         txtDetail06.focusedProperty().addListener(txtDetail_Focus);
         txtDetail07.focusedProperty().addListener(txtDetail_Focus);
+        txtDetail08.focusedProperty().addListener(txtDetail_Focus);
         txtDetail80.focusedProperty().addListener(txtDetail_Focus);
                 
         /*Add keypress event for field with search*/
@@ -148,6 +148,7 @@ public class POReturnController implements Initializable {
         txtDetail05.setOnKeyPressed(this::txtDetail_KeyPressed);
         txtDetail06.setOnKeyPressed(this::txtDetail_KeyPressed);
         txtDetail07.setOnKeyPressed(this::txtDetail_KeyPressed);
+        txtDetail08.setOnKeyPressed(this::txtDetail_KeyPressed);
         txtDetail80.setOnKeyPressed(this::txtDetail_KeyPressed);
         
         Combo04.setOnKeyPressed(this::ComboBox_KeyPressed);
@@ -408,7 +409,7 @@ public class POReturnController implements Initializable {
         if (loInv != null) txtField18.setText((String) loInv.getMaster("sDescript"));
         
         XMDepartment loDept = poTrans.GetDepartment((String)poTrans.getMaster(27), true);
-        if (loBranch != null) txtField27.setText((String) loBranch.getMaster("sDeptName"));
+        if (loDept != null) txtField27.setText((String) loDept.getMaster("sDeptName"));
 
         txtField07.setText(CommonUtils.NumberFormat(Double.valueOf(poTrans.getMaster(7).toString()), "0.00"));
         txtField09.setText(CommonUtils.NumberFormat(Double.valueOf(poTrans.getMaster(9).toString()), "0.00"));
@@ -456,6 +457,7 @@ public class POReturnController implements Initializable {
         txtDetail05.setText("0");
         txtDetail06.setText("0.00");
         txtDetail07.setText("0.00");
+        txtDetail08.setText(CommonUtils.xsDateLong((Date) java.sql.Date.valueOf(LocalDate.now())));
         
         
         Label06.setText("0.00");
@@ -491,8 +493,8 @@ public class POReturnController implements Initializable {
                 case 5: /*sSupplier*/
                 case 18: /*sInvTypCd*/
                 case 27: /*sDeptIDxx*/
-                    if (poTrans.SearchMaster(lnIndex, txtField.getText(), false))
-                        CommonUtils.SetNextFocus(txtField);
+                    if (poTrans.SearchMaster(lnIndex, txtField.getText(), false)==true)CommonUtils.SetNextFocus(txtField);
+                    else txtField.setText("");
                     return;
                 case 16: /*sPOTransx*/
                     if (poTrans.SearchMaster(lnIndex, txtField.getText(), false))
@@ -553,22 +555,34 @@ public class POReturnController implements Initializable {
             case F3:
                 switch (lnIndex){
                     case 3:
+                        loJSON = poTrans.SearchDetail(pnRow, 3, lsValue, true, true);
+                        if (loJSON != null){
+                            psBarCodex = (String) loJSON.get("sBarCodex");
+                            psDescript = (String) loJSON.get("sDescript");
+                            txtDetail03.setText(psBarCodex);
+                            txtDetail80.setText(psDescript);
+                            if (loJSON.get("nQuantity")!=null){
+                                txtDetail05.setText(String.valueOf(loJSON.get("nQuantity")));
+                                txtDetail08.setText(CommonUtils.toDate((String) loJSON.get("dExpiryDt")).toString());
+                                txtDetail06.setText(String.valueOf(loJSON.get("xUnitPrce")));
+                                txtDetail07.setText(String.valueOf(loJSON.get("nFreightx")));
+                            }
+                            loadDetail();
+                        }
+                        break;
+                    case 80:
                         loJSON = poTrans.SearchDetail(pnRow, 3, lsValue, false, false);
                         if (loJSON != null){
                             psBarCodex = (String) loJSON.get("sBarCodex");
                             psDescript = (String) loJSON.get("sDescript");
                             txtDetail03.setText(psBarCodex);
                             txtDetail80.setText(psDescript);
-                            loadDetail();
-                        }
-                        break;
-                    case 80:
-                        loJSON = poTrans.SearchDetail(pnRow, 3, lsValue, true, false);
-                        if (loJSON != null){
-                            psBarCodex = (String) loJSON.get("sBarCodex");
-                            psDescript = (String) loJSON.get("sDescript");
-                            txtDetail03.setText(psBarCodex);
-                            txtDetail80.setText(psDescript);
+                            if (loJSON.get("nQuantity")!=null){
+                                txtDetail05.setText((String) loJSON.get("nQuantity"));
+                                txtDetail08.setText(CommonUtils.toDate((String) loJSON.get("dExpiryDt")).toString());
+                                txtDetail06.setText(String.valueOf(loJSON.get("xUnitPrce")));
+                                txtDetail07.setText(String.valueOf(loJSON.get("nFreightx")));
+                            }
                             loadDetail();
                         }
                         break;
@@ -685,9 +699,15 @@ public class POReturnController implements Initializable {
                         loadDetail();
                         break;
                     case "Combo28":
-                        if (loField.getSelectionModel().getSelectedIndex() != cDivision.size() -1){
-                            poTrans.setMaster("cDivision", String.valueOf(loField.getSelectionModel().getSelectedIndex()));
-                        } else poTrans.setMaster("cDivision", "");
+                        String sDivision = (String) loField.getValue();
+//                        if (loField.getSelectionModel().getSelectedIndex() != cDivision.size() -1){
+//                            poTrans.setMaster("cDivision", String.valueOf(loField.getSelectionModel().getSelectedIndex()));
+//                        } else poTrans.setMaster("cDivision", "");
+                        if(!cDivision.contains(sDivision)){
+                        Combo28.getSelectionModel().select(0);
+                    }
+                    Combo28.getSelectionModel().getSelectedIndex();
+                    poTrans.setMaster("cDivision", String.valueOf(loField.getSelectionModel().getSelectedIndex()));
                 }
         }         
     };
@@ -756,6 +776,7 @@ public class POReturnController implements Initializable {
                         txtField.requestFocus(); 
                     } 
                     poTrans.setDetail(pnRow, lnIndex, x);
+                    break;
                 case 8: /*dExpiryDt*/
                         if (CommonUtils.isDate(txtField.getText(), pxeDateFormat)){
                             poTrans.setDetail(pnRow, "dExpiryDt", CommonUtils.toDate(txtField.getText()));
@@ -810,15 +831,73 @@ public class POReturnController implements Initializable {
                     }
                     return;
                 case 7: /*nVATRatex*/
+                    double a = 0.00;
+                    try {
+                        /*this must be numeric*/
+                        a = Double.parseDouble(lsValue);
+                    } catch (Exception e) {
+                        ShowMessageFX.Warning("Please input numbers only.", pxeModuleName, e.getMessage());
+                        txtField.requestFocus(); 
+                    }
+                    poTrans.setMaster(lnIndex, a);
+                    break;
                 case 9: /*nDiscount*/
-                    poTrans.setMaster(lnIndex, Double.parseDouble(txtField.getText()));
+//                    poTrans.setMaster(lnIndex, Double.parseDouble(txtField.getText()));
+                   double b = 0.00;
+                    try {
+                        /*this must be numeric*/
+                        b = Double.parseDouble(lsValue);
+                    } catch (Exception e) {
+                        ShowMessageFX.Warning("Please input numbers only.", pxeModuleName, e.getMessage());
+                        txtField.requestFocus(); 
+                    }
+                    poTrans.setMaster(lnIndex, b);
                     break;
                 case 8: /*nTWithHld*/
-                case 10: /*nAddDiscx*/
-                case 11: /*nFreightx*/
-                case 13: /*nAmtPaidx*/
-                    poTrans.setMaster(lnIndex, Double.parseDouble(txtField.getText()));
+                    double c = 0.00;
+                    try {
+                        /*this must be numeric*/
+                        c = Double.parseDouble(lsValue);
+                    } catch (Exception e) {
+                        ShowMessageFX.Warning("Please input numbers only.", pxeModuleName, e.getMessage());
+                        txtField.requestFocus(); 
+                    }
+                    poTrans.setMaster(lnIndex, c);
                     break;
+                case 10: /*nAddDiscx*/
+                    double d = 0.00;
+                    try {
+                        /*this must be numeric*/
+                        d = Double.parseDouble(lsValue);
+                    } catch (Exception e) {
+                        ShowMessageFX.Warning("Please input numbers only.", pxeModuleName, e.getMessage());
+                        txtField.requestFocus(); 
+                    }
+                    poTrans.setMaster(lnIndex, d);
+                    break;
+                case 11: /*nFreightx*/
+                    double f = 0.00;
+                    try {
+                        /*this must be numeric*/
+                        f = Double.parseDouble(lsValue);
+                    } catch (Exception e) {
+                        ShowMessageFX.Warning("Please input numbers only.", pxeModuleName, e.getMessage());
+                        txtField.requestFocus(); 
+                    }
+                    poTrans.setMaster(lnIndex, f);
+                    break;
+                case 13: /*nAmtPaidx*/
+                    double g = 0.00;
+                    try {
+                        /*this must be numeric*/
+                        g = Double.parseDouble(lsValue);
+                    } catch (Exception e) {
+                        ShowMessageFX.Warning("Please input numbers only.", pxeModuleName, e.getMessage());
+                        txtField.requestFocus(); 
+                    }
+                    poTrans.setMaster(lnIndex, g);
+                    break;
+//                    poTrans.setMaster(lnIndex, Double.parseDouble(txtField.getText()));
                 case 50:
                 case 51:
                     return;
@@ -855,7 +934,7 @@ public class POReturnController implements Initializable {
                 case 3:
                     break;
                 case 5:
-                    txtField05.setText(String.valueOf(poTrans.getDetail(pnRow, fnIndex)));
+                    txtDetail05.setText(String.valueOf(poTrans.getDetail(pnRow, fnIndex)));
                     loadDetail();
                     
                     if (!poTrans.getDetail(poTrans.getDetailCount() - 1, "sStockIDx").toString().isEmpty() && 
@@ -873,9 +952,17 @@ public class POReturnController implements Initializable {
                     }
                     break;
                 case 6:
-                case 7:
-                    txtField07.setText(CommonUtils.NumberFormat(Double.valueOf(poTrans.getDetail(pnRow, fnIndex).toString()), "0.00"));
+                    txtDetail06.setText(CommonUtils.NumberFormat(Double.valueOf(poTrans.getDetail(pnRow, fnIndex).toString()), "0.00"));
                     loadDetail();
+                    break;
+                case 7:
+                    txtDetail07.setText(CommonUtils.NumberFormat(Double.valueOf(poTrans.getDetail(pnRow, fnIndex).toString()), "0.00"));
+                    loadDetail();
+                    break;
+                case 8:
+                    txtDetail08.setText(CommonUtils.xsDateLong((Date)poTrans.getDetail(pnRow,"dExpiryDt")));
+                    loadDetail();
+                    break;
             }
         }
     };
@@ -891,8 +978,9 @@ public class POReturnController implements Initializable {
             if (loSupplier != null) txtField05.setText((String) loSupplier.get("sClientNm"));
             break;
         case 16:
-            XMPOReceiving loPORec = poTrans.GetPOReceving((String)poTrans.getMaster(fnIndex), true);
-            if (loPORec != null) txtField16.setText((String) loPORec.getMaster("sReferNox"));
+//            XMPOReceiving loPORec = poTrans.GetPOReceving((String)poTrans.getMaster(fnIndex), true);
+//            if (loPORec != null) txtField16.setText((String) loPORec.getMaster("sTransNox"));
+            txtField16.setText((String) poTrans.getMaster("sPOTransx"));
             break;
         case 18:
             XMInventoryType loInv = poTrans.GetInventoryType((String)poTrans.getMaster(fnIndex), true);

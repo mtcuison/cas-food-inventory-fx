@@ -99,6 +99,7 @@ public class POReceivingController implements Initializable {
         poTrans = new XMPOReceiving(poGRider, poGRider.getBranchCode(), false);
         poTrans.setTranStat(10);
         poTrans.setCallBack(poCallBack);
+        poTrans.setClientNm(System.getProperty("user.name"));
                 
         /*Set action event handler for the buttons*/
         btnCancel.setOnAction(this::cmdButton_Click);
@@ -573,12 +574,29 @@ public class POReceivingController implements Initializable {
         if (event.getCode() == F3){
             switch (lnIndex){
                 case 2: /*sBranchCd*/
+                    if (poTrans.SearchMaster(lnIndex, lsValue, false)){
+                         CommonUtils.SetNextFocus(txtField);
+                    }else txtField.setText("");
+                    return;
                 case 5: /*sSupplier*/
-                case 8: /*sTermCode*/
-                case 20: /*sInvTypCd*/
-                case 29: /*sDeptIDxx*/
-                    if (poTrans.SearchMaster(lnIndex, lsValue, false))
+                    if (poTrans.SearchMaster(lnIndex, lsValue, false)){
                         CommonUtils.SetNextFocus(txtField);
+                    }else txtField.setText("");
+                    return;
+                case 8: /*sTermCode*/
+                    if (poTrans.SearchMaster(lnIndex, lsValue, false)){
+                        CommonUtils.SetNextFocus(txtField);
+                    }else txtField.setText("");
+                    return;
+                case 20: /*sInvTypCd*/
+                    if (poTrans.SearchMaster(lnIndex, lsValue, false)){
+                        CommonUtils.SetNextFocus(txtField);
+                    }else txtField.setText("");
+                    return;
+                case 29: /*sDeptIDxx*/
+                    if (poTrans.SearchMaster(lnIndex, lsValue, false)){
+                        CommonUtils.SetNextFocus(txtField);
+                    }else txtField.setText("");
                     return;
                 case 50: /*ReferNox*/
                     if(poTrans.BrowseRecord(lsValue, true)==true){
@@ -645,7 +663,9 @@ public class POReceivingController implements Initializable {
             switch (lnIndex){
                 case 3:                    
                     loJSON = poTrans.SearchDetail(pnRow, 3, lsValue, false, false);                  
-                    if (loJSON != null) txtDetail03.setText((String) loJSON.get("sTransNox"));
+                    if (loJSON != null){
+                        txtDetail03.setText((String) loJSON.get("sTransNox"));
+                    }
                     break;
                 case 4:
                     loJSON = poTrans.SearchDetail(pnRow, 4, lsValue, false, false);
@@ -1045,6 +1065,7 @@ public class POReceivingController implements Initializable {
                 case 9:
                     txtDetail09.setText(CommonUtils.NumberFormat(Double.valueOf(poTrans.getDetail(pnRow, fnIndex).toString()), "0.00"));
                     loadDetail();
+                    break;
                 case 10:
                     txtDetail10.setText(CommonUtils.xsDateMedium((Date) poTrans.getDetail(pnRow, fnIndex)));
                     loadDetail();

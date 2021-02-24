@@ -10,6 +10,8 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.ResourceBundle;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.animation.Animation;
@@ -37,8 +39,11 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.stage.Modality;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
+import org.controlsfx.control.Notifications;
 import org.rmj.appdriver.GRider;
 import org.rmj.appdriver.MiscUtil;
 import org.rmj.appdriver.SQLUtil;
@@ -115,6 +120,8 @@ public class MDIMainController implements Initializable {
     @FXML private Menu mnuHistory;
     @FXML private Menu mnuSettings;
     @FXML private AnchorPane mnuMain;
+    @FXML private MenuItem menu_InvAdjustment;
+    @FXML private MenuItem mnu_InvAdjustmentReg;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -179,10 +186,16 @@ public class MDIMainController implements Initializable {
         Tooltip.install(btnExit, new Tooltip("Exit"));
         Tooltip.install(btnMinimize, new Tooltip("Minimize"));
         Tooltip.install(btnRestoreDown, new Tooltip("Restore down"));
+        poTrans.setGRider(poGRider);
         getTime();
         lblCompany.setText(poGRider.getClientName());
         loadRecord();
+        
+        Timer timer = new Timer();
+        timer.schedule(poTrans, 5000, DEFAULT_TIMEOUT);
+
     }
+    
     
     public void loadRecord(){
         ResultSet name;
@@ -407,6 +420,17 @@ public class MDIMainController implements Initializable {
                 SerialUploadController loUpload = new SerialUploadController();
                 loUpload.setGRider(poGRider);
                 return loUpload;
+            
+            case FoodInventoryFX.pxeInvAdjustment:
+                InvAdjustmentController loInvAdjustment = new InvAdjustmentController();
+                loInvAdjustment.setGRider(poGRider);
+                return loInvAdjustment;
+            
+            case FoodInventoryFX.pxeInvAdjustmentReg:
+                InvAdjustmentRegController loInvAdjustmentReg = new InvAdjustmentRegController();
+                loInvAdjustmentReg.setGRider(poGRider);
+                return loInvAdjustmentReg;
+                
             default:
                 return null;
         }
@@ -608,6 +632,17 @@ public class MDIMainController implements Initializable {
             }
         }     
     }
+
+    @FXML
+    private void menu_InvAdjustment_Click(ActionEvent event) throws IOException {
+        setDataPane(fadeAnimate(FoodInventoryFX.pxeInvAdjustment));
+    }
+
+    @FXML
+    private void mnu_InvAdjustmentReg_Click(ActionEvent event) throws IOException {
+        setDataPane(fadeAnimate(FoodInventoryFX.pxeInvAdjustmentReg));
+    }
+
        
     public static class MouseGestures {
         class DragContext {
@@ -645,9 +680,10 @@ public class MDIMainController implements Initializable {
     }
     
     public void setGRider(GRider foGRider){this.poGRider = foGRider;}
-    
+    final long DEFAULT_TIMEOUT = 60000;
     private final String pxeModuleName = "Pedritos Integrated System";
     private static GRider poGRider;
+   
     
     public boolean changeTheme(){
         if(chkLight.isSelected()){
@@ -819,4 +855,7 @@ public class MDIMainController implements Initializable {
                 return null;
         }
     }
+    
+    TimerDashBoard poTrans = new TimerDashBoard();
+    
 }

@@ -40,7 +40,6 @@ import org.rmj.purchasing.agent.XMPurchaseOrder;
 
 
 public class PurchaseOrderRegController implements Initializable {
-
     @FXML private VBox VBoxForm;
     @FXML private Button btnExit;
     @FXML private FontAwesomeIconView glyphExit;
@@ -72,6 +71,7 @@ public class PurchaseOrderRegController implements Initializable {
         
         poTrans = new XMPurchaseOrder(poGRider, poGRider.getBranchCode(), false);
         poTrans.setTranStat(1230);
+        poTrans.setClientNm(System.getProperty("user.name"));
         
         btnClose.setOnAction(this::cmdButton_Click);
         btnExit.setOnAction(this::cmdButton_Click);
@@ -177,8 +177,8 @@ public class PurchaseOrderRegController implements Initializable {
         index01.setPrefWidth(30);
         index02.setPrefWidth(110);
         index03.setPrefWidth(200);
-        index04.setPrefWidth(50); index04.setStyle("-fx-alignment: CENTER-RIGHT;");
-        index05.setPrefWidth(80); index05.setStyle("-fx-alignment: CENTER-RIGHT;");
+        index04.setPrefWidth(45); index04.setStyle("-fx-alignment: CENTER-RIGHT;");
+        index05.setPrefWidth(75); index05.setStyle("-fx-alignment: CENTER-RIGHT;");
         
         index01.setSortable(false); index01.setResizable(false);
         index02.setSortable(false); index02.setResizable(false);
@@ -266,6 +266,7 @@ public class PurchaseOrderRegController implements Initializable {
         txtField03.setText(CommonUtils.xsDateMedium((Date) poTrans.getMaster(3)));
         txtField07.setText((String) poTrans.getMaster(7));
         txtField50.setText((String) poTrans.getMaster(7));
+        psReferNox = (String) poTrans.getMaster(7);
         txtField10.setText((String) poTrans.getMaster(10));
 
         XMBranch loBranch = poTrans.GetBranch((String)poTrans.getMaster(2), true);
@@ -333,6 +334,7 @@ public class PurchaseOrderRegController implements Initializable {
         myBox.getChildren().clear();
     }
     
+    
     public void setGRider(GRider foGRider){this.poGRider = foGRider;}
     
     private final String pxeModuleName = "POReceivingRegController";
@@ -391,11 +393,11 @@ public class PurchaseOrderRegController implements Initializable {
         if (event.getCode() == ENTER || event.getCode() == F3){
             switch (lnIndex){
                 case 50: /*sTransNox*/
-                       if(event.getCode() == F3) lsValue = txtField.getText() + "%";
                             if(poTrans.BrowseRecord(lsValue, true)==true){
                                  loadRecord(); 
                                  pnEditMode = poTrans.getEditMode();
                              }
+                            
                             if(!txtField50.getText().equals(psReferNox)){
                                  clearFields();
                                  break;
@@ -418,7 +420,7 @@ public class PurchaseOrderRegController implements Initializable {
                                  }
                         return;
             }
-        } 
+        }
         
         switch (event.getCode()){
         case ENTER:

@@ -15,9 +15,9 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox fx:id="VBoxForm" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="451.0" prefWidth="1022.0" stylesheets="@../styles/Register.css" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1">
+<VBox fx:id="VBoxForm" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="533.0" prefWidth="1022.0" stylesheets="@../styles/Register.css" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <AnchorPane minHeight="-Infinity" minWidth="-Infinity">
+      <AnchorPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="533.0" prefWidth="1022.0">
          <children>
             <AnchorPane prefHeight="30.0" prefWidth="1022.0" style="-fx-background-color: #000000;">
                <children>
@@ -59,7 +59,7 @@
                   <TextField fx:id="txtField51" layoutX="544.0" layoutY="6.0" prefHeight="27.0" prefWidth="254.0" promptText="Press F3 to search" />
                </children>
             </AnchorPane>
-            <AnchorPane prefHeight="421.0" prefWidth="90.0" style="-fx-background-color: #686868;" AnchorPane.topAnchor="30.0">
+            <AnchorPane prefHeight="504.0" prefWidth="90.0" style="-fx-background-color: #686868;" AnchorPane.topAnchor="30.0">
                <children>
                   <Button fx:id="btnVoid" alignment="BOTTOM_CENTER" contentDisplay="TOP" layoutY="60.0" mnemonicParsing="false" prefHeight="60.0" prefWidth="90.0" text="Void" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="60.0">
                      <graphic>
@@ -84,36 +84,41 @@
                   <Separator layoutX="88.0" maxWidth="1.0" minWidth="1.0" orientation="VERTICAL" prefHeight="596.0" prefWidth="0.0" AnchorPane.bottomAnchor="0.0" AnchorPane.topAnchor="0.0" />
                </children>
             </AnchorPane>
-            <AnchorPane fx:id="anchorField" prefWidth="932.0" style="-fx-background-color: #B3B6B7;" AnchorPane.leftAnchor="90.0" AnchorPane.topAnchor="73.0">
+            <AnchorPane fx:id="anchorField" prefHeight="460.0" prefWidth="932.0" style="-fx-background-color: #B3B6B7;" AnchorPane.leftAnchor="90.0" AnchorPane.topAnchor="73.0">
                <children>
-                  <Label layoutX="14.0" layoutY="14.0" text="Transaction No.">
+                  <Label layoutX="120.0" layoutY="23.0" prefHeight="30.0" prefWidth="149.0" style="-fx-background-color: #000000;">
                      <font>
                         <Font name="System Bold" size="12.0" />
                      </font>
                   </Label>
-                  <TextField fx:id="txtField01" disable="true" editable="false" layoutX="111.0" layoutY="10.0" />
-                  <Label alignment="CENTER_RIGHT" layoutX="14.0" layoutY="49.0" prefHeight="17.0" prefWidth="90.0" text="Date" />
-                  <TextField fx:id="txtField03" disable="true" layoutX="111.0" layoutY="45.0" prefHeight="25.0" prefWidth="149.0" />
-                  <Label alignment="CENTER_RIGHT" layoutX="14.0" layoutY="76.0" prefHeight="17.0" prefWidth="90.0" text="Branch" textAlignment="RIGHT" />
-                  <TextField fx:id="txtField02" disable="true" layoutX="111.0" layoutY="72.0" prefHeight="25.0" prefWidth="315.0" promptText="Press F3 to search" />
-                  <Label alignment="CENTER_RIGHT" layoutX="14.0" layoutY="103.0" prefHeight="17.0" prefWidth="90.0" text="Destination" textAlignment="RIGHT" />
-                  <TextField fx:id="txtField05" disable="true" layoutX="111.0" layoutY="99.0" prefHeight="25.0" prefWidth="315.0" promptText="Press F3 to search" />
-                  <Label alignment="CENTER_RIGHT" layoutX="14.0" layoutY="130.0" prefHeight="17.0" prefWidth="90.0" text="Supplier" textAlignment="RIGHT" />
-                  <TextField fx:id="txtField06" disable="true" layoutX="111.0" layoutY="126.0" prefHeight="25.0" prefWidth="315.0" promptText="Press F3 to search" />
-                  <Label alignment="CENTER_RIGHT" layoutX="14.0" layoutY="157.0" prefHeight="17.0" prefWidth="90.0" text="Reference No." />
-                  <TextField fx:id="txtField07" disable="true" layoutX="111.0" layoutY="153.0" prefHeight="25.0" prefWidth="149.0" />
-                  <Label alignment="CENTER_RIGHT" layoutX="14.0" layoutY="184.0" prefHeight="17.0" prefWidth="90.0" text="Term" />
-                  <TextField fx:id="txtField08" disable="true" layoutX="111.0" layoutY="180.0" prefHeight="25.0" prefWidth="149.0" promptText="Press F3 to search" />
-                  <Label alignment="CENTER_RIGHT" layoutX="14.0" layoutY="211.0" prefHeight="17.0" prefWidth="90.0" text="Inventory Type" textAlignment="RIGHT" />
-                  <TextField fx:id="txtField16" disable="true" layoutX="111.0" layoutY="207.0" prefHeight="25.0" prefWidth="315.0" promptText="Press F3 to search" />
-                  <Label alignment="CENTER_RIGHT" layoutX="14.0" layoutY="238.0" prefHeight="17.0" prefWidth="90.0" text="Remarks" textAlignment="RIGHT" />
-                  <TextArea fx:id="txtField10" disable="true" layoutX="111.0" layoutY="234.0" prefHeight="75.0" prefWidth="315.0" />
-                  <Label layoutX="111.0" layoutY="333.0" text="Order Total">
+                  <Label layoutX="14.0" layoutY="24.0" text="Transaction No.">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font>
+                  </Label>
+                  <TextField fx:id="txtField01" disable="true" editable="false" layoutX="111.0" layoutY="20.0" />
+                  <Label alignment="CENTER_RIGHT" layoutX="14.0" layoutY="81.0" prefHeight="17.0" prefWidth="90.0" text="Date" />
+                  <TextField fx:id="txtField03" disable="true" layoutX="111.0" layoutY="77.0" prefHeight="25.0" prefWidth="149.0" />
+                  <Label alignment="CENTER_RIGHT" layoutX="14.0" layoutY="109.0" prefHeight="17.0" prefWidth="90.0" text="Branch" textAlignment="RIGHT" />
+                  <TextField fx:id="txtField02" disable="true" layoutX="111.0" layoutY="105.0" prefHeight="25.0" prefWidth="315.0" promptText="Press F3 to search" />
+                  <Label alignment="CENTER_RIGHT" layoutX="14.0" layoutY="137.0" prefHeight="17.0" prefWidth="90.0" text="Destination" textAlignment="RIGHT" />
+                  <TextField fx:id="txtField05" disable="true" layoutX="111.0" layoutY="133.0" prefHeight="25.0" prefWidth="315.0" promptText="Press F3 to search" />
+                  <Label alignment="CENTER_RIGHT" layoutX="14.0" layoutY="166.0" prefHeight="17.0" prefWidth="90.0" text="Supplier" textAlignment="RIGHT" />
+                  <TextField fx:id="txtField06" disable="true" layoutX="111.0" layoutY="161.0" prefHeight="25.0" prefWidth="315.0" promptText="Press F3 to search" />
+                  <Label alignment="CENTER_RIGHT" layoutX="14.0" layoutY="193.0" prefHeight="17.0" prefWidth="90.0" text="Reference No." />
+                  <TextField fx:id="txtField07" disable="true" layoutX="111.0" layoutY="189.0" prefHeight="25.0" prefWidth="149.0" />
+                  <Label alignment="CENTER_RIGHT" layoutX="14.0" layoutY="221.0" prefHeight="17.0" prefWidth="90.0" text="Term" />
+                  <TextField fx:id="txtField08" disable="true" layoutX="111.0" layoutY="217.0" prefHeight="25.0" prefWidth="149.0" promptText="Press F3 to search" />
+                  <Label alignment="CENTER_RIGHT" layoutX="14.0" layoutY="249.0" prefHeight="17.0" prefWidth="90.0" text="Inventory Type" textAlignment="RIGHT" />
+                  <TextField fx:id="txtField16" disable="true" layoutX="111.0" layoutY="245.0" prefHeight="25.0" prefWidth="315.0" promptText="Press F3 to search" />
+                  <Label alignment="CENTER_RIGHT" layoutX="14.0" layoutY="277.0" prefHeight="17.0" prefWidth="90.0" text="Remarks" textAlignment="RIGHT" />
+                  <TextArea fx:id="txtField10" disable="true" layoutX="111.0" layoutY="273.0" prefHeight="75.0" prefWidth="315.0" />
+                  <Label layoutX="111.0" layoutY="421.0" text="Order Total">
                      <font>
                         <Font name="System Bold" size="18.0" />
                      </font>
                   </Label>
-                  <Label fx:id="Label09" alignment="CENTER_RIGHT" layoutX="221.0" layoutY="329.0" prefHeight="35.0" prefWidth="205.0" style="-fx-background-color: #4d5656;" text="1,000,000.00" textFill="#ff6200" AnchorPane.rightAnchor="506.0">
+                  <Label fx:id="Label09" alignment="CENTER_RIGHT" layoutX="221.0" layoutY="417.0" prefHeight="35.0" prefWidth="205.0" style="-fx-background-color: #4d5656;" text="1,000,000.00" textFill="#ff6200" AnchorPane.rightAnchor="506.0">
                      <font>
                         <Font name="System Bold Italic" size="24.0" />
                      </font>
@@ -121,20 +126,20 @@
                         <Insets left="10.0" right="10.0" />
                      </padding>
                   </Label>
-                  <Label alignment="CENTER_RIGHT" layoutX="453.0" layoutY="14.0" prefHeight="17.0" prefWidth="69.0" text="Barcode" />
-                  <TextField fx:id="txtDetail03" disable="true" layoutX="529.0" layoutY="10.0" prefHeight="25.0" prefWidth="149.0" promptText="Press F3 to search" />
-                  <Label alignment="CENTER_RIGHT" layoutX="453.0" layoutY="41.0" prefHeight="17.0" prefWidth="69.0" text="Description" />
-                  <TextField fx:id="txtDetail80" disable="true" layoutX="529.0" layoutY="37.0" prefHeight="25.0" prefWidth="315.0" promptText="Press F3 to search" />
-                  <Label alignment="CENTER_RIGHT" layoutX="453.0" layoutY="68.0" prefHeight="17.0" prefWidth="69.0" text="Quantity" />
-                  <TextField fx:id="txtDetail04" alignment="CENTER_RIGHT" disable="true" layoutX="529.0" layoutY="64.0" prefHeight="25.0" prefWidth="69.0" />
-                  <Separator layoutX="436.0" orientation="VERTICAL" prefHeight="377.0" prefWidth="0.0" style="-fx-background-color: black;" />
-                  <TableView fx:id="table" focusTraversable="false" layoutX="451.0" layoutY="94.0" onMouseClicked="#table_Clicked" prefHeight="271.0" prefWidth="472.0" stylesheets="@../styles/Tables.css">
+                  <Label alignment="CENTER_RIGHT" layoutX="453.0" layoutY="105.0" prefHeight="17.0" prefWidth="69.0" text="Barcode" />
+                  <TextField fx:id="txtDetail03" disable="true" layoutX="529.0" layoutY="101.0" prefHeight="25.0" prefWidth="149.0" promptText="Press F3 to search" />
+                  <Label alignment="CENTER_RIGHT" layoutX="453.0" layoutY="133.0" prefHeight="17.0" prefWidth="69.0" text="Description" />
+                  <TextField fx:id="txtDetail80" disable="true" layoutX="529.0" layoutY="129.0" prefHeight="25.0" prefWidth="315.0" promptText="Press F3 to search" />
+                  <Label alignment="CENTER_RIGHT" layoutX="453.0" layoutY="161.0" prefHeight="17.0" prefWidth="69.0" text="Quantity" />
+                  <TextField fx:id="txtDetail04" alignment="CENTER_RIGHT" disable="true" layoutX="529.0" layoutY="157.0" prefHeight="25.0" prefWidth="69.0" />
+                  <Separator layoutX="436.0" orientation="VERTICAL" prefHeight="460.0" prefWidth="1.0" style="-fx-background-color: black;" />
+                  <TableView fx:id="table" focusTraversable="false" layoutX="451.0" layoutY="187.0" onMouseClicked="#table_Clicked" prefHeight="271.0" prefWidth="472.0" stylesheets="@../styles/Tables.css">
                      <columns>
                         <TableColumn prefWidth="75.0" text="C1" />
                         <TableColumn prefWidth="75.0" text="C2" />
                      </columns>
                   </TableView>
-                  <ImageView fx:id="imgTranStat" fitHeight="32.0" fitWidth="162.0" layoutX="263.0" layoutY="11.0" pickOnBounds="true" preserveRatio="true" />
+                  <ImageView fx:id="imgTranStat" fitHeight="32.0" fitWidth="162.0" layoutX="757.0" layoutY="15.0" pickOnBounds="true" preserveRatio="true" />
                </children>
             </AnchorPane>
          </children>

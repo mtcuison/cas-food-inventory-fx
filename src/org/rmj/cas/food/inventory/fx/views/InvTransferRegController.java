@@ -443,8 +443,8 @@ public class InvTransferRegController implements Initializable {
         params.put("sDestinat", lsSQL);
         
         params.put("sTransNox", poTrans.getMaster("sTransNox").toString().substring(1));
-        params.put("sReportDt", poTrans.getMaster("dTransact").toString());
-        params.put("sPrintdBy", poGRider.getUserID());
+        params.put("sReportDt", CommonUtils.xsDateMedium((Date)poTrans.getMaster("dTransact")));
+        params.put("sPrintdBy", System.getProperty("user.name"));
                 
         try {
             InputStream stream = new ByteArrayInputStream(json_arr.toJSONString().getBytes("UTF-8"));

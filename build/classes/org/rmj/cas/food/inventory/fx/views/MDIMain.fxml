@@ -527,7 +527,7 @@
          <children>
             <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="5.0">
                <image>
-                  <Image url="@../images/ic_launcher1.png" />
+                  <Image url="@../images/ic_launcher2.png" />
                </image>
             </ImageView>
             <Label fx:id="lblFormTitle" alignment="TOP_LEFT" layoutX="30.0" layoutY="3.0" prefHeight="15.0" prefWidth="470.0" text="General Inventory and Purchasing v1.0 " textFill="WHITE" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="0.0">
@@ -559,7 +559,7 @@
                <children>
                   <ImageView fitHeight="400.0" fitWidth="800.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../images/guanzon.png" />
+                        <Image url="@../images/rmj%20systems.png" />
                      </image>
                   </ImageView>
                   <VBox fx:id="dataPane" prefHeight="423.0" prefWidth="1024.0" />

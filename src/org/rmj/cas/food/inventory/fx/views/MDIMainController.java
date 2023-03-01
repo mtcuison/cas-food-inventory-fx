@@ -45,137 +45,78 @@ import org.rmj.appdriver.SQLUtil;
 import org.rmj.appdriver.agentfx.ShowMessageFX;
 import org.rmj.appdriver.agentfx.CommonUtils;
 import org.rmj.appdriver.agentfx.callback.IFXML;
-import org.rmj.appdriver.agentfx.service.ITokenize;
-import org.rmj.appdriver.agentfx.service.TokenApprovalFactory;
+//import org.rmj.appdriver.agentfx.service.ITokenize;
+//import org.rmj.appdriver.agentfx.service.TokenApprovalFactory;
 import org.rmj.appdriver.agentfx.ui.showFXDialog;
 import org.rmj.appdriver.constants.UserRight;
 import org.rmj.cas.food.reports.classes.FoodReports;
+import org.rmj.cas.parameter.agent.XMCP_Financer;
+import org.rmj.cas.parameter.base.CP_Financer;
 import org.rmj.cas.parameter.fx.ParameterFX;
 import org.rmj.cas.pos.reports.BIRReports;
 
 public class MDIMainController implements Initializable {
-    @FXML
-    private VBox dataPane;
-    @FXML
-    private MenuItem mnuClose;
-    @FXML
-    private MenuItem mnuTerm;
-    @FXML
-    private MenuItem mnuInvType;
-    @FXML
-    private MenuItem mnuCompany;
-    @FXML
-    private MenuItem mnuInventory;
-    @FXML
-    private MenuItem mnuBrand;
-    @FXML
-    private MenuItem mnuModel;
-    @FXML
-    private MenuItem mnuColor;
-    @FXML
-    private MenuItem mnuCategory;
-    @FXML
-    private MenuItem mnuCategory2;
-    @FXML
-    private MenuItem mnuCategory3;
-    @FXML
-    private MenuItem mnuCategory4;
-    @FXML
-    private MenuItem mnuSupplier;
-    @FXML
-    private MenuItem mnuInvLocation;
-    @FXML
-    private Label lblUser;
-    @FXML
-    private Button btnExit;
-    @FXML
-    private Button btnMinimize;
-    @FXML
-    private MenuBar mnuBar;
-    @FXML
-    private Label lblDate;
-    @FXML
-    private Label lblCompany;
-    @FXML
-    private MenuItem mnuPOReceiving;
-    @FXML
-    private MenuItem mnuStocks;
-    @FXML
-    private CheckMenuItem chkLight;
-    @FXML
-    private MenuItem mnu_InventoryTransfer;
-    @FXML
-    private MenuItem mnu_inventoryCount;
-    @FXML
-    private MenuItem mnu_DailyProduction;
-    @FXML
-    private MenuItem mnu_POReceivingReg;
-    @FXML
-    private MenuItem mnu_InvTransReg;
-    @FXML
-    private MenuItem mnu_InvCountReg;
-    @FXML
-    private MenuItem mnu_InvDailyProdReg;
-    @FXML
-    private MenuItem menu_TransferPosting;
-    @FXML
-    private ToggleButton btnRestoreDown;
-    @FXML
-    private FontAwesomeIconView cmdRestore;
-    @FXML
-    private AnchorPane rootPane;
-    @FXML
-    private FontAwesomeIconView file;
-    @FXML
-    private FontAwesomeIconView transaction;
-    @FXML
-    private FontAwesomeIconView utilities;
-    @FXML
-    private FontAwesomeIconView reports;
-    @FXML
-    private FontAwesomeIconView history;
-    @FXML
-    private FontAwesomeIconView settings;
-    @FXML
-    private MenuItem mnuStandard;
-    @FXML
-    private MenuItem mnuMeasure;
-    @FXML
-    private MenuItem mnuWasteInventory;
-    @FXML
-    private MenuItem mnuPurchaseOrder;
-    @FXML
-    private MenuItem mnu_InvWasteReg;
-    @FXML
-    private MenuItem mnuPOReturn;
-    @FXML
-    private MenuItem mnu_PurchaseOrderReg;
-    @FXML
-    private MenuItem mnu_POReturnReg;
-    @FXML
-    private MenuItem mnuBIRrep;
-    @FXML
-    private Label lblFormTitle;
-    @FXML
-    private MenuItem mnuResetPOS;
-    @FXML
-    private MenuItem mnuDiscounts;
-    @FXML
-    private MenuItem mnuSerialUpload;
-    @FXML
-    private Menu mnuFiles;
-    @FXML
-    private Menu mnuTransactions;
-    @FXML
-    private Menu mnuUtilities;
-    @FXML
-    private Menu mnuReports;
-    @FXML
-    private Menu mnuHistory;
-    @FXML
-    private Menu mnuSettings;
-    @FXML
-    private AnchorPane mnuMain;
+    @FXML private VBox dataPane;
+    @FXML private MenuItem mnuClose;
+    @FXML private MenuItem mnuTerm;
+    @FXML private MenuItem mnuInvType;
+    @FXML private MenuItem mnuCompany;
+    @FXML private MenuItem mnuInventory;
+    @FXML private MenuItem mnuBrand;
+    @FXML private MenuItem mnuModel;
+    @FXML private MenuItem mnuColor;
+    @FXML private MenuItem mnuCategory;
+    @FXML private MenuItem mnuCategory2;
+    @FXML private MenuItem mnuCategory3;
+    @FXML private MenuItem mnuCategory4;
+    @FXML private MenuItem mnuSupplier;
+    @FXML private MenuItem mnuInvLocation;
+    @FXML private Label lblUser;
+    @FXML private Button btnExit;
+    @FXML private Button btnMinimize;
+    @FXML private MenuBar mnuBar;
+    @FXML private Label lblDate;
+    @FXML private Label lblCompany;
+    @FXML private MenuItem mnuPOReceiving;
+    @FXML private MenuItem mnuStocks;
+    @FXML private CheckMenuItem chkLight;
+    @FXML private MenuItem mnu_InventoryTransfer;
+    @FXML private MenuItem mnu_inventoryCount;
+    @FXML private MenuItem mnu_DailyProduction;
+    @FXML private MenuItem mnu_POReceivingReg;
+    @FXML private MenuItem mnu_InvTransReg;
+    @FXML private MenuItem mnu_InvCountReg;
+    @FXML private MenuItem mnu_InvDailyProdReg;
+    @FXML private MenuItem menu_TransferPosting;
+    @FXML private ToggleButton btnRestoreDown;
+    @FXML private FontAwesomeIconView cmdRestore;
+    @FXML private AnchorPane rootPane;
+    @FXML private FontAwesomeIconView file;
+    @FXML private FontAwesomeIconView transaction;
+    @FXML private FontAwesomeIconView utilities;
+    @FXML private FontAwesomeIconView reports;
+    @FXML private FontAwesomeIconView history;
+    @FXML private FontAwesomeIconView settings;
+    @FXML private MenuItem mnuStandard;
+    @FXML private MenuItem mnuMeasure;
+    @FXML private MenuItem mnuWasteInventory;
+    @FXML private MenuItem mnuPurchaseOrder;
+    @FXML private MenuItem mnu_InvWasteReg;
+    @FXML private MenuItem mnuPOReturn;
+    @FXML private MenuItem mnu_PurchaseOrderReg;
+    @FXML private MenuItem mnu_POReturnReg;
+    @FXML private MenuItem mnuBIRrep;
+    @FXML private Label lblFormTitle;
+    @FXML private MenuItem mnuResetPOS;
+    @FXML private MenuItem mnuDiscounts;
+    @FXML private MenuItem mnuSerialUpload;
+    @FXML private Menu mnuFiles;
+    @FXML private Menu mnuTransactions;
+    @FXML private Menu mnuUtilities;
+    @FXML private Menu mnuReports;
+    @FXML private Menu mnuHistory;
+    @FXML private Menu mnuSettings;
+    @FXML private AnchorPane mnuMain;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -243,6 +184,8 @@ public class MDIMainController implements Initializable {
         getTime();
         lblCompany.setText(poGRider.getClientName());
         loadRecord();
+        
+        initXMFinancer();
     }
     
     public void loadRecord(){
@@ -653,20 +596,20 @@ public class MDIMainController implements Initializable {
                 ShowMessageFX.Information(null, "Success", "POS was successfully reset.");
             }
         } else if (event.getCode() == KeyCode.F10){     
-            ITokenize instance = TokenApprovalFactory.make("CASys_DBF.PO_Master");
-            instance.setGRider(poGRider);
-            instance.setTransNmbr("M00120000001");
-            if (instance.createCodeRequest()){
-                System.out.println(instance.getMessage());
-            } else {
-                System.err.println(instance.getMessage());
-            }
+//            ITokenize instance = TokenApprovalFactory.make("CASys_DBF.PO_Master");
+//            instance.setGRider(poGRider);
+//            instance.setTransNmbr("M00120000001");
+//            if (instance.createCodeRequest()){
+//                System.out.println(instance.getMessage());
+//            } else {
+//                System.err.println(instance.getMessage());
+//            }
         } else if (event.getCode() == KeyCode.F11){
-            if (showFXDialog.getTokenApproval(poGRider, "CASys_DBF.PO_Master", "M00120000001")){
-                //TODO:
-                //  execute approving of transaction here
-                ShowMessageFX.Information(null, "Success", "Transaction was approved successfully..");
-            }
+//            if (showFXDialog.getTokenApproval(poGRider, "CASys_DBF.PO_Master", "M00120000001")){
+//                //TODO:
+//                //  execute approving of transaction here
+//                ShowMessageFX.Information(null, "Success", "Transaction was approved successfully..");
+//            }
         }     
     }
        
@@ -816,6 +759,24 @@ public class MDIMainController implements Initializable {
         }
     }
     
+    
+    private void initXMFinancer(){
+        XMCP_Financer poTrans;
+        poTrans = new XMCP_Financer(poGRider, poGRider.getBranchCode(), false);
+//        
+//        poTrans.browseRecord("", false);
+        
+//        System.err.println(poTrans.getMaster("sFnancrID"));
+//        System.err.println(poTrans.getMaster("nDiscount"));
+//        System.err.println(poTrans.getMaster("nCredLimt"));
+//        System.err.println(poTrans.getMaster("nABalance"));
+//        System.err.println(poTrans.SearchMaster(7, (String)poTrans.getMaster("sTermIDxx"), true));
+//        System.err.println(poTrans.getTerm());
+//        System.err.println(SQLUtil.FORMAT_SHORT_DATEX);
+    }
+    
+    
+    
     private IFXML getController(String fsValue){                
         IFXML instance;
         
@@ -875,7 +836,7 @@ public class MDIMainController implements Initializable {
             case "InventoryLocation":
                 instance = new org.rmj.cas.parameter.fx.InventoryLocationController();
                 instance.setGRider(poGRider);
-                return instance; 
+                return instance;
             default: 
                 return null;
         }

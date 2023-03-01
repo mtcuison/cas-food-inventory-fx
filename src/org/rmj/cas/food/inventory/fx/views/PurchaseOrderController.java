@@ -292,24 +292,24 @@ public class PurchaseOrderController implements Initializable {
                         if (!"0".equals((String) poTrans.getMaster("cTranStat"))) return;
                         
                         //token type approval
-                        if (showFXDialog.getTokenApproval(poGRider, "CASys_DBF.PO_Master", psOldRec)){
-                            if (poTrans.closeRecord(psOldRec, poGRider.getUserID(), "TOKENAPPROVL")){
-                                ShowMessageFX.Information("Transaction was approved successfully.", pxeModuleName, "Approval successful!!!");
-
-                                if (poTrans.openRecord(psOldRec)){                                
-                                    loadRecord(); 
-                                    psOldRec = (String) poTrans.getMaster("sTransNox");
-
-                                    poTrans.printRecord();
-
-                                    pnEditMode = poTrans.getEditMode();
-                                } else {
-                                    clearFields();
-                                    initGrid();
-                                    pnEditMode = EditMode.UNKNOWN;
-                                }
-                            }
-                        }
+//                        if (showFXDialog.getTokenApproval(poGRider, "CASys_DBF.PO_Master", psOldRec)){
+//                            if (poTrans.closeRecord(psOldRec, poGRider.getUserID(), "TOKENAPPROVL")){
+//                                ShowMessageFX.Information("Transaction was approved successfully.", pxeModuleName, "Approval successful!!!");
+//
+//                                if (poTrans.openRecord(psOldRec)){                                
+//                                    loadRecord(); 
+//                                    psOldRec = (String) poTrans.getMaster("sTransNox");
+//
+//                                    poTrans.printRecord();
+//
+//                                    pnEditMode = poTrans.getEditMode();
+//                                } else {
+//                                    clearFields();
+//                                    initGrid();
+//                                    pnEditMode = EditMode.UNKNOWN;
+//                                }
+//                            }
+//                        }
                     } else{
                         //user approval type
                         if (poGRider.getUserLevel() < UserRight.MANAGER){

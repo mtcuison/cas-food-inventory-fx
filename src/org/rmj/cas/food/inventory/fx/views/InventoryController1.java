@@ -500,7 +500,7 @@ public class InventoryController1 implements Initializable {
         if(!nv){ /*Lost Focus*/
             switch (lnIndex){
                 case 2: /*sBarCodex*/
-                    if (lsValue.length() > 12){
+                    if (lsValue.length() > 20){
                         ShowMessageFX.Warning(null, pxeModuleName, "Max length for 'Barcode' exceeds the maximum limit.");
                         txtField.requestFocus();
                         return;
@@ -517,7 +517,7 @@ public class InventoryController1 implements Initializable {
                     }
                     break;
                 case 5: /*sAltBarCd*/
-                    if (lsValue.length() > 12){
+                    if (lsValue.length() > 20){
                         ShowMessageFX.Warning(null, pxeModuleName, "Max length for 'Alternate BCode' exceeds the maximum limit.");
                         txtField.requestFocus();
                         return;
